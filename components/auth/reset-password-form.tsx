@@ -10,33 +10,45 @@ import { CardWrapper } from "./card-wrapper";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginFormSchema } from "@/schemas";
+import { resetPasswordFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
-import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { SubmitButton } from "../submit-button";
-import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export function LoginForm() {
+export function ResetPasswordForm() {
+  const [success, setSuccess] = useState<string | undefined>();
   const [error, setError] = useState<string>("");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  useEffect(() => {
+    if (!token) {
+      router.replace("/auth/sign-in?reset=false");
+    }
+  }, [token]);
+
+  const form = useForm<z.infer<typeof resetPasswordFormSchema>>({
+    resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const { isValid, isSubmitting } = form.formState;
 
-  const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof resetPasswordFormSchema>) => {
     try {
-      await authService.login(data);
-
+      await authService.resetPassword({
+        token: token!,
+        ...data,
+      });
+      setSuccess("Email verified successfully!");
       startTransition(() => {
-        router.push("/admin/dashboard");
+        router.push("/auth/sign-in?reset=true");
         router.refresh();
       });
     } catch (err: unknown) {
@@ -52,10 +64,9 @@ export function LoginForm() {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
+      headerLabel="Reset password"
       backButtonLabel="Don't have an account?"
       backButtonHref="/auth/sign-up"
-      showSocial
       imageUrl="/assets/login-form.jpg"
       alt="Signup form image"
       width={600}
@@ -63,35 +74,29 @@ export function LoginForm() {
     >
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
-          {/* Email */}
+          {/* Password */}
           <Controller
-            name="email"
+            name="password"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Email</FieldLabel>
-                <Input {...field} type="email" placeholder="m@example.com" />
+                <FieldLabel>Password</FieldLabel>
+                <Input {...field} type="password" />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
               </Field>
             )}
           />
+
+          {/* Confirm Password */}
+
           <Controller
-            name="password"
+            name="confirmPassword"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <div className="flex items-center justify-between">
-                  <FieldLabel>Password</FieldLabel>
-
-                  <Link
-                    href="/auth/forgot-password"
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Forgot password?
-                  </Link>
-                </div>
+                <FieldLabel>Confirm Password</FieldLabel>
                 <Input {...field} type="password" />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
@@ -104,9 +109,9 @@ export function LoginForm() {
             type="submit"
             disabled={!isValid}
             loading={isLoading}
-            loadingText="Logging you in..."
+            loadingText="Please wait..."
           >
-            Login
+            Reset password
           </SubmitButton>
           <FieldGroup>
             {error && (

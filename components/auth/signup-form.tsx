@@ -16,12 +16,12 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { registerFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SubmitButton } from "../submit-button";
 
 export function SignupForm() {
+  const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string>("");
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
@@ -35,14 +35,15 @@ export function SignupForm() {
     },
   });
 
+  const { isValid, isSubmitting } = form.formState;
+
+  const isLoading = isSubmitting;
+
   const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
     try {
       const { confirmPassword, ...payload } = data;
-      const result = await authService.register(payload);
-
-      console.log("Api response from register", result);
-
-      //router.push("/auth/sign-in");
+      await authService.register(payload);
+      setIsSuccess(true);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
@@ -51,7 +52,43 @@ export function SignupForm() {
       }
     }
   };
+  if (isSuccess) {
+    return (
+      <CardWrapper
+        headerLabel="Check your email"
+        backButtonLabel="Back to login"
+        backButtonHref="/auth/sign-in"
+        imageUrl="/assets/register-form.jpg"
+        alt="Verification"
+        width={600}
+        height={600}
+      >
+        <div className="flex flex-col items-center justify-center text-center py-10 px-6 h-full">
+          {/* 🔥 Icon */}
+          <div className="mb-4 flex items-center justify-center h-16 w-16 rounded-full bg-blue-50 border border-blue-100">
+            <span className="text-2xl">📧</span>
+          </div>
 
+          {/* 🔥 Title */}
+          <h2 className="text-xl font-semibold mb-2">Verify your email</h2>
+
+          {/* 🔥 Description */}
+          <p className="text-sm text-muted-foreground max-w-sm mb-4">
+            We’ve sent a verification link to your email address. Please check
+            your inbox and click the link to activate your account.
+          </p>
+
+          {/* 🔥 Divider */}
+          <div className="w-12 h-0.5 bg-border rounded-full mb-4" />
+
+          {/* 🔥 Helper text */}
+          <p className="text-xs text-muted-foreground">
+            Didn’t receive it? Check your spam folder or try again.
+          </p>
+        </div>
+      </CardWrapper>
+    );
+  }
   return (
     <CardWrapper
       headerLabel="Create your account"
@@ -165,10 +202,15 @@ export function SignupForm() {
               )}
             />
           </div>
-
-          <Button type="submit" className="w-full">
+          <SubmitButton
+            type="submit"
+            disabled={!isValid}
+            loading={isLoading}
+            loadingText="Creating Account..."
+          >
             Create Account
-          </Button>
+          </SubmitButton>
+
           <FieldGroup>
             {error && (
               <div className="rounded-md bg-red-50 text-red-600 text-sm px-3 py-2">

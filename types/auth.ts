@@ -11,6 +11,17 @@ export type LoginPayload = {
   password: string;
 };
 
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ResetPasswordPayload = {
+  token: string;
+  password: string;
+  confirmPassword: string;
+};
+
 export type AuthResponse = {
-  access_token: string;
+  accessToken: string;
+  refreshToken: string;
 };

@@ -5,6 +5,7 @@ import {
   Bell,
   ChevronsUpDown,
   CreditCard,
+  Loader,
   LogOut,
   Sparkles,
 } from "lucide-react";
@@ -25,17 +26,36 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useSession } from "@/context/session-context";
+import { apiClient } from "@/lib/api/client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const user = useSession();
   const { isMobile } = useSidebar();
+  if (!user) return null;
+  // 🔥 initials fallback
+  const initials =
+    `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+
+      await apiClient("/api/auth/sign-out", {
+        method: "POST",
+      });
+
+      router.refresh();
+      router.push("/auth/sign-in");
+    } catch (err) {
+      console.error("Logout failed", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SidebarMenu>
@@ -44,14 +64,20 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                {user.avatar ? (
+                  <AvatarImage src={user.avatar} alt={user.firstName} />
+                ) : null}
+                <AvatarFallback className="rounded-lg">
+                  {initials || "U"}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user.name}</span>
+                <span className="truncate font-medium">
+                  {user.firstName} {user.lastName}
+                </span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
@@ -66,11 +92,17 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  {user.avatar ? (
+                    <AvatarImage src={user.avatar} alt={user.firstName} />
+                  ) : null}
+                  <AvatarFallback className="rounded-lg">
+                    {initials || "U"}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">
+                    {user.firstName} {user.lastName}
+                  </span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
@@ -98,9 +130,13 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              {loading ? (
+                <Loader className="animate-spin mr-2 h-4 w-4" />
+              ) : (
+                <LogOut />
+              )}
+              {loading ? "signing out..." : "Sign out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

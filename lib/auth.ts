@@ -1,11 +1,7 @@
-export const tokenService = {
-  set: (token: string) => {
-    localStorage.setItem("token", token);
-  },
-  get: () => {
-    return localStorage.getItem("token");
-  },
-  remove: () => {
-    localStorage.removeItem("token");
-  },
+import { apiServer } from "@/lib/api/server";
+import { User } from "@/types/user";
+
+export const getSession = async (): Promise<User | null> => {
+  const data = await apiServer("/auth/profile");
+  return data?.data ?? null;
 };
