@@ -13,6 +13,10 @@ export function proxy(request: NextRequest) {
   const pathname = nextUrl.pathname;
 
   const token = request.cookies.get("accessToken")?.value;
+  const response = NextResponse.next();
+
+  // 🔥 header set
+  response.headers.set("x-has-session", token ? "true" : "false");
 
   // ✅ Route checks (improved)
   const isPublicRoute = matchRoute(publicRoutes, pathname);
@@ -22,7 +26,7 @@ export function proxy(request: NextRequest) {
   // 🟢 1. Public routes → allow
   // =========================
   if (isPublicRoute) {
-    return NextResponse.next();
+    return response;
   }
 
   // =========================
@@ -34,7 +38,7 @@ export function proxy(request: NextRequest) {
         new URL(DEFAULT_LOGIN_REDIRECT, request.url),
       );
     }
-    return NextResponse.next();
+    return response;
   }
 
   // =========================
@@ -42,19 +46,15 @@ export function proxy(request: NextRequest) {
   // =========================
   if (!token) {
     const loginUrl = new URL("/auth/sign-in", request.url);
-
-    // 🔥 redirect back after login
     loginUrl.searchParams.set("callbackUrl", pathname);
-
     return NextResponse.redirect(loginUrl);
   }
 
   // =========================
   // ✅ 4. Allow
   // =========================
-  return NextResponse.next();
+  return response;
 }
-
 export const config = {
   matcher: [
     "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",

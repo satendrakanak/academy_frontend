@@ -4,6 +4,7 @@ import "./globals.css";
 import { SessionProvider } from "@/context/session-context";
 import { getSession } from "@/lib/auth";
 import { Toaster } from "sonner";
+import { headers } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,8 +22,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
+  const headerList = await headers();
+  const hasSession = headerList.get("x-has-session") === "true";
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session} hasSession={hasSession}>
       <html lang="en" className={`${inter.className}  h-full antialiased`}>
         <body className="min-h-full flex flex-col">
           <Toaster />

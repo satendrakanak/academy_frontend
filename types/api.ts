@@ -3,3 +3,8 @@ export type ApiErrorResponse = {
   statusCode?: number;
   error?: string;
 };
+
+export type ApiResponse<T> = {
+  apiVersion: string;
+  data: T;
+};

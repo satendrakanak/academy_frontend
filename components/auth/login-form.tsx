@@ -36,8 +36,8 @@ export function LoginForm() {
       await authService.login(data);
 
       startTransition(() => {
-        router.push("/admin/dashboard");
         router.refresh();
+        router.push("/admin/dashboard");
       });
     } catch (err: unknown) {
       if (err instanceof Error) {

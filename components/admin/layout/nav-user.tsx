@@ -44,9 +44,7 @@ export function NavUser() {
     try {
       setLoading(true);
 
-      await apiClient("/api/auth/sign-out", {
-        method: "POST",
-      });
+      await apiClient.post("/api/auth/sign-out");
 
       router.refresh();
       router.push("/auth/sign-in");
