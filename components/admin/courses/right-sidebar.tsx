@@ -1,32 +1,35 @@
 "use client";
 
-export const RightSidebar = () => {
-  const sections = [
-    "Basic Info",
-    "Pricing",
-    "Details",
-    "Features",
-    "Requirements",
-    "Media",
-    "Meta",
-  ];
+import { PricingForm } from "./pricing-form";
+import { TagsForm } from "./tags-form";
+import { CategoryForm } from "./category-form";
+import ActionForm from "./action-form";
+import QuickInfo from "./quick-info";
+import { Course } from "@/types/course";
+import { FeaturedImageForm } from "./featured-image-form";
 
+interface RightSidebarProps {
+  course: Course;
+}
+
+export const RightSidebar = ({ course }: RightSidebarProps) => {
   return (
-    <div className="sticky top-24 space-y-3">
-      <div className="rounded-2xl border p-4 shadow-sm">
-        <h3 className="text-sm font-semibold mb-3">Setup Progress</h3>
+    <div className="sticky top-24 space-y-4">
+      {/* 🔥 Publish Card */}
+      <ActionForm />
 
-        <div className="space-y-2">
-          {sections.map((item) => (
-            <div
-              key={item}
-              className="text-sm text-muted-foreground hover:text-black cursor-pointer"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* 🔥 Featured Image */}
+      <FeaturedImageForm course={course} />
+      {/* 🔥 Category */}
+      <CategoryForm course={course} />
+
+      {/* 🔥 Tags */}
+      <TagsForm course={course} />
+
+      {/* 🔥 Pricing */}
+      <PricingForm course={course} />
+      {/* 🔥 Quick Info */}
+      <QuickInfo course={course} />
     </div>
   );
 };

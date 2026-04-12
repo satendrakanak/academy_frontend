@@ -1,13 +1,14 @@
 import { CourseHeader } from "@/components/admin/courses/course-header";
 import { RightSidebar } from "@/components/admin/courses/right-sidebar";
 import { BasicInfoForm } from "@/components/admin/courses/basic-info-form";
-import { PricingForm } from "@/components/admin/courses/pricing-form";
-import { DetailsForm } from "@/components/admin/courses/details-form";
-import { FeaturesForm } from "@/components/admin/courses/features-form";
+import { CourseDetailsForm } from "@/components/admin/courses/course-details-form";
 import { RequirementsForm } from "@/components/admin/courses/requirements-form";
-import { MediaForm } from "@/components/admin/courses/media-form";
 import { MetaForm } from "@/components/admin/courses/meta-form";
 import { courseServerService } from "@/services/courses/course.server";
+import { notFound, redirect } from "next/navigation";
+import { Course } from "@/types/course";
+import ChaptersLayout from "@/components/admin/courses/chapters/chapters-layout";
+import ChaptersForm from "@/components/admin/courses/chapters-form";
 
 export default async function CourseIdPage({
   params,
@@ -15,26 +16,43 @@ export default async function CourseIdPage({
   params: Promise<{ courseId: string }>;
 }) {
   const { courseId } = await params;
-  const { data } = await courseServerService.getById(courseId);
+
+  let course: Course;
+
+  try {
+    const response = await courseServerService.getById(courseId);
+    course = response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === "UNAUTHORIZED") {
+        redirect("/login");
+      }
+
+      if (error.message === "NOT_FOUND") {
+        notFound();
+      }
+    }
+
+    throw error;
+  }
+
   return (
     <div>
-      <CourseHeader course={data} />
+      <CourseHeader course={course} />
 
       <div className="grid grid-cols-5 gap-6 py-6">
-        {/* LEFT - MAIN CONTENT */}
         <div className="col-span-4 space-y-6">
-          <BasicInfoForm course={data} />
-          <PricingForm />
-          <DetailsForm />
-          <FeaturesForm />
-          <RequirementsForm />
-          <MediaForm />
-          <MetaForm />
+          <BasicInfoForm course={course} />
+
+          <CourseDetailsForm course={course} />
+          <ChaptersForm />
+
+          <RequirementsForm course={course} />
+          <MetaForm course={course} />
         </div>
 
-        {/* RIGHT - SIDEBAR */}
         <div className="col-span-1">
-          <RightSidebar />
+          <RightSidebar course={course} />
         </div>
       </div>
     </div>

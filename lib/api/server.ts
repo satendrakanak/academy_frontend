@@ -41,7 +41,9 @@ async function request<T>(
         message = error.message;
       }
     } catch {}
-
+    if (response.status === 401) {
+      throw new Error("AUTH_EXPIRED");
+    }
     throw new Error(message);
   }
 

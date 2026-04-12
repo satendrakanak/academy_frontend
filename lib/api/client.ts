@@ -1,5 +1,3 @@
-import type { ApiErrorResponse } from "@/types/api";
-
 type Method = "GET" | "POST" | "PATCH" | "DELETE";
 
 async function request<T>(
@@ -8,42 +6,63 @@ async function request<T>(
   body?: unknown,
   options: RequestInit = {},
 ): Promise<T> {
-  const response = await fetch(endpoint, {
-    method,
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers || {}),
-    },
-    ...(body ? { body: JSON.stringify(body) } : {}),
-    ...options,
-  });
+  const isFormData = body instanceof FormData;
 
-  // 🔴 Error handling (same tera wala)
+  let response: Response;
+
+  try {
+    response = await fetch(endpoint, {
+      method,
+      credentials: "include",
+      headers: {
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
+        ...(options.headers || {}),
+      },
+      ...(body
+        ? {
+            body: isFormData ? (body as FormData) : JSON.stringify(body),
+          }
+        : {}),
+      ...options,
+    });
+  } catch (networkError) {
+    console.error("NETWORK ERROR:", networkError);
+    throw new Error("Network error. Please check your connection.");
+  }
+
+  // 🔴 Handle non-OK responses
   if (!response.ok) {
-    let message = "Something went wrong";
+    let message = `Request failed (${response.status})`;
+    let errorBody: any = null;
 
     try {
-      const error: ApiErrorResponse = await response.json();
+      errorBody = await response.json();
 
-      if (Array.isArray(error.message)) {
-        message = error.message.join(", ");
-      } else if (typeof error.message === "string") {
-        message = error.message;
+      if (Array.isArray(errorBody?.message)) {
+        message = errorBody.message.join(", ");
+      } else if (typeof errorBody?.message === "string") {
+        message = errorBody.message;
       }
     } catch {
-      message = response.statusText;
+      // fallback
+      message = response.statusText || message;
     }
 
     throw new Error(message);
   }
 
-  // ✅ Handle no-content responses
+  // 🟡 No content
   if (response.status === 204) {
     return {} as T;
   }
 
-  return response.json() as Promise<T>;
+  // 🟢 Safe JSON parse
+  try {
+    return (await response.json()) as T;
+  } catch (parseError) {
+    console.error("JSON PARSE ERROR:", parseError);
+    throw new Error("Invalid server response");
+  }
 }
 
 export const apiClient = {
@@ -68,16 +87,11 @@ export const withAuthRetry = async <T>(fn: () => Promise<T>): Promise<T> => {
       error instanceof Error &&
       error.message.toLowerCase().includes("unauthorized")
     ) {
-      console.log("⚠️ Token expired → refreshing...");
-
       try {
         await apiClient.post("/api/auth/refresh-tokens");
-        console.log("✅ Token refreshed");
 
         return await fn(); // 🔥 retry same request
       } catch (refreshError) {
-        console.log("❌ Refresh failed");
-
         throw refreshError;
       }
     }

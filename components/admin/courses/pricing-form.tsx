@@ -1,12 +1,160 @@
-export const PricingForm = () => {
+"use client";
+
+import * as z from "zod";
+import { useEffect, useState } from "react";
+import { Input } from "@base-ui/react";
+import { Course } from "@/types/course";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { Controller, useForm } from "react-hook-form";
+import { SubmitButton } from "@/components/submit-button";
+import { pricingSchema } from "@/schemas/courses";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { courseClientService } from "@/services/courses/course.client";
+import { toast } from "sonner";
+
+interface PricingFormProps {
+  course: Course;
+}
+
+export const PricingForm = ({ course }: PricingFormProps) => {
+  const router = useRouter();
+  const form = useForm<z.input<typeof pricingSchema>>({
+    resolver: zodResolver(pricingSchema),
+    mode: "onChange",
+    defaultValues: {
+      isFree: course.isFree ?? false,
+      priceInr: course.priceInr ?? "",
+      priceUsd: course.priceUsd ?? "",
+    },
+  });
+  const { isValid, isSubmitting } = form.formState;
+  const isFree = form.watch("isFree");
+
+  const onSubmit = async (data: z.input<typeof pricingSchema>) => {
+    try {
+      const payload = {
+        isFree: data.isFree || false,
+        priceInr: data.priceInr || undefined,
+        priceUsd: data.priceUsd || undefined,
+      };
+
+      const response = await courseClientService.update(course.id, payload);
+
+      router.refresh();
+      toast.success("Course pricing info updated successfully");
+    } catch (error: unknown) {
+      let message = "Something went wrong";
+
+      if (error instanceof Error) {
+        message = error.message;
+      }
+
+      toast.error(message);
+    }
+  };
+
   return (
-    <div className="rounded-2xl border p-6 shadow-sm space-y-4">
-      <h3 className="font-semibold text-lg">Pricing</h3>
+    <div className="rounded-xl border bg-white p-4 space-y-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Pricing</h3>
+      </div>
 
-      <input className="input" placeholder="Price INR" />
-      <input className="input" placeholder="Price USD" />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FieldGroup>
+          {/* Free Toggle */}
+          <Controller
+            name="isFree"
+            control={form.control}
+            render={({ field }) => (
+              <div className="flex items-center justify-between border rounded-md p-2">
+                <span className="text-sm">Free Course</span>
 
-      <button className="btn">Save</button>
+                <input
+                  type="checkbox"
+                  checked={field.value ?? false}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                  className="accent-primary h-4 w-4"
+                />
+              </div>
+            )}
+          />
+
+          {/* Pricing Fields */}
+          <div className="grid grid-cols-2 gap-2">
+            {/* INR */}
+            <Controller
+              name="priceInr"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <div className="relative">
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs">
+                      ₹
+                    </span>
+
+                    <Input
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      disabled={isFree}
+                      type="number"
+                      placeholder="0"
+                      className="pl-6 h-9 border rounded-md w-full appearance-none"
+                    />
+                  </div>
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            {/* USD */}
+            <Controller
+              name="priceUsd"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <div className="relative">
+                    <span className="absolute left-2 top-1/2 -translate-y-1/2 text-xs">
+                      $
+                    </span>
+
+                    <Input
+                      value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      disabled={isFree}
+                      type="number"
+                      placeholder="0"
+                      className="pl-6 h-9 border rounded-md w-full appearance-none"
+                    />
+                  </div>
+
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+        </FieldGroup>
+
+        {/* Button */}
+        <SubmitButton
+          type="submit"
+          disabled={!isValid}
+          loading={isSubmitting}
+          className="w-full h-9 text-sm"
+        >
+          Save
+        </SubmitButton>
+      </form>
+
+      {isFree && (
+        <p className="text-[11px] text-green-600">This course will be free.</p>
+      )}
     </div>
   );
 };

@@ -11,12 +11,12 @@ export const courseClientService = {
       apiClient.post<ApiResponse<Course>>("/api/courses", data),
     ),
 
-  getById: (id: string) =>
+  getById: (id: number) =>
     withAuthRetry(() =>
       apiClient.get<ApiResponse<Course>>(`/api/courses/${id}`),
     ),
 
-  update: (id: string, data: UpdateCoursePayload) =>
+  update: (id: number, data: UpdateCoursePayload) =>
     withAuthRetry(() =>
       apiClient.patch<ApiResponse<Course>>(`/api/courses/${id}`, data),
     ),
