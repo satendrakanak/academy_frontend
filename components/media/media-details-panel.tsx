@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ConfirmDeleteDialog } from "../modals/confirm-dialog";
 import Image from "next/image";
-import { getAltFromFileName } from "@/utils/get-file-type";
+import { getAltFromFileName, getFileType } from "@/utils/get-file-type";
 
 interface MediaDetailsPanelProps {
   selected: FileType | null;
@@ -53,7 +53,7 @@ export const MediaDetailsPanel = ({
     );
   }
 
-  const isValidType = selected.type === previewType;
+  const isValidType = getFileType(selected.mime) === previewType;
   const handleCopy = async () => {
     await navigator.clipboard.writeText(selected.url);
     setCopied(true);
@@ -92,7 +92,7 @@ export const MediaDetailsPanel = ({
           {selected.type === "image" && (
             <div className="relative w-full h-56">
               <Image
-                src={selected.url}
+                src={selected.path}
                 alt={selected.name}
                 fill
                 sizes="100vw"
@@ -104,7 +104,7 @@ export const MediaDetailsPanel = ({
 
           {selected.type === "video" && (
             <video
-              src={selected.url}
+              src={selected.path}
               className="w-full h-56 object-cover rounded-lg"
               controls
             />
@@ -142,7 +142,7 @@ export const MediaDetailsPanel = ({
             <label className="text-[11px] font-medium">Media URL</label>
             <div className="flex items-center gap-2">
               <input
-                value={selected.url}
+                value={selected.path}
                 readOnly
                 className="w-full border p-2 text-xs rounded"
               />

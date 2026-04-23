@@ -2,12 +2,13 @@ import { AppSidebar } from "@/components/admin/layout/app-sidebar";
 import Navbar from "@/components/admin/layout/navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Inter } from "next/font/google";
+import { ReactNode } from "react";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-admin",
 });
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <div className={inter.className}>
       <SidebarProvider>

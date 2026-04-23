@@ -1,0 +1,129 @@
+"use client";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay, EffectCards } from "swiper/modules";
+import Image from "next/image";
+
+const courses = [
+  {
+    title: "The Complete Histudy 2025",
+    price: "$70",
+    image: "/assets/courses/course-1.jpg",
+    desc: "Learn data science, automation, AI tools and build real-world projects step by step.",
+  },
+  {
+    title: "Master React & Next.js",
+    price: "$90",
+    image: "/assets/courses/course-2.jpg",
+    desc: "Become job-ready with React, Next.js and real production apps.",
+  },
+];
+
+export default function Hero() {
+  return (
+    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-500 to-red-500 text-white">
+      {/* CONTAINER */}
+      <div className="max-w-7xl mx-auto px-6 pt-20 grid md:grid-cols-3 gap-10 items-center">
+        {/* LEFT */}
+        <div>
+          <p className="bg-white/20 inline-block px-4 py-1 rounded-full text-sm mb-4">
+            🏆 The Leader in Online Learning
+          </p>
+
+          <h1 className="text-5xl font-bold leading-tight mb-4">
+            Build The Skills <br /> To Drive Your Career
+          </h1>
+
+          <p className="text-white/80 mb-6">
+            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
+            sint.
+          </p>
+
+          <button className="bg-white text-black px-6 py-3 rounded-md font-semibold">
+            View Course →
+          </button>
+        </div>
+
+        {/* GIRL FIXED (NO BG ISSUE, NO SHOE) */}
+
+        <div className="relative flex justify-center items-end">
+          <div className="relative h-130 w-100 overflow-hidden">
+            <Image
+              src="/assets/courses/banner-01.webp"
+              alt="hero"
+              fill
+              className="object-contain object-bottom"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* RIGHT SLIDER */}
+        <div className="relative pb-22">
+          <Swiper
+            modules={[Pagination, EffectCards, Autoplay]}
+            effect="cards"
+            loop
+            autoplay={{ delay: 3000 }}
+            pagination={{ clickable: true }}
+          >
+            {courses.map((course, index) => (
+              <SwiperSlide key={index}>
+                <div className="bg-white rounded-2xl p-5 shadow-xl min-h-85 flex flex-col">
+                  {/* IMAGE */}
+                  <div className="relative">
+                    <img
+                      src={course.image}
+                      className="w-full h-50 object-cover rounded-lg"
+                    />
+
+                    <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                      -40%
+                    </span>
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="mt-4 flex flex-col flex-1">
+                    <h3 className="font-semibold text-lg mb-2 text-black">
+                      {course.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-500 mb-3">{course.desc}</p>
+
+                    <div className="text-yellow-500 text-sm mb-3">
+                      ⭐⭐⭐⭐⭐ <span className="text-gray-400">(15)</span>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-auto">
+                      <p className="text-blue-600 font-bold text-lg">
+                        {course.price}
+                      </p>
+
+                      <span className="text-sm text-blue-600">
+                        Learn More →
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+
+      {/* CLEAN WAVE (FIXED HEIGHT) */}
+      <div className="absolute bottom-0 left-0 w-full leading-none">
+        <svg
+          viewBox="0 0 1440 120"
+          className="w-full h-25"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="#ffffff"
+            d="M0,64L60,69.3C120,75,240,85,360,85.3C480,85,600,75,720,64C840,53,960,43,1080,42.7C1200,43,1320,53,1380,58.7L1440,64V120H0Z"
+          />
+        </svg>
+      </div>
+    </section>
+  );
+}

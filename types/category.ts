@@ -8,6 +8,8 @@ export type CreateCategoryPayload = {
   imageId?: number;
 };
 
+export type UpdateCategoryPayload = Partial<CreateCategoryPayload>;
+
 export type Category = {
   id: number;
   name: string;
@@ -15,4 +17,7 @@ export type Category = {
   type: string;
   description?: string;
   image?: FileType | null;
+  imageAlt: string | null;
+  createdAt: string;
+  updatedAt: string;
 };

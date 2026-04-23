@@ -31,8 +31,12 @@ export const sidebarData = {
           url: "/admin/courses",
         },
         {
-          title: "Create Course",
-          url: "/admin/courses/create",
+          title: "Categories",
+          url: "/admin/courses/categories",
+        },
+        {
+          title: "Tags",
+          url: "/admin/courses/tags",
         },
       ],
     },

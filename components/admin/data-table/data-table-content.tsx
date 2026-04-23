@@ -1,7 +1,6 @@
 "use client";
 
 import { flexRender, Table as TableType } from "@tanstack/react-table";
-
 import {
   closestCenter,
   DndContext,
@@ -14,7 +13,6 @@ import {
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-
 import {
   arrayMove,
   SortableContext,
@@ -30,47 +28,46 @@ import {
   TableCell,
 } from "@/components/ui/table";
 
-export const schema = z.object({
-  id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
-});
 import { DraggableRow } from "./draggable-row";
-import { columns } from "./columns";
 import { useId, useMemo, useState } from "react";
-import { z } from "zod";
+
+interface DataTableContentProps<TData> {
+  table: TableType<TData>;
+  data: TData[];
+  getRowId: (row: TData) => UniqueIdentifier; // 🔥 IMPORTANT
+}
+
 export function DataTableContent<TData>({
   table,
   data: initialData,
-}: {
-  table: TableType<TData>;
-  data: z.infer<typeof schema>[];
-}) {
-  const [data, setData] = useState(() => initialData);
+  getRowId,
+}: DataTableContentProps<TData>) {
+  const [data, setData] = useState(initialData);
 
   const sortableId = useId();
+
   const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {}),
+    useSensor(MouseSensor),
+    useSensor(TouchSensor),
+    useSensor(KeyboardSensor),
   );
+
+  // 🔥 dynamic id extraction
   const dataIds = useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id) || [],
-    [data],
+    () => data.map((item) => getRowId(item)),
+    [data, getRowId],
   );
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
-        return arrayMove(data, oldIndex, newIndex);
-      });
-    }
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = dataIds.indexOf(active.id);
+    const newIndex = dataIds.indexOf(over.id);
+
+    const newData = arrayMove(data, oldIndex, newIndex);
+    setData(newData);
   }
 
   return (
@@ -83,27 +80,27 @@ export function DataTableContent<TData>({
         id={sortableId}
       >
         <Table>
+          {/* 🔥 HEADER */}
           <TableHeader className="sticky top-0 z-10 bg-sidebar-primary">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id} colSpan={header.colSpan}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
 
-          <TableBody className="**:data-[slot=table-cell]:first:w-8">
-            {table.getRowModel().rows?.length ? (
+          {/* 🔥 BODY */}
+          <TableBody>
+            {table.getRowModel().rows.length ? (
               <SortableContext
                 items={dataIds}
                 strategy={verticalListSortingStrategy}
@@ -115,7 +112,7 @@ export function DataTableContent<TData>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  colSpan={table.getAllColumns().length} // 🔥 FIX
                   className="h-24 text-center"
                 >
                   No results.

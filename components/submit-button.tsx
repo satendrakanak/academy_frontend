@@ -25,7 +25,7 @@ export function SubmitButton({
     <Button
       type={type}
       disabled={disabled}
-      className={cn("w-full bg-sidebar-primary", className)}
+      className={cn("bg-sidebar-primary", className)}
     >
       {loading && <Loader className="mr-2 h-4 w-4 animate-spin" />}
       {loading ? loadingText || children : children}

@@ -15,11 +15,11 @@ interface FeaturedImageFormProps {
 export const FeaturedImageForm = ({ course }: FeaturedImageFormProps) => {
   const [selectedImage, setSelectedImage] = useState<FileType | null>(null);
   const router = useRouter();
-  const handleImageUpload = async (file: FileType) => {
+  const handleImageUpload = async (file: FileType, alt: string) => {
     try {
       await courseClientService.update(course.id, {
         imageId: file.id,
-        imageAlt: file.name || "",
+        imageAlt: alt || "",
       });
 
       setSelectedImage(file);
@@ -36,6 +36,7 @@ export const FeaturedImageForm = ({ course }: FeaturedImageFormProps) => {
         previewType="image"
         value={selectedImage || course.image}
         onUpload={handleImageUpload}
+        className="h-40"
       />
     </div>
   );

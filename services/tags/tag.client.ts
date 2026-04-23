@@ -1,6 +1,6 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
-import { CreateTagPayload, Tag } from "@/types/tag";
+import { CreateTagPayload, Tag, UpdateTagPayload } from "@/types/tag";
 export const tagClientService = {
   getAll: () =>
     withAuthRetry(() => apiClient.get<Promise<{ data: Tag[] }>>("/api/tags/")),
@@ -12,5 +12,15 @@ export const tagClientService = {
       apiClient.post<ApiResponse<Tag[]>>("/api/tags/bulk", {
         names,
       }),
+    ),
+
+  update: (id: number, data: UpdateTagPayload) =>
+    withAuthRetry(() =>
+      apiClient.patch<ApiResponse<Tag>>(`/api/tags/${id}`, data),
+    ),
+
+  delete: (id: number) =>
+    withAuthRetry(() =>
+      apiClient.delete<ApiResponse<{ message: string }>>(`/api/tags/${id}`),
     ),
 };

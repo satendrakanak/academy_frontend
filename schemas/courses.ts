@@ -15,14 +15,11 @@ export const courseSchema = z.object({
       message: "Slug can only contain lowercase letters, numbers, and hyphens",
     }),
 
-  description: z
-    .string()
-    .max(2000, "Description is too long")
-    .optional()
-    .or(z.literal("")),
-  isFree: z.boolean(),
-  priceInr: z.string().optional(),
-  priceUsd: z.string().optional(),
+  shortDescription: z.string().optional(),
+});
+
+export const courseDescriptionSchema = z.object({
+  description: z.string().optional(),
 });
 
 export const pricingSchema = z.object({
@@ -48,7 +45,7 @@ export const requirementsSchema = z
     },
     {
       message: "At least one field is required",
-      path: ["technologyRequirements"], // kisi ek field pe error dikha dena
+      path: ["technologyRequirements"],
     },
   );
 
@@ -83,4 +80,38 @@ export const metaSchema = z.object({
   metaTitle: z.string().max(60).optional(),
   metaDescription: z.string().max(160).optional(),
   metaSlug: z.string().max(100).optional(),
+});
+
+export const chapterSchema = z.object({
+  title: z.string().min(3, "Title required"),
+  description: z.string().optional(),
+  isFree: z.boolean().default(false),
+  isPublished: z.boolean().default(false),
+});
+
+export const lectureSchema = z.object({
+  title: z.string().min(3, "Title required"),
+  description: z.string().optional(),
+  isFree: z.boolean().default(false),
+  isPublished: z.boolean().default(false),
+});
+
+export const categoriesSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(255, "Title is too long")
+    .trim(),
+
+  description: z.string().optional(),
+});
+
+export const tagsSchema = z.object({
+  name: z
+    .string()
+    .min(3, "Title must be at least 3 characters")
+    .max(255, "Title is too long")
+    .trim(),
+
+  description: z.string().optional(),
 });

@@ -1,12 +1,12 @@
-import { File, Video } from "lucide-react";
-import { FileType, PreviewType } from "@/types/file";
+import { File } from "lucide-react";
+import { FileType } from "@/types/file";
 import Image from "next/image";
 
 export const renderMediaPreview = (file: FileType) => {
   if (file.type === "image") {
     return (
       <Image
-        src={file.url}
+        src={file.path}
         alt={file.name}
         className="w-full h-full object-cover"
         fill
@@ -18,7 +18,7 @@ export const renderMediaPreview = (file: FileType) => {
 
   if (file.type === "video") {
     return (
-      <video src={file.url} className="w-full h-full object-cover" muted />
+      <video src={file.path} className="w-full h-full object-cover" muted />
     );
   }
 

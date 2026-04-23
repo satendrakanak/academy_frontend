@@ -6,9 +6,9 @@ import { RequirementsForm } from "@/components/admin/courses/requirements-form";
 import { MetaForm } from "@/components/admin/courses/meta-form";
 import { courseServerService } from "@/services/courses/course.server";
 import { notFound, redirect } from "next/navigation";
-import { Course } from "@/types/course";
-import ChaptersLayout from "@/components/admin/courses/chapters/chapters-layout";
 import ChaptersForm from "@/components/admin/courses/chapters-form";
+import { Course } from "@/types/course";
+import { CourseDescription } from "@/components/admin/courses/course-description-form";
 
 export default async function CourseIdPage({
   params,
@@ -43,9 +43,9 @@ export default async function CourseIdPage({
       <div className="grid grid-cols-5 gap-6 py-6">
         <div className="col-span-4 space-y-6">
           <BasicInfoForm course={course} />
-
+          <CourseDescription course={course} />
           <CourseDetailsForm course={course} />
-          <ChaptersForm />
+          <ChaptersForm course={course} />
 
           <RequirementsForm course={course} />
           <MetaForm course={course} />

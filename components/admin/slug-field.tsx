@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Check, Pencil } from "lucide-react";
 
-interface Props {
+interface SlugFieldProps {
   title: string;
   value: string;
   onChange: (val: string) => void;
 }
 
-export const SlugField = ({ title, value, onChange }: Props) => {
+export const SlugField = ({ title, value, onChange }: SlugFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempSlug, setTempSlug] = useState(value);
   const [isManual, setIsManual] = useState(false);

@@ -9,7 +9,6 @@ async function request<T>(
   const isFormData = body instanceof FormData;
 
   let response: Response;
-
   try {
     response = await fetch(endpoint, {
       method,
@@ -58,7 +57,8 @@ async function request<T>(
 
   // 🟢 Safe JSON parse
   try {
-    return (await response.json()) as T;
+    const data = await response.json();
+    return data as T;
   } catch (parseError) {
     console.error("JSON PARSE ERROR:", parseError);
     throw new Error("Invalid server response");
@@ -90,7 +90,7 @@ export const withAuthRetry = async <T>(fn: () => Promise<T>): Promise<T> => {
       try {
         await apiClient.post("/api/auth/refresh-tokens");
 
-        return await fn(); // 🔥 retry same request
+        return await fn();
       } catch (refreshError) {
         throw refreshError;
       }

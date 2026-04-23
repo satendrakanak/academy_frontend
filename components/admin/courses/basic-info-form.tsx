@@ -29,7 +29,7 @@ export const BasicInfoForm = ({ course }: BasicInfoFormProps) => {
     mode: "onChange",
     defaultValues: {
       title: course.title || "",
-      description: course.description || "",
+      shortDescription: course.shortDescription || "",
       slug: course.slug || "",
     },
   });
@@ -98,7 +98,7 @@ export const BasicInfoForm = ({ course }: BasicInfoFormProps) => {
 
             {/* Description */}
             <Controller
-              name="description"
+              name="shortDescription"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>

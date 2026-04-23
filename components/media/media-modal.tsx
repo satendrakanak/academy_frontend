@@ -90,7 +90,7 @@ export const MediaModal = ({
 
       const json: ApiResponse<InitUploadResponse> = await initRes.json();
 
-      const { uploadId, url, key } = json.data;
+      const { uploadId, url } = json.data;
 
       // 🔥 STEP 2: upload to S3 (REAL progress)
       await axios.put(url, file, {

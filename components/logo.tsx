@@ -9,9 +9,8 @@ const Logo = () => {
         <Image
           alt="logo"
           src="/assets/unitus-logo.png"
-          priority
-          fill
-          sizes="200px"
+          width={250}
+          height={60}
         />
       </div>
     </Link>

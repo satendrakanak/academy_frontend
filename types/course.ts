@@ -1,17 +1,21 @@
 import { Category } from "./category";
+import { Chapter } from "./chapter";
 import { FileType } from "./file";
 import { Tag } from "./tag";
 import { User } from "./user";
 
 export type CreateCoursePayload = {
   title: string;
-  slug: string;
+  slug?: string;
 
   description?: string;
+  shortDescription?: string;
 
   imageId?: number;
   imageAlt?: string;
-  isFree: boolean;
+  videoId?: number;
+  isFree?: boolean;
+  isPublished?: boolean;
   priceInr?: string;
   priceUsd?: string;
 
@@ -38,8 +42,8 @@ export type CreateCoursePayload = {
 
   metaDescription?: string;
 
-  categories: number[];
-  tags: number[];
+  categories?: number[];
+  tags?: number[];
 };
 
 export type UpdateCoursePayload = Partial<CreateCoursePayload>;
@@ -48,10 +52,13 @@ export type Course = {
   id: number;
   title: string;
   slug: string;
+  shortDescription: string | null;
   description: string | null;
   image: FileType | null;
   imageAlt: string | null;
+  video: FileType | null;
   isFree: boolean;
+  isPublished: boolean;
   priceInr: string | null;
   priceUsd: string | null;
   duration: string | null;
@@ -70,6 +77,7 @@ export type Course = {
   metaDescription: string | null;
   categories: Category[];
   tags: Tag[];
+  chapters: Chapter[];
   createdBy: User;
   updatedBy: User;
   createdAt: string;

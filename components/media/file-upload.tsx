@@ -10,10 +10,11 @@ import { FilePreview } from "./file-preview";
 
 interface FileUploadProps {
   value?: FileType | null;
-  onUpload: (file: FileType) => Promise<void> | void;
+  onUpload: (file: FileType, alt: string) => Promise<void> | void;
   label?: string;
   previewType?: PreviewType;
   disabled?: boolean;
+  className?: string;
 }
 
 export const FileUpload = ({
@@ -22,14 +23,15 @@ export const FileUpload = ({
   label,
   previewType = "image",
   disabled,
+  className,
 }: FileUploadProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSelect = async (file: FileType) => {
+  const handleSelect = async (file: FileType, alt: string) => {
     try {
       setLoading(true);
-      await onUpload(file);
+      await onUpload(file, alt);
     } finally {
       setLoading(false);
       setOpen(false);
@@ -41,10 +43,11 @@ export const FileUpload = ({
       {label && <h3 className="text-sm font-semibold">{label}</h3>}
 
       <div
-        onClick={!disabled ? () => setOpen(true) : undefined}
+        onClick={!disabled && !value ? () => setOpen(true) : undefined}
         className={cn(
-          "relative h-40 w-full border rounded-md flex items-center justify-center overflow-hidden cursor-pointer",
-          !disabled && "hover:bg-muted",
+          "relative w-full border rounded-md flex items-center justify-center overflow-hidden ",
+          !disabled && !value && "hover:bg-muted cursor-pointer",
+          className,
         )}
       >
         {loading && (
@@ -53,7 +56,11 @@ export const FileUpload = ({
           </div>
         )}
 
-        <FilePreview file={value} previewType={previewType} />
+        <FilePreview
+          file={value}
+          previewType={previewType}
+          className={className}
+        />
       </div>
 
       {value && (

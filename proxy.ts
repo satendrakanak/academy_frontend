@@ -11,6 +11,9 @@ const matchRoute = (routes: string[], pathname: string) => {
 export function proxy(request: NextRequest) {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
 
   const token = request.cookies.get("accessToken")?.value;
   const response = NextResponse.next();
@@ -57,6 +60,9 @@ export function proxy(request: NextRequest) {
 }
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    // Skip Next.js internals and all static files, unless found in search params
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
+    "/(api|trpc)(.*)",
   ],
 };

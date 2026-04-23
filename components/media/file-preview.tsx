@@ -8,15 +8,15 @@ interface FilePreviewProps {
   file?: FileType | null;
   previewType?: PreviewType;
   triggerText?: string;
+  className?: string;
 }
 
 export const FilePreview = ({
   file,
   previewType = "image",
   triggerText = "Click to upload",
+  className,
 }: FilePreviewProps) => {
-  console.log("File in preview", file);
-
   if (!file) {
     return (
       <div className="text-xs text-muted-foreground text-center">
@@ -33,7 +33,7 @@ export const FilePreview = ({
   if (previewType === "image") {
     return (
       <Image
-        src={file.url}
+        src={file.path}
         alt={file.name || "Featured Image"}
         fill
         className="object-cover w-full h-full"
@@ -44,9 +44,7 @@ export const FilePreview = ({
   }
 
   if (previewType === "video") {
-    return (
-      <video src={file.url} className="w-full h-full object-cover" controls />
-    );
+    return <video src={file.path} className="aspect-video w-full" controls />;
   }
 
   return (

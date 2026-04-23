@@ -1,39 +1,106 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Chapter } from "@/types/chapter";
 import ChaptersList from "./chapters/chapters-list";
 import PublishedList from "./chapters/published-chapters";
-import ChapterDrawer from "./chapters/chapter-drawer";
-import DescriptionModal from "./chapters/description-modal";
+import { Course } from "@/types/course";
+import { chapterClientService } from "@/services/chapters/chapter.client";
+import type { DragEndEvent } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { toast } from "sonner";
 
-export default function ChaptersForm() {
+interface ChaptersFormProps {
+  course: Course;
+}
+
+export default function ChaptersForm({ course }: ChaptersFormProps) {
   const [chapters, setChapters] = useState<Chapter[]>([]);
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const [openDrawer, setOpenDrawer] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-
-  const activeChapter = chapters.find((c) => c.id === activeId);
+  const [activeId, setActiveId] = useState<number | null>(null);
+  useEffect(() => {
+    if (course?.chapters) {
+      setChapters(course.chapters);
+    }
+  }, [course]);
 
   const addChapter = () => {
     const newChapter: Chapter = {
-      id: crypto.randomUUID(),
+      id: Date.now(),
       title: "",
+      courseId: course.id,
       description: "",
-      videoUrl: "",
+      lectures: [],
       isFree: false,
       isPublished: false,
+      isTemp: true,
+      position: chapters.length,
     };
 
     setChapters((prev) => [...prev, newChapter]);
     setActiveId(newChapter.id);
   };
 
-  const updateChapter = (key: keyof Chapter, value: any) => {
-    setChapters((prev) =>
-      prev.map((c) => (c.id === activeId ? { ...c, [key]: value } : c)),
-    );
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = chapters.findIndex((c) => c.id === active.id);
+    const newIndex = chapters.findIndex((c) => c.id === over.id);
+
+    const newChapters = arrayMove(chapters, oldIndex, newIndex);
+
+    const updated = newChapters.map((c, index) => ({
+      ...c,
+      position: index,
+    }));
+
+    setChapters(updated);
+
+    try {
+      await chapterClientService.reorder({
+        items: updated.map((c) => ({
+          id: c.id,
+          position: c.position,
+        })),
+      });
+
+      toast.success("Chapters reordered successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to reorder chapters");
+    }
+  };
+
+  const onTooglePublish = async (id: number, isPublished: boolean) => {
+    try {
+      // 🔥 optimistic update
+      setChapters((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, isPublished } : c)),
+      );
+
+      // 🔥 API call
+      await chapterClientService.update(id, {
+        isPublished,
+      });
+      toast.success("Chapter updated successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update chapter");
+    }
+  };
+
+  const onDelete = async (id: number) => {
+    setChapters((prev) => prev.filter((c) => c.id !== id));
+
+    try {
+      await chapterClientService.delete(id);
+      toast.success("Chapter deleted successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete chapter");
+    }
   };
 
   return (
@@ -42,26 +109,26 @@ export default function ChaptersForm() {
         <ChaptersList
           chapters={chapters}
           activeId={activeId}
+          courseId={course.id}
           setActiveId={setActiveId}
           addChapter={addChapter}
-          openModal={() => setOpenModal(true)}
+          onTooglePublish={onTooglePublish}
+          onDelete={onDelete}
+          viewType="all"
+          handleDragEnd={handleDragEnd}
         />
 
         <PublishedList
           chapters={chapters.filter((c) => c.isPublished)}
-          onEdit={(id: string) => {
-            setActiveId(id);
-            setOpenDrawer(true);
-          }}
+          activeId={activeId}
+          courseId={course.id}
+          setActiveId={setActiveId}
+          onTooglePublish={onTooglePublish}
+          onDelete={onDelete}
+          viewType="published"
+          handleDragEnd={handleDragEnd}
         />
       </div>
-
-      <DescriptionModal
-        open={openModal}
-        onOpenChange={setOpenModal}
-        chapter={activeChapter}
-        updateChapter={updateChapter}
-      />
     </>
   );
 }
