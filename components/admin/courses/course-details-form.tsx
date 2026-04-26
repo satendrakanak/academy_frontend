@@ -10,6 +10,7 @@ import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
 import { Input } from "@base-ui/react";
 import { SubmitButton } from "@/components/submit-button";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CourseDetailsFormProps {
   course: Course;
@@ -40,7 +41,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
       const payload = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [
           key,
-          value?.trim() ? value : undefined,
+          value?.trim() ? value : "",
         ]),
       );
 
@@ -49,12 +50,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
       router.refresh();
       toast.success("Course details updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

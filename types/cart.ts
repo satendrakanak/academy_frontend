@@ -7,4 +7,5 @@ export type CartItem = {
   instructor?: string;
   totalDuration?: string;
   totalLectures?: number;
+  discountPrice?: number;
 };

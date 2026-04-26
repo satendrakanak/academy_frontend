@@ -8,6 +8,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { Field, FieldGroup, FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { courseClientService } from "@/services/courses/course.client";
+import { getErrorMessage } from "@/lib/error-handler";
 
 const schema = z.object({
   title: z.string().min(3, "Title required"),
@@ -34,12 +35,7 @@ export const CreateCourseForm = ({ onSuccess }: CreateCourseFormProps) => {
       onSuccess?.(response.data.id);
       form.reset();
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

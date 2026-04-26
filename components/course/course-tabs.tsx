@@ -86,7 +86,7 @@ export const CourseTabs = ({ course }: { course: Course }) => {
         ref={tabsRef}
         className={`z-40 mb-6 px-2 py-3 rounded-2xl transition-all duration-300 ${
           isSticky
-            ? "sticky top-25 bg-primary/10 shadow-md backdrop-blur-sm"
+            ? "sticky top-28 bg-primary/10 shadow-md backdrop-blur-sm"
             : "bg-white shadow-none"
         }`}
       >

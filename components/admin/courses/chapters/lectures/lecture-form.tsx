@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { LectureList } from "./lectures-list";
 import { Chapter } from "@/types/chapter";
 import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface LectureFormProps {
   chapter: Chapter;
@@ -90,9 +91,16 @@ export const LectureForm = ({ chapter }: LectureFormProps) => {
       });
       router.refresh();
       toast.success("Lecture updated successfully");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update lecture");
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+
+      // 🔥 rollback
+      setLectures((prev) =>
+        prev.map((l) =>
+          l.id === id ? { ...l, isPublished: !isPublished } : l,
+        ),
+      );
     }
   };
 

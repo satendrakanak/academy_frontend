@@ -135,3 +135,6 @@
     @apply font-sans;
   }
 }
+[data-radix-arrow] {
+  display: none !important;
+}

@@ -19,7 +19,6 @@ import { FileUpload } from "@/components/media/file-upload";
 import { FileType } from "@/types/file";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { handleApiError } from "@/helper/handle-api-error";
 import { Switch } from "@/components/ui/switch";
 import { lectureSchema } from "@/schemas/courses";
 import type { DraggableAttributes } from "@dnd-kit/core";
@@ -31,6 +30,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { attachmentClientService } from "@/services/attachments/attachment.client";
 import { Attachment } from "@/types/attachment";
 import Link from "next/link";
+import { canPublishLecture } from "@/helpers/publish-rules";
+import { cn } from "@/lib/utils";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface LectureDrawerProps {
   lecture: Lecture;
@@ -87,8 +89,9 @@ export default function LectureDrawer({
     try {
       setSelectedVideo(file);
       toast.success("Video uploaded");
-    } catch (err) {
-      handleApiError(err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 
@@ -123,8 +126,9 @@ export default function LectureDrawer({
       }
 
       toast.success("Attachment added");
-    } catch (err) {
-      handleApiError(err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
   const handleRemoveAttachment = async (id: number) => {
@@ -143,11 +147,9 @@ export default function LectureDrawer({
 
       toast.success("Attachment removed");
       router.refresh();
-    } catch (error) {
-      handleApiError(error);
-
-      // ❗ rollback (optional but pro level)
-      // setSelectedFiles(prev => [...prev, removedFile]);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     } finally {
       setLoadingId(null);
     }
@@ -199,10 +201,6 @@ export default function LectureDrawer({
         (a) => !persistedFileIds.includes(a.id),
       );
 
-      console.log("New files", newFiles);
-      console.log("Removed files", removedFiles);
-      console.log("Lecture", lecture.id);
-
       // ✅ CREATE (only if needed)
       if (newFiles.length > 0) {
         await Promise.all(
@@ -223,11 +221,12 @@ export default function LectureDrawer({
         );
       }
       router.refresh();
-    } catch (error) {
-      handleApiError(error);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
-
+  const disabled = !canPublishLecture(lecture);
   return (
     <Drawer key={lecture.id} direction="right">
       <div
@@ -286,12 +285,25 @@ export default function LectureDrawer({
               {/* Publish */}
               {!lecture.isPublished && !isTemp && (
                 <button
+                  disabled={disabled}
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (disabled) return;
+
                     onTooglePublish(lecture.id, true);
                   }}
-                  className="p-1 rounded hover:bg-green-50 text-green-600 transition cursor-pointer"
-                  title="Publish"
+                  className={cn(
+                    "p-1.5 rounded-md transition flex items-center justify-center",
+                    "focus:outline-none focus:ring-2 focus:ring-green-400/40 cursor-pointer",
+                    disabled
+                      ? "opacity-40 cursor-not-allowed text-gray-400 bg-gray-100"
+                      : "text-green-600 hover:bg-green-50 active:scale-95",
+                  )}
+                  title={
+                    disabled
+                      ? "Add video or attachment to publish"
+                      : "Publish lecture"
+                  }
                 >
                   <CheckCircle className="size-3" />
                 </button>

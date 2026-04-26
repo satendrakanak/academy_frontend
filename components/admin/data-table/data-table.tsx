@@ -12,11 +12,13 @@ export function DataTable<T extends { id: number }>({
   columns,
   searchColumn = "title",
   isClient,
+  action,
 }: {
   data: T[];
   columns: ColumnDef<T>[];
   searchColumn?: string;
   isClient?: boolean;
+  action?: React.ReactNode;
 }) {
   const { table } = isClient
     ? usePaginationDataTable({ data, columns })
@@ -25,7 +27,11 @@ export function DataTable<T extends { id: number }>({
   return (
     <div className="w-full flex flex-col gap-4">
       {/* 🔥 Toolbar */}
-      <DataTableToolbar table={table} searchColumn={searchColumn} />
+      <DataTableToolbar
+        table={table}
+        searchColumn={searchColumn}
+        action={action}
+      />
 
       {/* 🔥 Table */}
       <div className="px-4 lg:px-6">

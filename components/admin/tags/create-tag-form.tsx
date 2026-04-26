@@ -13,9 +13,9 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/utils/slugify";
 import { useEffect } from "react";
-import { handleApiError } from "@/helper/handle-api-error";
 import { Tag } from "@/types/tag";
 import { tagClientService } from "@/services/tags/tag.client";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CreateTagFormProps {
   tag?: Tag;
@@ -64,8 +64,9 @@ export const CreateTagForm = ({ tag }: CreateTagFormProps) => {
       }
 
       router.refresh();
-    } catch (error) {
-      handleApiError(error);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 

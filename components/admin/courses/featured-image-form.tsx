@@ -7,7 +7,7 @@ import { FileType } from "@/types/file";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { FileUpload } from "@/components/media/file-upload";
-import { handleApiError } from "@/helper/handle-api-error";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface FeaturedImageFormProps {
   course: Course;
@@ -25,8 +25,9 @@ export const FeaturedImageForm = ({ course }: FeaturedImageFormProps) => {
       setSelectedImage(file);
       toast.success("Image Updated");
       router.refresh();
-    } catch (err) {
-      handleApiError(err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
   return (

@@ -11,13 +11,20 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from "@/components/ui/popover";
-import { CreateCourseForm } from "../courses/create-course-form";
 
 interface AddButtonProps {
   title?: string;
+  redirectPath?: string; // optional redirect base
+  FormComponent: React.ComponentType<{
+    onSuccess?: (id?: number | string) => void;
+  }>;
 }
 
-export default function AddButton({ title }: AddButtonProps) {
+export default function AddButton({
+  title,
+  redirectPath,
+  FormComponent,
+}: AddButtonProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -27,23 +34,21 @@ export default function AddButton({ title }: AddButtonProps) {
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="flex items-center gap-1">
           <IconPlus className="size-4" />
-          <span className="hidden lg:inline">{title || "Add Course"}</span>
+          <span className="hidden lg:inline">{title || "Add"}</span>
         </Button>
       </PopoverTrigger>
 
-      {/* 🔥 POPOVER CONTENT */}
-      <PopoverContent
-        align="end" // 🔥 right align (important)
-        className="w-80 p-4"
-      >
-        <div className="space-y-3">
-          <CreateCourseForm
-            onSuccess={(id) => {
-              setOpen(false); // 🔥 close
-              router.push(`/admin/courses/${id}`);
-            }}
-          />
-        </div>
+      {/* 🔥 CONTENT */}
+      <PopoverContent align="end" className="w-80 p-4">
+        <FormComponent
+          onSuccess={(id) => {
+            setOpen(false);
+
+            if (redirectPath && id) {
+              router.push(`${redirectPath}/${id}`);
+            }
+          }}
+        />
       </PopoverContent>
     </Popover>
   );

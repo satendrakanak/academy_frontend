@@ -8,103 +8,59 @@ import { CourseTabs } from "./course-tabs";
 import { Course } from "@/types/course";
 import { userProgressClientService } from "@/services/user-progress/user-progress.client";
 
-export const LearnClient = ({ course }: { course: Course }) => {
-  const firstLecture = course.chapters?.[0]?.lectures?.[0] || null;
+import {
+  mergeCourseProgress,
+  getResumeLecture,
+  getNextLecture,
+} from "@/helpers/course-progress";
+import { Lecture } from "@/types/lecture";
+import { LearnFooter } from "@/components/layout/learn-footer";
 
+interface LearnClientProps {
+  course: Course;
+}
+
+export const LearnClient = ({ course }: LearnClientProps) => {
   const [courseData, setCourseData] = useState(course);
-  const [currentLecture, setCurrentLecture] = useState(firstLecture);
+  const [currentLecture, setCurrentLecture] = useState<Lecture | null>(null);
 
-  // 🔥 LOAD PROGRESS
+  // 🔥 load progress
   useEffect(() => {
-    const loadProgress = async () => {
-      try {
-        const res = await userProgressClientService.getCourse(course.id);
-        const progressMap = res.data;
+    const load = async () => {
+      const res = await userProgressClientService.getCourse(course.id);
 
-        const updatedCourse = {
-          ...course,
-          chapters: course.chapters.map((chapter) => ({
-            ...chapter,
-            lectures: chapter.lectures.map((lecture) => ({
-              ...lecture,
-              progress: progressMap[lecture.id] || {
-                isCompleted: false,
-                progress: 0,
-                lastTime: 0,
-              },
-            })),
-          })),
-        };
+      const updated = mergeCourseProgress(course, res.data);
 
-        setCourseData(updatedCourse);
-      } catch {
-        console.error("Failed to load progress");
-      }
+      setCourseData(updated);
+      setCurrentLecture(getResumeLecture(updated));
     };
 
-    loadProgress();
+    load();
   }, [course]);
 
-  useEffect(() => {
-    if (!courseData) return;
-
-    const allLectures = courseData.chapters.flatMap((c) => c.lectures);
-
-    // 🔥 1. find first incomplete lecture
-    const nextLecture =
-      allLectures.find((l) => !l.progress?.isCompleted) ||
-      allLectures[allLectures.length - 1]; // fallback
-
-    if (nextLecture) {
-      setCurrentLecture(nextLecture);
-    }
-  }, [courseData]);
-
-  // 🔥 SYNC CURRENT LECTURE WITH UPDATED DATA
-  useEffect(() => {
+  const handleNextLecture = () => {
     if (!currentLecture) return;
 
-    const updatedLecture = courseData.chapters
-      .flatMap((c) => c.lectures)
-      .find((l) => l.id === currentLecture.id);
-
-    if (updatedLecture) {
-      setCurrentLecture(updatedLecture);
-    }
-  }, [courseData]);
-
-  // 🔥 NEXT LECTURE
-  const handleNextLecture = () => {
-    let found = false;
-
-    for (const chapter of courseData.chapters) {
-      for (const lecture of chapter.lectures) {
-        if (found) {
-          setCurrentLecture(lecture);
-          return;
-        }
-
-        if (lecture.id === currentLecture?.id) {
-          found = true;
-        }
-      }
-    }
+    const next = getNextLecture(courseData, currentLecture.id);
+    if (next) setCurrentLecture(next);
   };
+
   const handleProgressUpdate = (
     lectureId: number,
     progress: number,
     lastTime: number,
+    alreadyCompleted?: boolean,
   ) => {
     setCourseData((prev) => ({
       ...prev,
-      chapters: prev.chapters.map((chapter) => ({
-        ...chapter,
-        lectures: chapter.lectures.map((l) =>
+      chapters: prev.chapters.map((c) => ({
+        ...c,
+        lectures: c.lectures.map((l) =>
           l.id === lectureId
             ? {
                 ...l,
                 progress: {
-                  isCompleted: progress >= 90,
+                  isCompleted: alreadyCompleted || progress >= 90, // 🔥 FIX
                   progress,
                   lastTime,
                 },
@@ -114,28 +70,43 @@ export const LearnClient = ({ course }: { course: Course }) => {
       })),
     }));
   };
+
+  if (!currentLecture) return null;
+
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
+    <div className="h-screen flex flex-col">
+      {/* HEADER */}
       <PlayerHeader course={courseData} />
 
+      {/* MAIN */}
       <div className="flex flex-1 overflow-hidden">
-        {/* 🎥 PLAYER */}
-        <div className="flex-1 flex flex-col bg-black">
+        {/* 🔥 LEFT SIDE (SCROLLABLE) */}
+        <div className="flex-1 overflow-y-auto bg-black">
           <VideoPlayer
             lecture={currentLecture}
             onNext={handleNextLecture}
             onProgressUpdate={handleProgressUpdate}
           />
+
           <CourseTabs course={courseData} />
+          <LearnFooter />
         </div>
 
-        {/* 📚 SIDEBAR */}
-        <div className="w-90 border-l bg-white overflow-y-auto">
-          <LearnCourseSidebar
-            course={courseData}
-            currentLecture={currentLecture}
-            onSelectLecture={setCurrentLecture}
-          />
+        {/* 🔥 RIGHT SIDE (SIDEBAR) */}
+        <div className="w-90 border-l bg-white flex flex-col">
+          {/* SIDEBAR HEADER FIXED */}
+          <div className="p-4 border-b sticky top-0 bg-white z-10">
+            <h2 className="font-semibold">Course content</h2>
+          </div>
+
+          {/* SIDEBAR SCROLL */}
+          <div className="flex-1 overflow-y-auto">
+            <LearnCourseSidebar
+              course={courseData}
+              currentLecture={currentLecture}
+              onSelectLecture={setCurrentLecture}
+            />
+          </div>
         </div>
       </div>
     </div>

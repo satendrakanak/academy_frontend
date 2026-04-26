@@ -10,6 +10,7 @@ import { chapterClientService } from "@/services/chapters/chapter.client";
 import type { DragEndEvent } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface ChaptersFormProps {
   course: Course;
@@ -85,9 +86,16 @@ export default function ChaptersForm({ course }: ChaptersFormProps) {
         isPublished,
       });
       toast.success("Chapter updated successfully");
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to update chapter");
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+
+      // 🔥 rollback
+      setChapters((prev) =>
+        prev.map((c) =>
+          c.id === id ? { ...c, isPublished: !isPublished } : c,
+        ),
+      );
     }
   };
 

@@ -6,6 +6,8 @@ import Container from "@/components/container";
 import MobileMenuIcon from "@/components/header/mobile-menu-icon";
 import { Navbar } from "@/components/header/navbar";
 import { cn } from "@/lib/utils";
+import { WebsiteNavUser } from "../auth/website-nav-user";
+import { CartIcon } from "./cart-icon";
 
 interface HeaderProps {
   isHomePage?: boolean;
@@ -31,39 +33,39 @@ export const Header = ({ isHomePage }: HeaderProps) => {
   return (
     <header
       className={cn(
-        "fixed left-0 w-full z-50 duration-300 transition-all ease-in-out",
-        scrolled ? "top-0" : "top-10",
+        "fixed left-0 w-full z-50 transition-all duration-300",
+        "top-10",
         headerClass,
       )}
     >
-      <div className="py-3">
+      <div>
         <Container>
-          <div className="flex flex-col gap-3">
-            {/* ==== Top Row ==== */}
-            <div className="relative flex flex-row items-center justify-between gap-3">
-              {/* Left: Mobile menu icon (visible only on mobile) */}
-              <div className="block md:hidden">
+          {/* 🔥 SINGLE ROW CLEAN LAYOUT */}
+          <div className="flex items-center justify-between">
+            {/* LEFT */}
+            <div className="flex items-center gap-3">
+              <div className="md:hidden">
                 <MobileMenuIcon />
               </div>
-
-              {/* Center: Logo (absolutely centered on mobile) */}
-              <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 mx-auto md:mx-0">
-                <Logo />
-              </div>
-
-              {/* Right: CTA + Icons */}
-              <div className="flex items-center gap-4"></div>
+              <Logo />
             </div>
 
-            {/* ==== Second Row: Navbar for Tablet only ==== */}
-            <div className="hidden md:flex lg:hidden justify-center border-t border-[#e0cfc1] pt-2 force-tablet-navbar">
+            {/* CENTER (Desktop Navbar) */}
+            <div className="hidden lg:flex">
               <Navbar />
             </div>
 
-            {/* ==== Navbar for Desktop (inline, top row) ==== */}
-            <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 force-desktop-navbar">
-              <Navbar />
+            {/* RIGHT */}
+            <div className="flex items-center gap-3">
+              <CartIcon />
+
+              <WebsiteNavUser />
             </div>
+          </div>
+
+          {/* Tablet Navbar */}
+          <div className="hidden md:flex lg:hidden justify-center border-t border-[#e0cfc1] mt-3 pt-2">
+            <Navbar />
           </div>
         </Container>
       </div>

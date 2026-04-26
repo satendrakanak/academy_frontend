@@ -7,7 +7,7 @@ interface CourseFeatureItemProps {
 
 const CourseFeatureItem = ({ title, value }: CourseFeatureItemProps) => {
   return (
-    <div className="flex mx-2 my-4  border-b-2 border-gray-200 items-center justify-between">
+    <div className="flex mx-2 my-4  border-b border-gray-200 items-center justify-between">
       <div className="w-1/3">
         <span className="text-gray-600 font-bold mr-2">{title}</span>
       </div>

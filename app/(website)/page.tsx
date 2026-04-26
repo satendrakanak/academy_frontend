@@ -12,14 +12,14 @@ export default async function Home() {
   let courses: Course[] = [];
   try {
     const response = await courseServerService.getAll();
-    courses = response.data.data;
+    courses = response.data;
     console.log("Courses", courses);
   } catch (error) {
     console.error(error);
   }
   return (
     <div>
-      <Hero />
+      <Hero courses={courses} />
       <StatsTimeline />
       <PopularCourses courses={courses} />
       <WhyJoinOurCourses />

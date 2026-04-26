@@ -15,15 +15,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Chapter } from "@/types/chapter";
 import { SubmitButton } from "@/components/submit-button";
-import RichEditor from "@/components/editor/rich-editor";
 import { toast } from "sonner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { handleApiError } from "@/helper/handle-api-error";
 import { chapterClientService } from "@/services/chapters/chapter.client";
 import { Switch } from "@/components/ui/switch";
 import { chapterSchema } from "@/schemas/courses";
 import { Textarea } from "@/components/ui/textarea";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface ChapterDrawerProps {
   open: boolean;
@@ -80,14 +79,15 @@ export default function ChapterDrawer({
         toast.success("Chapter created");
       }
       router.refresh();
-    } catch (error) {
-      handleApiError(error);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 
   return (
     <Drawer direction="right" open={open} onOpenChange={onClose}>
-      <DrawerContent className="ml-auto h-full w-200 max-w-5xl! sm:max-w-4xl flex flex-col">
+      <DrawerContent className="ml-auto h-full w-200 max-w-2xl! sm:max-w-4xl flex flex-col">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col h-full"

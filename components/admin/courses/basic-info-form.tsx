@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,13 +14,12 @@ import { Course } from "@/types/course";
 import { courseClientService } from "@/services/courses/course.client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface BasicInfoFormProps {
   course: Course;
 }
 export const BasicInfoForm = ({ course }: BasicInfoFormProps) => {
-  const [error, setError] = useState("");
-
   const router = useRouter();
 
   const form = useForm<z.infer<typeof courseSchema>>({
@@ -41,17 +39,11 @@ export const BasicInfoForm = ({ course }: BasicInfoFormProps) => {
 
   const onSubmit = async (data: z.infer<typeof courseSchema>) => {
     try {
-      const response = await courseClientService.update(course.id, data);
-      console.log(response);
+      await courseClientService.update(course.id, data);
       router.refresh();
       toast.success("Course basic info updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };
@@ -116,15 +108,7 @@ export const BasicInfoForm = ({ course }: BasicInfoFormProps) => {
           </FieldGroup>
 
           {/* Footer */}
-          <div className="flex items-center justify-between">
-            {error ? (
-              <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md">
-                {error}
-              </div>
-            ) : (
-              <div />
-            )}
-
+          <div className="flex items-center justify-end">
             <SubmitButton
               type="submit"
               disabled={!isValid}

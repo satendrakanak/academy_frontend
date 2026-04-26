@@ -3,7 +3,7 @@ import { Lecture } from "@/types/lecture";
 /**
  * 🎥 get video duration
  */
-const getVideoDuration = (url: string): Promise<number> => {
+export const getVideoDuration = (url: string): Promise<number> => {
   return new Promise((resolve) => {
     const video = document.createElement("video");
 
@@ -16,6 +16,30 @@ const getVideoDuration = (url: string): Promise<number> => {
 
     video.onerror = () => resolve(0);
   });
+};
+
+/**
+ * ⏱️ format duration
+ */
+export const formatDuration = (seconds: number) => {
+  if (!seconds) return "";
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+};
+
+/**
+ * ⏱️ format total duration
+ */
+
+export const formatTotalDuration = (seconds: number) => {
+  if (!seconds) return "";
+
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+
+  if (hrs > 0) return `${hrs}h ${mins}m`;
+  return `${mins}m`;
 };
 
 /**

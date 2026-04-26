@@ -4,6 +4,7 @@ import CourseRatingDetails from "../courses/course-rating-details";
 import CourseAuthor from "../courses/course-author";
 import CourseUpdateDetails from "../courses/course-update-details";
 import guestAuthor from "@/public/assets/guest-user.webp";
+import { formatDate } from "@/utils/formate-date";
 
 interface CourseHeroProps {
   course: Course;
@@ -42,14 +43,14 @@ export const CourseHero = ({ course }: CourseHeroProps) => {
             />
 
             <CourseAuthor
-              authorName="Satendra Singh"
+              authorName={`${course.createdBy.firstName} ${course.createdBy.lastName}`}
               authorPhoto={guestAuthor}
             />
 
             <div className="bg-white backdrop-blur-md border border-white/10 rounded-xl px-4 py-3 inline-block mt-4">
               <CourseUpdateDetails
-                lastUpdateDate="March 25, 2024"
-                language="English | Hindi"
+                lastUpdateDate={formatDate(course.updatedAt)}
+                language={course.language || "English"}
                 certificate="Certified Course"
               />
             </div>

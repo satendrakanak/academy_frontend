@@ -8,6 +8,8 @@ import { Category } from "@/types/category";
 import { courseClientService } from "@/services/courses/course.client";
 import { slugify } from "@/utils/slugify";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CategoryFormProps {
   course: Course;
@@ -18,8 +20,7 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
   const [selected, setSelected] = useState<number[]>([]);
   const [showInput, setShowInput] = useState(false);
   const [newCategory, setNewCategory] = useState("");
-  const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   // 🔥 Load categories + preselect
   useEffect(() => {
     const loadCategories = async () => {
@@ -41,17 +42,14 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
   // 🔥 Auto Save
   const saveCategories = async (updated: number[]) => {
     try {
-      setLoading(true);
-
       await courseClientService.update(course.id, {
         categories: updated,
       });
+      router.refresh();
       toast.success("Categories updated successfully");
-    } catch (err) {
-      toast.error("Failed to update categories");
-      console.error("Save failed", err);
-    } finally {
-      setLoading(false);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
   const toggleCategory = (id: number) => {
@@ -72,8 +70,6 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
     if (!newCategory.trim()) return;
 
     try {
-      setLoading(true);
-
       // 1️⃣ create category
       const res = await categoryClientService.create({
         name: newCategory,
@@ -95,10 +91,9 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
       // reset
       setNewCategory("");
       setShowInput(false);
-    } catch (err) {
-      console.error("Create category failed", err);
-    } finally {
-      setLoading(false);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 

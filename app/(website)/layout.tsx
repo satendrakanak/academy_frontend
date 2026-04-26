@@ -2,8 +2,8 @@ import { Header } from "@/components/header/header";
 import MobileMenu from "@/components/header/mobile-menu";
 import Topbar from "@/components/header/top-bar";
 import Footer from "@/components/layout/footer";
-import { Inter } from "next/font/google";
 import { ReactNode } from "react";
+import Script from "next/script";
 
 export default function WebsiteLayout({ children }: { children: ReactNode }) {
   return (
@@ -11,9 +11,15 @@ export default function WebsiteLayout({ children }: { children: ReactNode }) {
       <Topbar />
       <Header />
       <MobileMenu />
-      <main className="pt-[105px] md:pt-[115px] lg:pt-[115px] h-full">
-        {children}
-      </main>
+
+      <main className="pt-26 md:pt-25 lg:pt-25 h-full">{children}</main>
+
+      {/* 🔥 Razorpay Script */}
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="afterInteractive"
+      />
+
       <Footer />
     </div>
   );

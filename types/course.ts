@@ -77,10 +77,21 @@ export type Course = {
   metaDescription: string | null;
   categories: Category[];
   tags: Tag[];
+  isEnrolled?: boolean;
+  progress: {
+    isCompleted: boolean;
+    progress: number;
+    lastTime: number;
+  };
   chapters: Chapter[];
   createdBy: User;
   updatedBy: User;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+};
+
+export type PublishCheckResult = {
+  canPublish: boolean;
+  reasons: string[];
 };

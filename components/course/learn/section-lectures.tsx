@@ -5,13 +5,9 @@ import { Lecture } from "@/types/lecture";
 import { CheckCircle2, FileText, PlayCircle } from "lucide-react";
 import { LearnCourseResources } from "./learn-course-resources";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { formatDuration, getVideoDuration } from "@/helpers/get-section-stats";
 
-const formatDuration = (seconds: number) => {
-  if (!seconds) return "";
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
 interface SectionLecturesProps {
   chapter: Chapter;
   openMenu: number | null;
@@ -27,68 +23,101 @@ export const SectionLectures = ({
   currentLecture,
   onSelectLecture,
 }: SectionLecturesProps) => {
+  const [durationMap, setDurationMap] = useState<Record<number, number>>({});
+
+  // 🔥 load durations
+  useEffect(() => {
+    const loadDurations = async () => {
+      const map: Record<number, number> = {};
+
+      await Promise.all(
+        chapter.lectures.map(async (lecture) => {
+          if (lecture.video?.path) {
+            const duration = await getVideoDuration(lecture.video.path);
+            map[lecture.id] = duration;
+          }
+        }),
+      );
+
+      setDurationMap(map);
+    };
+
+    loadDurations();
+  }, [chapter]);
+
   return (
-    <div className="bg-gray-50">
+    <div className="bg-white">
       {chapter.lectures?.map((lecture: Lecture) => {
         const isActive = currentLecture?.id === lecture.id;
         const isCompleted = lecture.progress?.isCompleted;
 
         const hasVideo = !!lecture.video?.path;
         const hasAttachments =
-          !!lecture.attachments && lecture.attachments?.length > 0;
+          lecture.attachments && lecture.attachments.length > 0;
+
+        const duration = durationMap[lecture.id];
 
         return (
           <div
             key={lecture.id}
-            className={cn("px-3 py-2 border-l-4 cursor-pointer relative", {
-              "border-primary bg-primary/10": isActive,
-              "border-transparent hover:bg-gray-100": !isActive,
-            })}
+            className={cn(
+              "group px-4 py-3 border-l-4 cursor-pointer transition flex items-start justify-between",
+              {
+                "border-primary bg-primary/10": isActive,
+                "border-transparent hover:bg-gray-50": !isActive,
+              },
+            )}
           >
-            <div className="flex justify-between items-start">
-              {/* LEFT */}
-              <div
-                className="flex gap-2 flex-1"
-                onClick={() => onSelectLecture(lecture)}
-              >
-                {/* ICON */}
-                <div className="mt-1">
-                  {isCompleted ? (
-                    <CheckCircle2 className="w-4 h-4 text-primary" />
-                  ) : hasVideo ? (
-                    <PlayCircle className="w-4 h-4 text-gray-500" />
-                  ) : (
-                    <FileText className="w-4 h-4 text-gray-500" />
-                  )}
-                </div>
-
-                {/* TITLE + DURATION */}
-                <div>
-                  <p
-                    className={cn("line-clamp-1", {
-                      "text-primary font-medium": isActive,
-                    })}
-                  >
-                    {lecture.title}
-                  </p>
-
-                  {/* {hasVideo && (
-                    <p className="text-xs text-gray-400">
-                      {formatDuration(lecture.duration)}
-                    </p>
-                  )} */}
-                </div>
+            {/* LEFT */}
+            <div
+              className="flex gap-3 flex-1"
+              onClick={() => onSelectLecture(lecture)}
+            >
+              {/* ICON */}
+              <div className="mt-1">
+                {isCompleted ? (
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
+                ) : hasVideo ? (
+                  <PlayCircle className="w-4 h-4 text-gray-500 group-hover:text-primary transition" />
+                ) : (
+                  <FileText className="w-4 h-4 text-gray-500" />
+                )}
               </div>
 
-              {/* RIGHT MENU */}
-              {hasAttachments && (
-                <LearnCourseResources
-                  lecture={lecture}
-                  openMenu={openMenu}
-                  setOpenMenu={setOpenMenu}
-                />
-              )}
+              {/* TEXT */}
+              <div className="flex flex-col">
+                <p
+                  className={cn(
+                    "text-sm line-clamp-1",
+                    isActive && "text-primary font-medium",
+                  )}
+                >
+                  {lecture.title}
+                </p>
+
+                {/* META */}
+                <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
+                  {hasVideo && duration && (
+                    <span>{formatDuration(duration)}</span>
+                  )}
+
+                  {hasAttachments && <span className="text-gray-300">•</span>}
+
+                  {hasAttachments && lecture.attachments && (
+                    <span>{lecture.attachments.length} files</span>
+                  )}
+                </div>
+              </div>
             </div>
+
+            {/* RIGHT */}
+            {hasAttachments && (
+              <LearnCourseResources
+                lecture={lecture}
+                openMenu={openMenu}
+                setOpenMenu={setOpenMenu}
+              />
+            )}
           </div>
         );
       })}

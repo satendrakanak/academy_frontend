@@ -1,20 +1,21 @@
-import { DataTable } from "@/components/admin/data-table/data-table";
-import { courseColumns } from "@/components/admin/data-table/columns";
+import { CoursesList } from "@/components/admin/courses/courses-list";
+import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
 import { Course } from "@/types/course";
+import { toast } from "sonner";
 const CoursesPage = async () => {
   let courses: Course[] = [];
   try {
-    const response = await courseServerService.getAll();
+    const response = await courseServerService.getAllCourses();
     courses = response.data.data;
-    console.log("Courses", courses);
-  } catch (error) {
-    console.error(error);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    toast.error(message);
   }
 
   return (
     <div>
-      <DataTable data={courses} columns={courseColumns} />
+      <CoursesList courses={courses} />
     </div>
   );
 };

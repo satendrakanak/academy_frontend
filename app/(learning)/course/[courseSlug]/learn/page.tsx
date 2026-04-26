@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { Course } from "@/types/course";
 import { courseServerService } from "@/services/courses/course.server";
 import { LearnClient } from "@/components/course/learn/learn-client";
+import { getErrorMessage } from "@/lib/error-handler";
+import { EnrollmentGate } from "@/components/layout/enrollment-gate";
 
 export default async function LearnPage({
   params,
@@ -16,24 +18,29 @@ export default async function LearnPage({
     notFound();
   }
 
-  let course: Course;
+  let course: Course | null = null;
+  let hasAccess = true;
 
   try {
-    const response = await courseServerService.getBySlug(courseSlug);
+    const response =
+      await courseServerService.getLearningCourseBySlug(courseSlug);
+
     course = response.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "UNAUTHORIZED") {
-        redirect("/login");
-      }
+    console.log("Course in learn", course);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
 
-      if (error.message === "NOT_FOUND") {
-        notFound();
-      }
+    // 🔥 detect access error
+    if (message.toLowerCase().includes("have access to this course")) {
+      hasAccess = false;
+    } else {
+      throw error;
     }
-
-    throw error;
   }
 
-  return <LearnClient course={course} />;
+  return (
+    <EnrollmentGate hasAccess={hasAccess} courseSlug={courseSlug}>
+      {course && <LearnClient course={course} />}
+    </EnrollmentGate>
+  );
 }

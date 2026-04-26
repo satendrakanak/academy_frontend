@@ -7,8 +7,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader, ShoppingCart } from "lucide-react";
-import { useMemo } from "react";
-import { getCourseMeta } from "@/lib/course-meta";
+import { getCourseMeta } from "@/helpers/course-meta";
 
 interface AddToCartButtonProps {
   course: Course;
@@ -24,30 +23,25 @@ export const AddToCartButton = ({
   const addToCart = useCartStore((s) => s.addToCart);
   const isInCart = useCartStore((s) => s.isInCart);
 
-  const [hasMounted, setHasMounted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { totalLectures, totalDuration } = useMemo(
-    () => getCourseMeta(course),
-    [course],
-  );
+  const [meta, setMeta] = useState({
+    totalLectures: 0,
+    totalDuration: "0m",
+  });
 
   useEffect(() => {
-    setHasMounted(true);
-  }, []);
+    const loadMeta = async () => {
+      const data = await getCourseMeta(course);
+      setMeta(data);
+    };
 
-  // 🔒 hydration safe
-  if (!hasMounted) {
-    return (
-      <Button className="w-full h-12 rounded-lg" disabled>
-        Loading...
-      </Button>
-    );
-  }
+    loadMeta();
+  }, [course]);
 
   const alreadyAdded = isInCart(course.id);
 
-  const handleAdd = async () => {
+  const handleAddToCart = async () => {
     if (alreadyAdded) {
       router.push("/cart");
       return;
@@ -55,7 +49,7 @@ export const AddToCartButton = ({
 
     setLoading(true);
 
-    await new Promise((res) => setTimeout(res, 500));
+    await new Promise((res) => setTimeout(res, 300));
 
     addToCart({
       id: course.id,
@@ -63,8 +57,8 @@ export const AddToCartButton = ({
       price: Number(course.priceInr),
       image: course.image?.path,
       instructor: course.createdBy?.firstName,
-      totalDuration,
-      totalLectures,
+      totalDuration: meta.totalDuration,
+      totalLectures: meta.totalLectures,
     });
 
     setLoading(false);
@@ -80,9 +74,9 @@ export const AddToCartButton = ({
 
   return (
     <Button
-      onClick={handleAdd}
+      onClick={handleAddToCart}
       disabled={loading}
-      className={`w-full h-12 text-base font-semibold rounded-lg flex items-center justify-center gap-2 transition-all ${className}`}
+      className={`w-full h-12 text-base font-semibold rounded-lg flex items-center justify-center gap-2 ${className}`}
       variant={alreadyAdded ? "secondary" : "default"}
     >
       {loading ? (

@@ -44,3 +44,9 @@ export interface UpdateLectureProgressPayload {
   progress: number;
   lastTime: number;
 }
+
+export type LectureStats = {
+  total: number;
+  completed: number;
+  totalSeconds: number;
+};

@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { IconDotsVertical } from "@tabler/icons-react";
 import {
   DropdownMenu,
@@ -11,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tag } from "@/types/tag";
+import { Pencil, Trash2 } from "lucide-react";
 
 export const getTagsColumns = (
   onEdit: (tag: Tag) => void,
@@ -58,6 +58,7 @@ export const getTagsColumns = (
               onClick={() => onEdit(tag)}
               className="cursor-pointer"
             >
+              <Pencil className="size-4" />
               Edit
             </DropdownMenuItem>
 
@@ -66,6 +67,7 @@ export const getTagsColumns = (
               onClick={() => onDelete(tag)}
               className="cursor-pointer"
             >
+              <Trash2 className="size-4" />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

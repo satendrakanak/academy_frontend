@@ -7,6 +7,8 @@ import { Tag } from "@/types/tag";
 import { Course } from "@/types/course";
 import { courseClientService } from "@/services/courses/course.client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface TagsFormProps {
   course: Course;
@@ -19,6 +21,8 @@ export function TagsForm({ course }: TagsFormProps) {
   const [suggestedTags, setSuggestedTags] = useState<Tag[]>([]);
   const [search, setSearch] = useState("");
 
+  const router = useRouter();
+
   // 🔥 important: prevent duplicate API calls
   const lastSavedRef = useRef<string>("");
 
@@ -26,13 +30,13 @@ export function TagsForm({ course }: TagsFormProps) {
     setTags(course.tags || []);
   }, [course]);
 
-  // 🔥 load suggestions (later search API laga sakta hai)
+  // load suggestions (later search API laga sakta hai)
   const loadSuggestedTags = async () => {
     const res = await tagClientService.getAll();
     setSuggestedTags(res.data as Tag[]);
   };
 
-  // 🔥 core save (dedupe + safe)
+  // core save
   const saveTags = async (updated: Tag[]) => {
     const ids = updated
       .map((t) => t.id)
@@ -49,20 +53,36 @@ export function TagsForm({ course }: TagsFormProps) {
       await courseClientService.update(course.id, {
         tags: updated.map((t) => t.id),
       });
+      router.refresh();
       toast.success("Tags updated successfully");
-    } catch (err) {
-      toast.error("Failed to update tags");
-      console.error("❌ Tag save failed", err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 
-  // 🔥 remove
-  const removeTag = (tagId: number) => {
-    setTags((prev) => {
-      const updated = prev.filter((t) => t.id !== tagId);
-      saveTags(updated);
-      return updated;
-    });
+  // remove tag
+  const removeTag = async (tagId: number) => {
+    const previous = tags;
+
+    // 🔥 optimistic update
+    const updated = tags.filter((t) => t.id !== tagId);
+    setTags(updated);
+
+    try {
+      await courseClientService.update(course.id, {
+        tags: updated.map((t) => t.id),
+      });
+
+      toast.success("Tag removed successfully");
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+
+      // 🔥 rollback
+      setTags(previous);
+    }
   };
 
   // 🔥 add via input (comma / enter)

@@ -1,31 +1,29 @@
 "use client";
 
-import { userProgressClientService } from "@/services/user-progress/user-progress.client";
-import { Lecture } from "@/types/lecture";
 import { useRef, useEffect } from "react";
+import { Lecture } from "@/types/lecture";
+import { userProgressClientService } from "@/services/user-progress/user-progress.client";
+import { getStartTime, shouldMarkComplete } from "@/helpers/video-player";
 
-interface VideoPlayerProps {
+interface Props {
   lecture: Lecture;
   onNext: () => void;
   onProgressUpdate: (
     lectureId: number,
     progress: number,
     lastTime: number,
+    alreadyCompleted?: boolean,
   ) => void;
 }
 
-export const VideoPlayer = ({
-  lecture,
-  onNext,
-  onProgressUpdate,
-}: VideoPlayerProps) => {
+export const VideoPlayer = ({ lecture, onNext, onProgressUpdate }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const hasVideo = !!lecture?.video?.path;
   const firstAttachment = lecture?.attachments?.[0];
 
   /**
-   * ✅ ONLY RUN WHEN LECTURE CHANGES (not progress update)
+   * 🎯 RESUME / RESTART
    */
   useEffect(() => {
     if (!hasVideo) return;
@@ -33,14 +31,16 @@ export const VideoPlayer = ({
     const video = videoRef.current;
     if (!video) return;
 
-    // 🔥 resume playback
-    video.currentTime = lecture.progress?.lastTime || 0;
+    video.currentTime = getStartTime(
+      lecture.progress?.isCompleted,
+      lecture.progress?.lastTime,
+    );
 
     video.play().catch(() => {});
-  }, [lecture.id]); // ✅ IMPORTANT FIX
+  }, [lecture.id]);
 
   /**
-   * ✅ PROGRESS TRACKING (stable)
+   * 🎯 PROGRESS TRACKING
    */
   useEffect(() => {
     if (!hasVideo) return;
@@ -59,18 +59,18 @@ export const VideoPlayer = ({
       if (Math.floor(currentTime) - lastSent >= 5) {
         lastSent = Math.floor(currentTime);
 
-        try {
-          await userProgressClientService.update({
-            lectureId: lecture.id,
-            progress,
-            lastTime: currentTime,
-          });
+        await userProgressClientService.update({
+          lectureId: lecture.id,
+          progress,
+          lastTime: currentTime,
+        });
 
-          // 🔥 LOCAL UPDATE (UI sync)
-          onProgressUpdate(lecture.id, progress, currentTime);
-        } catch {
-          console.error("Progress update failed");
-        }
+        onProgressUpdate(
+          lecture.id,
+          progress,
+          currentTime,
+          lecture.progress?.isCompleted,
+        );
       }
     };
 
@@ -79,10 +79,10 @@ export const VideoPlayer = ({
     return () => {
       video.removeEventListener("timeupdate", handleTimeUpdate);
     };
-  }, [lecture.id, hasVideo]); // ✅ IMPORTANT FIX
+  }, [lecture.id]);
 
   /**
-   * ✅ AUTO NEXT
+   * 🎯 AUTO NEXT (ONLY ON END)
    */
   useEffect(() => {
     if (!hasVideo) return;
@@ -90,15 +90,21 @@ export const VideoPlayer = ({
     const video = videoRef.current;
     if (!video) return;
 
-    const handleEnded = async () => {
-      // 🔥 mark complete
-      await userProgressClientService.update({
-        lectureId: lecture.id,
-        progress: 100,
-        lastTime: video.duration,
-      });
+    let called = false;
 
-      onProgressUpdate(lecture.id, 100, video.duration);
+    const handleEnded = async () => {
+      if (called) return;
+      called = true;
+
+      if (!lecture.progress?.isCompleted) {
+        await userProgressClientService.update({
+          lectureId: lecture.id,
+          progress: 100,
+          lastTime: video.duration,
+        });
+
+        onProgressUpdate(lecture.id, 100, video.duration, true);
+      }
 
       onNext();
     };
@@ -108,35 +114,23 @@ export const VideoPlayer = ({
     return () => {
       video.removeEventListener("ended", handleEnded);
     };
-  }, [lecture.id, hasVideo, onNext]);
-
-  useEffect(() => {
-    if (hasVideo) return;
-    if (!lecture?.id) return;
-
-    const markComplete = async () => {
-      try {
-        await userProgressClientService.update({
-          lectureId: lecture.id,
-          progress: 100,
-          lastTime: 0,
-        });
-
-        onProgressUpdate(lecture.id, 100, 0);
-      } catch {
-        console.error("File completion failed");
-      }
-    };
-
-    markComplete();
-  }, [lecture.id, hasVideo]);
+  }, [lecture.id, onNext]);
 
   /**
-   * ❌ disable right click
+   * 📄 FILE AUTO COMPLETE
    */
-  const handleContextMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-  };
+  useEffect(() => {
+    if (hasVideo) return;
+    if (lecture.progress?.isCompleted) return;
+
+    userProgressClientService.update({
+      lectureId: lecture.id,
+      progress: 100,
+      lastTime: 0,
+    });
+
+    onProgressUpdate(lecture.id, 100, 0, true);
+  }, [lecture.id, hasVideo]);
 
   if (!lecture) return null;
 
@@ -147,25 +141,16 @@ export const VideoPlayer = ({
           ref={videoRef}
           src={lecture.video?.path}
           controls
-          autoPlay
           controlsList="nodownload noplaybackrate"
           disablePictureInPicture
-          onContextMenu={handleContextMenu}
+          onContextMenu={(e) => e.preventDefault()}
           className="w-full h-125"
         />
       ) : (
-        <div className="w-full h-125 bg-white">
-          {firstAttachment ? (
-            <iframe
-              src={firstAttachment.file?.path}
-              className="w-full h-full"
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              No content available
-            </div>
-          )}
-        </div>
+        <iframe
+          src={`${firstAttachment?.file?.path}#toolbar=0&navpanes=0&scrollbar=0`}
+          className="w-full h-125 bg-white"
+        />
       )}
     </div>
   );

@@ -30,11 +30,13 @@ import { useSession } from "@/context/session-context";
 import { apiClient } from "@/lib/api/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { getErrorMessage } from "@/lib/error-handler";
+import { toast } from "sonner";
 
 export function NavUser() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const user = useSession();
+  const { user } = useSession();
   const { isMobile } = useSidebar();
   if (!user) return null;
   // 🔥 initials fallback
@@ -43,13 +45,12 @@ export function NavUser() {
   const handleLogout = async () => {
     try {
       setLoading(true);
-
       await apiClient.post("/api/auth/sign-out");
-
       router.refresh();
       router.push("/auth/sign-in");
-    } catch (err) {
-      console.error("Logout failed", err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

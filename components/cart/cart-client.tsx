@@ -57,7 +57,7 @@ export const CartClient = () => {
             </div>
 
             {/* RIGHT */}
-            <CartSummary total={total} />
+            <CartSummary items={cartItems} />
           </div>
         )}
       </Container>

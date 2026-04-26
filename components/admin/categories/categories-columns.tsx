@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Category } from "@/types/category";
+import { Pencil, Trash2 } from "lucide-react";
 
 export const getCategoriesColumns = (
   onEdit: (category: Category) => void,
@@ -63,6 +64,7 @@ export const getCategoriesColumns = (
               onClick={() => onEdit(category)}
               className="cursor-pointer"
             >
+              <Pencil className="size-4" />
               Edit
             </DropdownMenuItem>
 
@@ -71,6 +73,7 @@ export const getCategoriesColumns = (
               onClick={() => onDelete(category)}
               className="cursor-pointer"
             >
+              <Trash2 className="size-4" />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

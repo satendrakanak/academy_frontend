@@ -3,14 +3,16 @@ import { CategoriesList } from "@/components/admin/categories/categories-list";
 import { Category } from "@/types/category";
 import { categoryServerService } from "@/services/categories/category.server";
 import { Card, CardContent } from "@/components/ui/card";
+import { getErrorMessage } from "@/lib/error-handler";
+import { toast } from "sonner";
 const CategoriesPage = async () => {
   let categories: Category[] = [];
   try {
     const response = await categoryServerService.getAll();
     categories = response.data.data;
-    console.log("categories", categories);
-  } catch (error) {
-    console.error(error);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    toast.error(message);
   }
 
   return (

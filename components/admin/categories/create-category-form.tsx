@@ -17,7 +17,7 @@ import { Category } from "@/types/category";
 import { FileUpload } from "@/components/media/file-upload";
 import { FileType } from "@/types/file";
 import { useEffect, useState } from "react";
-import { handleApiError } from "@/helper/handle-api-error";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CreateCategoryFormProps {
   category?: Category;
@@ -74,8 +74,9 @@ export const CreateCategoryForm = ({ category }: CreateCategoryFormProps) => {
       }
 
       router.refresh();
-    } catch (error) {
-      handleApiError(error);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 
@@ -83,8 +84,9 @@ export const CreateCategoryForm = ({ category }: CreateCategoryFormProps) => {
     try {
       setSelectedImage(file);
       setAltText(alt);
-    } catch (err) {
-      handleApiError(err);
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
     }
   };
 

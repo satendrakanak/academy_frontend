@@ -3,9 +3,10 @@ import { CourseHero } from "@/components/course/course-hero";
 import { CourseSidebarCard } from "@/components/course/course-sidebar-card";
 import { CourseTabs } from "@/components/course/course-tabs";
 import { RelatedCourses } from "@/components/course/related-courses";
+import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
 import { Course } from "@/types/course";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 export default async function CourseSlugPage({
   params,
@@ -23,26 +24,19 @@ export default async function CourseSlugPage({
   try {
     const response = await courseServerService.getBySlug(courseSlug);
     course = response.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "UNAUTHORIZED") {
-        redirect("/login");
-      }
-
-      if (error.message === "NOT_FOUND") {
-        notFound();
-      }
-    }
-
-    throw error;
+    console.log("Course", course);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
   }
 
   let relatedCourses: Course[] = [];
   try {
     const response = await courseServerService.getAll();
-    relatedCourses = response.data.data;
-  } catch (error) {
-    console.error(error);
+    relatedCourses = response.data;
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
   }
 
   return (
@@ -58,7 +52,7 @@ export default async function CourseSlugPage({
           </div>
 
           {/* RIGHT */}
-          <div className="sticky top-30 w-100 -mt-120 z-50">
+          <div className="sticky top-30 w-100 -mt-120 z-40">
             <CourseSidebarCard course={course} />
           </div>
         </div>

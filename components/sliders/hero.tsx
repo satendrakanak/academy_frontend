@@ -3,27 +3,17 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, EffectCards } from "swiper/modules";
 import Image from "next/image";
+import { Course } from "@/types/course";
 
-const courses = [
-  {
-    title: "The Complete Histudy 2025",
-    price: "$70",
-    image: "/assets/courses/course-1.jpg",
-    desc: "Learn data science, automation, AI tools and build real-world projects step by step.",
-  },
-  {
-    title: "Master React & Next.js",
-    price: "$90",
-    image: "/assets/courses/course-2.jpg",
-    desc: "Become job-ready with React, Next.js and real production apps.",
-  },
-];
+interface HeroProps {
+  courses: Course[];
+}
 
-export default function Hero() {
+export default function Hero({ courses }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-500 to-red-500 text-white">
       {/* CONTAINER */}
-      <div className="max-w-7xl mx-auto px-6 pt-20 grid md:grid-cols-3 gap-10 items-center">
+      <div className="max-w-7xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-3 gap-10 items-center">
         {/* LEFT */}
         <div>
           <p className="bg-white/20 inline-block px-4 py-1 rounded-full text-sm mb-4">
@@ -47,13 +37,13 @@ export default function Hero() {
         {/* GIRL FIXED (NO BG ISSUE, NO SHOE) */}
 
         <div className="relative flex justify-center items-end">
-          <div className="relative h-130 w-100 overflow-hidden">
+          <div className="relative w-full max-w-sm h-[410px] md:h-[540px]">
             <Image
               src="/assets/courses/banner-01.webp"
               alt="hero"
               fill
-              className="object-contain object-bottom"
               priority
+              className="object-cover object-bottom scale-110 drop-shadow-2xl"
             />
           </div>
         </div>
@@ -72,9 +62,12 @@ export default function Hero() {
                 <div className="bg-white rounded-2xl p-5 shadow-xl min-h-85 flex flex-col">
                   {/* IMAGE */}
                   <div className="relative">
-                    <img
-                      src={course.image}
+                    <Image
+                      alt={course.title}
+                      src={course.image?.path || "/placeholder.jpg"}
                       className="w-full h-50 object-cover rounded-lg"
+                      width={950}
+                      height={600}
                     />
 
                     <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
@@ -88,7 +81,9 @@ export default function Hero() {
                       {course.title}
                     </h3>
 
-                    <p className="text-sm text-gray-500 mb-3">{course.desc}</p>
+                    <p className="text-sm text-gray-500 mb-3">
+                      {course.shortDescription}
+                    </p>
 
                     <div className="text-yellow-500 text-sm mb-3">
                       ⭐⭐⭐⭐⭐ <span className="text-gray-400">(15)</span>
@@ -96,7 +91,7 @@ export default function Hero() {
 
                     <div className="flex justify-between items-center mt-auto">
                       <p className="text-blue-600 font-bold text-lg">
-                        {course.price}
+                        {course.priceInr}
                       </p>
 
                       <span className="text-sm text-blue-600">

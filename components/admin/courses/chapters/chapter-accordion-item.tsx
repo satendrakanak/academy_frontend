@@ -11,6 +11,8 @@ import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { CheckCircle, Trash2, RotateCcw, Pencil } from "lucide-react";
 import { Chapter } from "@/types/chapter";
 import { LectureForm } from "./lectures/lecture-form";
+import { canPublishChapter } from "@/helpers/publish-rules";
+import { cn } from "@/lib/utils";
 
 interface ChapterAccordionItemProps {
   chapter: Chapter;
@@ -41,7 +43,7 @@ export const ChapterAccordionItem = ({
   onEdit,
 }: ChapterAccordionItemProps) => {
   const isActive = activeId === chapter.id;
-
+  const disabled = !canPublishChapter(chapter);
   return (
     <AccordionItem
       value={String(chapter.id)}
@@ -120,9 +122,29 @@ export const ChapterAccordionItem = ({
               {!chapter.isPublished && !isTemp && (
                 <div
                   role="button"
-                  onClick={() => onTooglePublish(chapter.id, true)}
-                  className="p-1 rounded hover:bg-green-50 text-green-600 cursor-pointer"
-                  title="Publish"
+                  tabIndex={disabled ? -1 : 0}
+                  aria-disabled={disabled}
+                  onClick={(e) => {
+                    e.stopPropagation(); // 🔥 IMPORTANT (accordion fix)
+                    if (disabled) return;
+
+                    onTooglePublish(chapter.id, true);
+                  }}
+                  onKeyDown={(e) => {
+                    if (disabled) return;
+
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      onTooglePublish(chapter.id, true);
+                    }
+                  }}
+                  className={cn(
+                    "p-1 rounded text-green-600",
+                    disabled
+                      ? "opacity-40 cursor-not-allowed"
+                      : "hover:bg-green-50 cursor-pointer",
+                  )}
+                  title={disabled ? "Cannot publish yet" : "Publish"}
                 >
                   <CheckCircle className="size-3" />
                 </div>

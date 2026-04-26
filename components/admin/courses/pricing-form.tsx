@@ -1,7 +1,6 @@
 "use client";
 
 import * as z from "zod";
-import { useEffect, useState } from "react";
 import { Input } from "@base-ui/react";
 import { Course } from "@/types/course";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
@@ -12,6 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { courseClientService } from "@/services/courses/course.client";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface PricingFormProps {
   course: Course;
@@ -35,21 +35,16 @@ export const PricingForm = ({ course }: PricingFormProps) => {
     try {
       const payload = {
         isFree: data.isFree || false,
-        priceInr: data.priceInr || undefined,
-        priceUsd: data.priceUsd || undefined,
+        priceInr: data.priceInr || "",
+        priceUsd: data.priceUsd || "",
       };
 
-      const response = await courseClientService.update(course.id, payload);
+      await courseClientService.update(course.id, payload);
 
       router.refresh();
       toast.success("Course pricing info updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

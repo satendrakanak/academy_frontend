@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/submit-button";
 import { useEffect, useState } from "react";
 import { slugify } from "@/utils/slugify";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface MetaFormProps {
   course: Course;
@@ -88,8 +89,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
       router.refresh();
       toast.success("Meta updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-      if (error instanceof Error) message = error.message;
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

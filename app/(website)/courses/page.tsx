@@ -1,16 +1,19 @@
 import { CourseCard } from "@/components/courses/course-card";
 import { CoursesBanner } from "@/components/layout/courses-banner";
-import { courses } from "@/data/courses";
+import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
 import { Course } from "@/types/course";
 
 export default async function CoursesPage() {
   let courses: Course[] = [];
+
   try {
     const response = await courseServerService.getAll();
-    courses = response.data.data;
-  } catch (error) {
-    console.error(error);
+    courses = response.data;
+    console.log("Courses", courses);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
   }
   return (
     <div>

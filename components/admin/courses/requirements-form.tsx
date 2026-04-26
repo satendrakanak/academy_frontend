@@ -10,6 +10,7 @@ import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/submit-button";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface RequirementsFormProps {
   course: Course;
@@ -34,7 +35,7 @@ export const RequirementsForm = ({ course }: RequirementsFormProps) => {
       const payload = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [
           key,
-          value?.trim() ? value : undefined,
+          value?.trim() ? value : "",
         ]),
       );
 
@@ -43,12 +44,7 @@ export const RequirementsForm = ({ course }: RequirementsFormProps) => {
       router.refresh();
       toast.success("Requirements updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };

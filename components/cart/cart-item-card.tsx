@@ -63,22 +63,17 @@ export const CartItemCard = ({ item }: CartItemCardProps) => {
             className="flex items-center gap-1 text-red-500 
                        hover:text-red-600 hover:bg-red-50 
                        active:scale-95 px-2 py-1 rounded-md 
-                       transition-all duration-200"
+                       transition-all duration-200 cursor-pointer"
           >
             <Trash2 className="w-4 h-4" />
             Remove
-          </button>
-
-          <button className="text-primary hover:underline">
-            Save for later
           </button>
         </div>
       </div>
 
       {/* Price */}
-      <div className="text-right min-w-[100px] flex flex-col items-end">
+      <div className="text-right min-w-25 flex flex-col items-end">
         <p className="font-bold text-lg text-gray-900">₹{item.price}</p>
-        <p className="text-sm line-through text-gray-400">₹1999</p>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import {
   FolderTree,
   Users,
   Settings,
+  CircleDollarSign,
 } from "lucide-react";
 
 export const sidebarData = {
@@ -37,6 +38,18 @@ export const sidebarData = {
         {
           title: "Tags",
           url: "/admin/courses/tags",
+        },
+      ],
+    },
+
+    {
+      title: "Coupons",
+      url: "/admin/coupons",
+      icon: CircleDollarSign,
+      items: [
+        {
+          title: "All Coupons",
+          url: "/admin/coupons",
         },
       ],
     },

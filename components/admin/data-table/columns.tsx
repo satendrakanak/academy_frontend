@@ -66,7 +66,6 @@ export const courseColumns: ColumnDef<Course>[] = [
     accessorKey: "categories",
     header: "Category",
     cell: ({ row }) => {
-      console.log("Categories", row.original.categories);
       return (
         <div className="flex gap-1 flex-wrap">
           {row.original.categories?.map((cat: any) => (

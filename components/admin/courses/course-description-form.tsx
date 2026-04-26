@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { SubmitButton } from "@/components/submit-button";
@@ -13,13 +12,12 @@ import { courseClientService } from "@/services/courses/course.client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import RichEditor from "@/components/editor/rich-editor";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CourseDescriptionProps {
   course: Course;
 }
 export const CourseDescription = ({ course }: CourseDescriptionProps) => {
-  const [error, setError] = useState("");
-
   const router = useRouter();
 
   const form = useForm<z.infer<typeof courseDescriptionSchema>>({
@@ -38,12 +36,7 @@ export const CourseDescription = ({ course }: CourseDescriptionProps) => {
       router.refresh();
       toast.success("Course description updated successfully");
     } catch (error: unknown) {
-      let message = "Something went wrong";
-
-      if (error instanceof Error) {
-        message = error.message;
-      }
-
+      const message = getErrorMessage(error);
       toast.error(message);
     }
   };
@@ -80,15 +73,7 @@ export const CourseDescription = ({ course }: CourseDescriptionProps) => {
           </FieldGroup>
 
           {/* Footer */}
-          <div className="flex items-center justify-between">
-            {error ? (
-              <div className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-md">
-                {error}
-              </div>
-            ) : (
-              <div />
-            )}
-
+          <div className="flex items-center justify-end">
             <SubmitButton
               type="submit"
               disabled={!isValid}

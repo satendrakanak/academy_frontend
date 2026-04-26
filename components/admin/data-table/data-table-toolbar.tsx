@@ -14,16 +14,15 @@ import {
   IconChevronDown,
   IconSearch,
 } from "@tabler/icons-react";
-import AddButton from "./add-button";
 
 export function DataTableToolbar<TData>({
   table,
   searchColumn = "title",
-  showAddButton,
+  action, // 🔥 inject anything (AddButton, filters, etc.)
 }: {
   table: Table<TData>;
   searchColumn?: string;
-  showAddButton?: Boolean;
+  action?: React.ReactNode;
 }) {
   return (
     <div className="flex items-center justify-between px-4 lg:px-6 gap-4">
@@ -79,9 +78,8 @@ export function DataTableToolbar<TData>({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Add Button */}
-
-        {showAddButton && <AddButton />}
+        {/* 🔥 Injected Action */}
+        {action}
       </div>
     </div>
   );
