@@ -31,8 +31,9 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
         // prefill from course
         const existing = course.categories?.map((c) => c.id) || [];
         setSelected(existing);
-      } catch (err) {
-        console.error(err);
+      } catch (error: unknown) {
+        const message = getErrorMessage(error);
+        toast.error(message);
       }
     };
 

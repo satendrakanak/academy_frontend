@@ -2,7 +2,6 @@ import CheckoutClient from "@/components/checkout/checkout-client";
 import { getErrorMessage } from "@/lib/error-handler";
 import { settingsServerService } from "@/services/settings/settings.server";
 import { Gateway } from "@/types/settings";
-import { toast } from "sonner";
 
 export default async function CheckoutPage() {
   let gateways: Gateway[] = [];
@@ -11,7 +10,7 @@ export default async function CheckoutPage() {
     gateways = response.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    toast.error(message);
+    throw new Error(message);
   }
 
   return <CheckoutClient gateways={gateways} />;

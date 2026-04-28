@@ -7,7 +7,14 @@ export const courseServerService = {
     apiServer.get<ApiResponse<Course[]>>("/courses?isPublished=true"),
   getAllCourses: () =>
     apiServer.get<ApiResponse<{ data: Course[] }>>("/courses"),
-  getById: (id: string) => apiServer.get<ApiResponse<Course>>(`/courses/${id}`),
+
+  getPopularCourses: () =>
+    apiServer.get<ApiResponse<Course[]>>("/courses/featured"),
+
+  getRealtedCourses: (id: number) =>
+    apiServer.get<ApiResponse<Course[]>>(`/courses/related/${id}`),
+
+  getById: (id: number) => apiServer.get<ApiResponse<Course>>(`/courses/${id}`),
   getBySlug: (slug: string) =>
     apiServer.get<ApiResponse<Course>>(`/courses/slug/${slug}`),
   getLearningCourseBySlug: (slug: string) =>

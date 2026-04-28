@@ -1,6 +1,16 @@
 "use client";
 
-import { LogOut, User, Settings, LayoutDashboard, Loader } from "lucide-react";
+import {
+  LogOut,
+  User,
+  Settings,
+  LayoutDashboard,
+  Loader,
+  BookOpen,
+  Award,
+} from "lucide-react";
+
+import Link from "next/link";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -35,8 +45,8 @@ export const WebsiteNavUser = () => {
       setLoading(true);
       await apiClient.post("/api/auth/sign-out");
 
-      router.refresh();
-      router.push("/auth/sign-in");
+      router.refresh(); // ✅ ye rehne de (server sync ke liye)
+      router.push("/auth/sign-in"); // ✅ yahan allowed hai
     } catch (error: unknown) {
       const message = getErrorMessage(error);
       toast.error(message);
@@ -52,11 +62,12 @@ export const WebsiteNavUser = () => {
         <Button
           variant="ghost"
           className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center
-          outline-none focus:outline-none focus:ring-0 active:outline-none active:ring-0"
+  outline-none ring-0 border-0 focus:outline-none focus:ring-0 focus:border-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:border-0
+  active:outline-none active:ring-0 active:border-0"
         >
           <Avatar className="h-9 w-9">
             {user.avatar ? (
-              <AvatarImage src={user.avatar} alt={user.firstName} />
+              <AvatarImage src={user.avatar.path} alt={user.firstName} />
             ) : null}
             <AvatarFallback>{initials || "U"}</AvatarFallback>
           </Avatar>
@@ -68,19 +79,23 @@ export const WebsiteNavUser = () => {
         align="end"
         className="w-64 rounded-xl shadow-md p-2"
       >
+        {/* USER INFO */}
         <div className="flex py-2 gap-x-2">
           <Avatar className="h-9 w-9">
             {user.avatar ? (
-              <AvatarImage src={user.avatar} alt={user.firstName} />
+              <AvatarImage src={user.avatar.path} alt={user.firstName} />
             ) : null}
             <AvatarFallback>{initials || "U"}</AvatarFallback>
           </Avatar>
-          {/* USER INFO */}
-          <div className="">
+
+          <div className="min-w-0">
             <p className="text-sm font-medium">
               {user.firstName} {user.lastName}
             </p>
-            <p className="text-xs text-gray-500">{user.email}</p>
+
+            <p title={user.email} className="text-xs text-gray-500 break-all">
+              {user.email}
+            </p>
           </div>
         </div>
 
@@ -88,28 +103,54 @@ export const WebsiteNavUser = () => {
 
         {/* MENU */}
         <DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => router.push("/dashboard")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <LayoutDashboard className="w-4 h-4" />
-            Dashboard
+          <DropdownMenuItem asChild>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Dashboard
+            </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={() => router.push("/profile")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <User className="w-4 h-4" />
-            Profile
+          <DropdownMenuItem asChild>
+            <Link
+              href="/profile"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <User className="w-4 h-4" />
+              Profile
+            </Link>
           </DropdownMenuItem>
 
-          <DropdownMenuItem
-            onClick={() => router.push("/settings")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
-            <Settings className="w-4 h-4" />
-            Settings
+          <DropdownMenuItem asChild>
+            <Link
+              href="/my-courses"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <BookOpen className="w-4 h-4" />
+              My Courses
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href="/certificates"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <Award className="w-4 h-4" />
+              Certificates
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href="/settings"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <Settings className="w-4 h-4" />
+              Settings
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 

@@ -16,6 +16,7 @@ export type CreateCoursePayload = {
   videoId?: number;
   isFree?: boolean;
   isPublished?: boolean;
+  isFeatured?: boolean;
   priceInr?: string;
   priceUsd?: string;
 
@@ -44,6 +45,7 @@ export type CreateCoursePayload = {
 
   categories?: number[];
   tags?: number[];
+  facultyIds?: number[];
 };
 
 export type UpdateCoursePayload = Partial<CreateCoursePayload>;
@@ -59,6 +61,7 @@ export type Course = {
   video: FileType | null;
   isFree: boolean;
   isPublished: boolean;
+  isFeatured: boolean;
   priceInr: string | null;
   priceUsd: string | null;
   duration: string | null;
@@ -84,6 +87,7 @@ export type Course = {
     lastTime: number;
   };
   chapters: Chapter[];
+  faculties: User[];
   createdBy: User;
   updatedBy: User;
   createdAt: string;

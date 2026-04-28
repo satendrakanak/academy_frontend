@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
+import { Category } from "@/types/category";
 
 export const getCourseColumns = (
   onDelete: (course: Course) => void,
@@ -71,7 +72,7 @@ export const getCourseColumns = (
     cell: ({ row }) => {
       return (
         <div className="flex gap-1 flex-wrap">
-          {row.original.categories?.map((cat: any) => (
+          {row.original.categories?.map((cat: Category) => (
             <Badge key={cat.id} variant="outline">
               {cat.name}
             </Badge>

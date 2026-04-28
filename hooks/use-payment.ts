@@ -23,10 +23,15 @@ declare global {
 
 export const usePayment = () => {
   const router = useRouter();
-  const cartItems = useCartStore((s) => s.cartItems);
+
   const clearCart = useCartStore((s) => s.clearCart);
 
-  // 🔥 Common Razorpay open function
+  // 🔥 ALWAYS fresh state (IMPORTANT)
+  const getCartState = () => useCartStore.getState();
+
+  // ===============================
+  // 🔥 COMMON RAZORPAY HANDLER
+  // ===============================
   const openRazorpay = async ({
     keyId,
     razorpayOrderId,
@@ -55,10 +60,9 @@ export const usePayment = () => {
           await orderClientService.verifyPayment(response);
 
           toast.success("✅ Payment successful");
-          // 🔥 cart clear
+
           clearCart();
 
-          // 🔥 yahin use karo
           if (courses.length === 1) {
             router.push(`/course/${courses[0].slug}/learn`);
           } else {
@@ -66,8 +70,6 @@ export const usePayment = () => {
           }
         } catch (err) {
           toast("Payment received. Verifying...");
-
-          // 🔥 fallback
           router.push("/my-courses");
         }
       },
@@ -100,17 +102,37 @@ export const usePayment = () => {
     });
   };
 
-  // 🥇 NORMAL PAYMENT
+  // ===============================
+  // 🥇 INITIATE PAYMENT
+  // ===============================
   const initiatePayment = async (
     data: z.infer<typeof checkoutSchema>,
     provider: string,
   ) => {
     try {
+      const { cartItems, finalAmount, discount, autoCoupon, manualCoupon } =
+        getCartState();
+
+      if (!cartItems.length) {
+        toast.error("Cart is empty");
+        return;
+      }
+
+      const originalPrice = cartItems.reduce((t, i) => t + i.price, 0);
+
+      // 🔥 FINAL PAYABLE (after discount)
+      const totalAmount = finalAmount || originalPrice;
+
+      // 🔥 REVERSE GST (consistent with your UI)
+      const subTotal = Math.round(totalAmount / 1.18);
+      const tax = totalAmount - subTotal;
+
       const payload = {
         items: cartItems.map((item) => ({
           courseId: item.id,
           quantity: 1,
         })),
+
         billingAddress: {
           firstName: data.firstName,
           lastName: data.lastName,
@@ -122,10 +144,19 @@ export const usePayment = () => {
           city: data.city,
           pincode: data.pincode,
         },
+
+        // 🔥 PRICING
+        discount, // coupon
+        subTotal, // GST removed
+        tax, // GST part
+        totalAmount, // final payable
+        couponCode: manualCoupon || autoCoupon || null,
+
         paymentMethod: provider,
       };
 
       const res = await orderClientService.create(payload);
+
       const { razorpayOrderId, amount, currency, courses } = res.data;
 
       const configRes = await settingsClientService.getPaymentConfig();
@@ -144,7 +175,9 @@ export const usePayment = () => {
     }
   };
 
-  // 🥈 RETRY PAYMENT 🔥
+  // ===============================
+  // 🥈 RETRY PAYMENT
+  // ===============================
   const retryPayment = async (
     orderId: number,
     data: z.infer<typeof checkoutSchema>,
@@ -172,6 +205,6 @@ export const usePayment = () => {
 
   return {
     initiatePayment,
-    retryPayment, // 🔥 important
+    retryPayment,
   };
 };

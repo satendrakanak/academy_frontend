@@ -39,7 +39,9 @@ export const AddToCartButton = ({
     loadMeta();
   }, [course]);
 
-  const alreadyAdded = isInCart(course.id);
+  const alreadyAdded = useCartStore((s) =>
+    s.cartItems.some((i) => i.id === course.id),
+  );
 
   const handleAddToCart = async () => {
     if (alreadyAdded) {
@@ -59,6 +61,7 @@ export const AddToCartButton = ({
       instructor: course.createdBy?.firstName,
       totalDuration: meta.totalDuration,
       totalLectures: meta.totalLectures,
+      slug: course.slug,
     });
 
     setLoading(false);
@@ -87,7 +90,7 @@ export const AddToCartButton = ({
       ) : alreadyAdded ? (
         <>
           <ShoppingCart className="h-5 w-5" />
-          View Cart
+          Go to Cart
         </>
       ) : (
         <>

@@ -1,7 +1,11 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
 import {
+  ApplyCouponPayload,
+  AutoApplyCouponPayload,
   Coupon,
+  CouponApplyResponse,
+  CouponMap,
   CreateCouponPayload,
   UpdateCouponPayload,
 } from "@/types/coupon";
@@ -27,5 +31,28 @@ export const couponClientService = {
   delete: (id: number) =>
     withAuthRetry(() =>
       apiClient.delete<ApiResponse<{ message: string }>>(`/api/coupons/${id}`),
+    ),
+
+  applyCoupon: (data: ApplyCouponPayload) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<CouponApplyResponse>>(
+        `/api/coupons/apply`,
+        data,
+      ),
+    ),
+
+  autoApplyCoupon: (data: AutoApplyCouponPayload) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<CouponApplyResponse>>(
+        `/api/coupons/auto-apply`,
+        data,
+      ),
+    ),
+  autoApplyBulk: (data: { courses: { id: number; price: number }[] }) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<{ data: CouponMap }>>(
+        `/api/coupons/auto-apply-bulk`,
+        data,
+      ),
     ),
 };

@@ -9,12 +9,8 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { getCourseMeta } from "@/helpers/course-meta";
-import {
-  getCourseProgress,
-  mergeCourseProgress,
-} from "@/helpers/course-progress";
-import { userProgressClientService } from "@/services/user-progress/user-progress.client";
 import { CourseProgressBar } from "./course-progress-bar";
+import { CouponApplyResponse } from "@/types/coupon";
 
 interface CourseCardProps {
   course: Course & {
@@ -23,11 +19,11 @@ interface CourseCardProps {
       progress: number;
     };
   };
+  coupon?: CouponApplyResponse | null;
 }
 
-export function CourseCard({ course }: CourseCardProps) {
+export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
-  const isInCart = useCartStore((s) => s.isInCart);
   const [meta, setMeta] = useState({
     totalLectures: 0,
     totalDuration: "0m",
@@ -50,6 +46,10 @@ export function CourseCard({ course }: CourseCardProps) {
   );
 
   const isEnrolled = course.isEnrolled;
+  const basePrice = Number(course.priceInr);
+  const finalPrice = coupon?.finalAmount ?? basePrice;
+  const discount = coupon?.discount ?? 0;
+  const couponCode = coupon?.code;
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,15 +132,34 @@ export function CourseCard({ course }: CourseCardProps) {
           />
         ) : (
           <div className="mt-auto flex items-center justify-between">
-            {/* PRICE */}
-            <p className="text-primary font-semibold text-base">
-              ₹{new Intl.NumberFormat("en-IN").format(Number(course.priceInr))}
-            </p>
+            {/* 🔥 PRICE */}
+            <div className="flex flex-col">
+              {discount > 0 ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <span className="text-primary font-semibold text-base">
+                      ₹{new Intl.NumberFormat("en-IN").format(finalPrice)}
+                    </span>
+                    <span className="text-xs line-through text-gray-400">
+                      ₹{new Intl.NumberFormat("en-IN").format(basePrice)}
+                    </span>
+                  </div>
+
+                  <span className="text-[11px] text-green-600 font-medium">
+                    🎉 {couponCode} applied
+                  </span>
+                </>
+              ) : (
+                <span className="text-primary font-semibold text-base">
+                  ₹{new Intl.NumberFormat("en-IN").format(basePrice)}
+                </span>
+              )}
+            </div>
 
             {/* 🔥 ICON CTA */}
             <button
               onClick={handleAdd}
-              className={`w-9 h-9 flex items-center justify-center rounded-full border transition ${
+              className={`w-9 h-9 flex items-center justify-center rounded-full border transition cursor-pointer ${
                 alreadyAdded
                   ? "bg-green-600 text-white border-green-600"
                   : "hover:bg-gray-100"

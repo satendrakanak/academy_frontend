@@ -127,7 +127,7 @@ export const CourseTabs = ({ course }: { course: Course }) => {
       </div>
 
       <div id="instructor" className="mb-8 scroll-mt-32">
-        <CourseInstructor />
+        <CourseInstructor course={course} />
       </div>
     </div>
   );

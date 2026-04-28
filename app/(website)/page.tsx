@@ -11,7 +11,7 @@ import { Course } from "@/types/course";
 export default async function Home() {
   let courses: Course[] = [];
   try {
-    const response = await courseServerService.getAll();
+    const response = await courseServerService.getPopularCourses();
     courses = response.data;
     console.log("Courses", courses);
   } catch (error) {

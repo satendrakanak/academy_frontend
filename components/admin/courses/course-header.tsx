@@ -29,6 +29,23 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const { canPublish, reasons } = checkCoursePublish(course);
+
+  const handleToggleFeatured = async () => {
+    try {
+      await courseClientService.update(course.id, {
+        isFeatured: !course.isFeatured,
+      });
+
+      toast.success(
+        course.isFeatured ? "Removed from featured" : "Marked as featured",
+      );
+
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+    }
+  };
   // 🔥 Toggle Publish
   const handleTogglePublish = async () => {
     try {
@@ -82,6 +99,11 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
             >
               {course.isPublished ? "Published" : "Draft"}
             </Badge>
+            {course.isFeatured && (
+              <Badge className="text-xs bg-purple-100 text-purple-700 border border-purple-200">
+                Featured
+              </Badge>
+            )}
 
             <p className="text-sm text-muted-foreground">
               Manage your course settings
@@ -91,6 +113,18 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
 
         {/* 🔥 RIGHT */}
         <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            onClick={handleToggleFeatured}
+            className={cn(
+              "flex items-center gap-1 transition",
+              course.isFeatured
+                ? "bg-purple-500 hover:bg-purple-600"
+                : "bg-gray-700 hover:bg-gray-800",
+            )}
+          >
+            {course.isFeatured ? <>⭐ Unfeature</> : <>⭐ Feature</>}
+          </Button>
           {/* Publish / Unpublish */}
           <TooltipProvider>
             <Tooltip>

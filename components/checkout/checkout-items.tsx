@@ -1,7 +1,7 @@
 "use client";
 
 import { useCartStore } from "@/store/cart-store";
-import { CheckoutItemCard } from "./checkout-item-card";
+import { CartItemCard } from "../cart/cart-item-card";
 
 export const CheckoutItems = () => {
   const cartItems = useCartStore((s) => s.cartItems);
@@ -21,7 +21,7 @@ export const CheckoutItems = () => {
 
       <div className="lg:col-span-2 space-y-5">
         {cartItems.map((item) => (
-          <CheckoutItemCard key={item.id} item={item} />
+          <CartItemCard key={item.id} item={item} />
         ))}
       </div>
     </div>

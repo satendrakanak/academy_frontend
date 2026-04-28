@@ -5,35 +5,30 @@ import { CourseDetailsForm } from "@/components/admin/courses/course-details-for
 import { RequirementsForm } from "@/components/admin/courses/requirements-form";
 import { MetaForm } from "@/components/admin/courses/meta-form";
 import { courseServerService } from "@/services/courses/course.server";
-import { notFound, redirect } from "next/navigation";
 import ChaptersForm from "@/components/admin/courses/chapters-form";
 import { Course } from "@/types/course";
 import { CourseDescription } from "@/components/admin/courses/course-description-form";
+import { User } from "@/types/user";
+import { userServerService } from "@/services/users/user.server";
+import { getErrorMessage } from "@/lib/error-handler";
 
 export default async function CourseIdPage({
   params,
 }: {
-  params: Promise<{ courseId: string }>;
+  params: Promise<{ courseId: number }>;
 }) {
   const { courseId } = await params;
 
   let course: Course;
 
+  let user: User;
+
   try {
     const response = await courseServerService.getById(courseId);
     course = response.data;
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "UNAUTHORIZED") {
-        redirect("/login");
-      }
-
-      if (error.message === "NOT_FOUND") {
-        notFound();
-      }
-    }
-
-    throw error;
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
   }
 
   return (

@@ -4,18 +4,46 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay, EffectCards } from "swiper/modules";
 import Image from "next/image";
 import { Course } from "@/types/course";
+import { CouponMap } from "@/types/coupon";
+import { useEffect, useState } from "react";
+import { couponClientService } from "@/services/coupons/coupon.client";
+import Link from "next/link";
 
 interface HeroProps {
   courses: Course[];
 }
 
 export default function Hero({ courses }: HeroProps) {
+  const [couponMap, setCouponMap] = useState<CouponMap>({});
+
+  useEffect(() => {
+    if (!courses?.length) return;
+
+    const run = async () => {
+      try {
+        const res = await couponClientService.autoApplyBulk({
+          courses: courses.map((c) => ({
+            id: c.id,
+            price: Number(c.priceInr),
+          })),
+        });
+
+        console.log("🔥 RELATED BULK:", res.data);
+
+        setCouponMap(res.data?.data || {});
+      } catch (e) {
+        console.error("❌ RELATED BULK FAILED", e);
+      }
+    };
+
+    run();
+  }, [courses]);
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-500 to-red-500 text-white">
       {/* CONTAINER */}
       <div className="max-w-7xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-3 gap-10 items-center">
         {/* LEFT */}
-        <div>
+        <div className="z-10">
           <p className="bg-white/20 inline-block px-4 py-1 rounded-full text-sm mb-4">
             🏆 The Leader in Online Learning
           </p>
@@ -36,8 +64,8 @@ export default function Hero({ courses }: HeroProps) {
 
         {/* GIRL FIXED (NO BG ISSUE, NO SHOE) */}
 
-        <div className="relative flex justify-center items-end">
-          <div className="relative w-full max-w-sm h-[410px] md:h-[540px]">
+        <div className="relative flex justify-center items-end ">
+          <div className="relative w-full max-w-sm h-100 md:h-135">
             <Image
               src="/assets/courses/banner-01.webp"
               alt="hero"
@@ -49,7 +77,7 @@ export default function Hero({ courses }: HeroProps) {
         </div>
 
         {/* RIGHT SLIDER */}
-        <div className="relative pb-22">
+        <div className="relative pb-22 z-10">
           <Swiper
             modules={[Pagination, EffectCards, Autoplay]}
             effect="cards"
@@ -57,51 +85,76 @@ export default function Hero({ courses }: HeroProps) {
             autoplay={{ delay: 3000 }}
             pagination={{ clickable: true }}
           >
-            {courses.map((course, index) => (
-              <SwiperSlide key={index}>
-                <div className="bg-white rounded-2xl p-5 shadow-xl min-h-85 flex flex-col">
-                  {/* IMAGE */}
-                  <div className="relative">
-                    <Image
-                      alt={course.title}
-                      src={course.image?.path || "/placeholder.jpg"}
-                      className="w-full h-50 object-cover rounded-lg"
-                      width={950}
-                      height={600}
-                    />
+            {courses.map((course, index) => {
+              const coupon = couponMap[course.id];
 
-                    <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
-                      -40%
-                    </span>
-                  </div>
+              const discount = coupon?.discount ?? 0;
+              const finalPrice = coupon?.finalAmount ?? Number(course.priceInr);
+              return (
+                <SwiperSlide key={index}>
+                  <div className="bg-white rounded-2xl p-5 shadow-xl min-h-85 flex flex-col">
+                    {/* IMAGE */}
+                    <div className="relative">
+                      <Image
+                        alt={course.title}
+                        src={course.image?.path || "/placeholder.jpg"}
+                        className="w-full h-50 object-cover rounded-lg"
+                        width={950}
+                        height={600}
+                      />
 
-                  {/* CONTENT */}
-                  <div className="mt-4 flex flex-col flex-1">
-                    <h3 className="font-semibold text-lg mb-2 text-black">
-                      {course.title}
-                    </h3>
-
-                    <p className="text-sm text-gray-500 mb-3">
-                      {course.shortDescription}
-                    </p>
-
-                    <div className="text-yellow-500 text-sm mb-3">
-                      ⭐⭐⭐⭐⭐ <span className="text-gray-400">(15)</span>
+                      {discount > 0 && (
+                        <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                          -
+                          {Math.round(
+                            (discount / Number(course.priceInr)) * 100,
+                          )}
+                          %
+                        </span>
+                      )}
                     </div>
 
-                    <div className="flex justify-between items-center mt-auto">
-                      <p className="text-blue-600 font-bold text-lg">
-                        {course.priceInr}
+                    {/* CONTENT */}
+                    <div className="mt-4 flex flex-col flex-1">
+                      <h3 className="font-semibold text-lg mb-2 text-black">
+                        {course.title}
+                      </h3>
+
+                      <p className="text-sm text-gray-500 mb-3">
+                        {course.shortDescription}
                       </p>
 
-                      <span className="text-sm text-blue-600">
-                        Learn More →
-                      </span>
+                      <div className="text-yellow-500 text-sm mb-3">
+                        ⭐⭐⭐⭐⭐ <span className="text-gray-400">(15)</span>
+                      </div>
+
+                      <div className="flex justify-between items-center mt-auto">
+                        <div className="flex items-center gap-2">
+                          <p className="text-primary font-bold text-lg">
+                            ₹{new Intl.NumberFormat("en-IN").format(finalPrice)}
+                          </p>
+
+                          {discount > 0 && (
+                            <span className="text-sm text-gray-400 line-through">
+                              ₹
+                              {new Intl.NumberFormat("en-IN").format(
+                                Number(course.priceInr),
+                              )}
+                            </span>
+                          )}
+                        </div>
+
+                        <Link href={`/course/${course.slug}`}>
+                          <span className="text-sm text-primary">
+                            Learn More →
+                          </span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </div>
       </div>

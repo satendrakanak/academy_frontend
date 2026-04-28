@@ -24,7 +24,6 @@ export default async function CourseSlugPage({
   try {
     const response = await courseServerService.getBySlug(courseSlug);
     course = response.data;
-    console.log("Course", course);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
@@ -32,7 +31,7 @@ export default async function CourseSlugPage({
 
   let relatedCourses: Course[] = [];
   try {
-    const response = await courseServerService.getAll();
+    const response = await courseServerService.getRealtedCourses(course.id);
     relatedCourses = response.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);

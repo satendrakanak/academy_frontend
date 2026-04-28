@@ -4,7 +4,7 @@ import { Category } from "@/types/category";
 import { categoryServerService } from "@/services/categories/category.server";
 import { Card, CardContent } from "@/components/ui/card";
 import { getErrorMessage } from "@/lib/error-handler";
-import { toast } from "sonner";
+
 const CategoriesPage = async () => {
   let categories: Category[] = [];
   try {
@@ -12,7 +12,7 @@ const CategoriesPage = async () => {
     categories = response.data.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
-    toast.error(message);
+    throw new Error(message);
   }
 
   return (

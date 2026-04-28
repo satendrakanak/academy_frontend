@@ -77,3 +77,23 @@ export type CreateCouponPayload = {
 };
 
 export type UpdateCouponPayload = Partial<CreateCouponPayload>;
+
+export type AutoApplyCouponPayload = {
+  cartTotal: number;
+  courseIds: number[];
+};
+
+export type ApplyCouponPayload = {
+  code: string;
+  cartTotal: number;
+  courseIds: number[];
+};
+
+export type CouponApplyResponse = {
+  couponId: number;
+  code: string;
+  discount: number;
+  finalAmount: number;
+};
+
+export type CouponMap = Record<number, CouponApplyResponse | null>;

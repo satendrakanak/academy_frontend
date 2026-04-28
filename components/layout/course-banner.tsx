@@ -2,7 +2,7 @@
 
 import { Course } from "@/types/course";
 import Container from "../container";
-import CourseAuthor from "../courses/course-author";
+import CourseAuthor from "../course/course-author";
 import CourseRatingDetails from "../courses/course-rating-details";
 import CourseUpdateDetails from "../courses/course-update-details";
 import guestAuthor from "@/public/assets/guest-user.webp";

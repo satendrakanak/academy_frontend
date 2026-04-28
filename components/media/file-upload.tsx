@@ -43,7 +43,9 @@ export const FileUpload = ({
       {label && <h3 className="text-sm font-semibold">{label}</h3>}
 
       <div
-        onClick={!disabled && !value ? () => setOpen(true) : undefined}
+        onClick={() => {
+          if (!disabled && !value) setOpen(true);
+        }}
         className={cn(
           "relative w-full border rounded-md flex items-center justify-center overflow-hidden ",
           !disabled && !value && "hover:bg-muted cursor-pointer",

@@ -10,12 +10,23 @@ import { useEffect, useState } from "react";
 import { getCourseMeta } from "@/helpers/course-meta";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { useCartStore } from "@/store/cart-store";
+import { couponClientService } from "@/services/coupons/coupon.client";
+import CoursePrice from "./course-price";
 
 interface CourseSidebarcardProps {
   course: Course;
 }
 
 export const CourseSidebarCard = ({ course }: CourseSidebarcardProps) => {
+  const applyAutoCoupon = useCartStore((s) => s.applyAutoCoupon);
+
+  const [couponData, setCouponData] = useState<{
+    code: string;
+    discount: number;
+    finalAmount: number;
+  } | null>(null);
+
   const [meta, setMeta] = useState({
     totalLectures: 0,
     totalDuration: "0m",
@@ -28,6 +39,32 @@ export const CourseSidebarCard = ({ course }: CourseSidebarcardProps) => {
     };
     loadMeta();
   }, [course]);
+
+  useEffect(() => {
+    applyAutoCoupon();
+  }, [course.id]);
+
+  useEffect(() => {
+    const run = async () => {
+      try {
+        const res = await couponClientService.autoApplyCoupon({
+          cartTotal: Number(course.priceInr),
+          courseIds: [course.id],
+        });
+
+        setCouponData(res.data || null);
+      } catch (e) {
+        console.error("❌ AUTO APPLY FAILED:", e);
+      }
+    };
+
+    run();
+  }, [course.id]);
+
+  const discount = couponData?.discount || 0;
+  const finalAmount = couponData?.finalAmount || Number(course.priceInr);
+  const couponCode = couponData?.code;
+
   const isEnrolled = course.isEnrolled;
   const percent = course.progress.progress;
   return (
@@ -60,8 +97,16 @@ export const CourseSidebarCard = ({ course }: CourseSidebarcardProps) => {
         </p>
       ) : (
         <p className="text-sm text-green-600 font-medium mb-3">
-          ✅ You are enrolled
+          ✅ You are enrolled, Lifetime access unlocked
         </p>
+      )}
+      {!isEnrolled && (
+        <CoursePrice
+          course={course}
+          discount={discount}
+          finalAmount={finalAmount}
+          couponCode={couponCode}
+        />
       )}
 
       {/* 🔥 CTA SECTION */}

@@ -7,6 +7,7 @@ import QuickInfo from "./quick-info";
 import { Course } from "@/types/course";
 import { FeaturedImageForm } from "./featured-image-form";
 import { FeaturedVideoForm } from "./featured-video-form";
+import { AssignFacultyForm } from "./assign-faculty-form";
 
 interface RightSidebarProps {
   course: Course;
@@ -19,6 +20,8 @@ export const RightSidebar = ({ course }: RightSidebarProps) => {
       <FeaturedImageForm course={course} />
       {/* 🔥 Featured Video */}
       <FeaturedVideoForm course={course} />
+      {/* 🔥 Assign Faculty */}
+      <AssignFacultyForm course={course} />
       {/* 🔥 Category */}
       <CategoryForm course={course} />
 

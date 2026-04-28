@@ -3,13 +3,15 @@ import { tagServerService } from "@/services/tags/tag.server";
 import { Tag } from "@/types/tag";
 import { TagsList } from "@/components/admin/tags/tags-list";
 import { CreateTagForm } from "@/components/admin/tags/create-tag-form";
+import { getErrorMessage } from "@/lib/error-handler";
 const TagsPage = async () => {
   let tags: Tag[] = [];
   try {
     const response = await tagServerService.getAll();
     tags = Array.isArray(response.data) ? response.data : response.data.data;
-  } catch (error) {
-    console.error(error);
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
   }
 
   return (

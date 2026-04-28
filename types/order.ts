@@ -19,15 +19,31 @@ export interface BillingAddress {
   pincode: string;
 }
 
-export interface CreateOrderPayload {
+export type CreateOrderPayload = {
   items: {
     courseId: number;
     quantity: number;
   }[];
-  billingAddress: BillingAddress;
-  couponCode?: string;
-  paymentMethod?: string;
-}
+
+  billingAddress: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    address: string;
+    country: string;
+    state: string;
+    city: string;
+    pincode: string;
+  };
+
+  paymentMethod: string;
+  subTotal: number;
+  discount: number;
+  totalAmount: number;
+  tax: number;
+  couponCode?: string | null;
+};
 
 export interface CreateOrderResponse {
   orderId: number;

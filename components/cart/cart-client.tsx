@@ -52,12 +52,12 @@ export const CartClient = () => {
               </p>
 
               {cartItems.map((item) => (
-                <CartItemCard key={item.id} item={item} />
+                <CartItemCard key={item.id} item={item} showRemove={true} />
               ))}
             </div>
 
             {/* RIGHT */}
-            <CartSummary items={cartItems} />
+            <CartSummary />
           </div>
         )}
       </Container>

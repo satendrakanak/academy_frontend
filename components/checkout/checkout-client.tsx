@@ -10,8 +10,6 @@ import { useCheckoutForm } from "@/hooks/use-checkout-form";
 import { useSession } from "@/context/session-context";
 import { FormProvider } from "react-hook-form";
 import { checkoutSchema } from "@/schemas/checkout";
-import { orderClientService } from "@/services/orders/order.client";
-import { settingsClientService } from "@/services/settings/settings.client";
 import { getErrorMessage } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { Gateway } from "@/types/settings";
@@ -24,8 +22,11 @@ interface CheckoutClientProps {
 
 const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   const [selectedGateway, setSelectedGateway] = useState<Gateway | null>(null);
-  const { cartItems } = useCartStore();
+
   const { initiatePayment } = usePayment();
+
+  const { cartItems, finalAmount, discount, autoCoupon, manualCoupon } =
+    useCartStore();
 
   const { user, isLoading } = useSession();
   if (isLoading) return <div>Loading...</div>;
@@ -42,7 +43,34 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
       toast.error("Please select a payment method");
       return;
     }
-    initiatePayment(data, selectedGateway.provider);
+
+    if (!cartItems.length) {
+      toast.error("Cart is empty");
+      return;
+    }
+    try {
+      const payload = {
+        ...data,
+
+        // 🔥 CART INFO
+        items: cartItems.map((i) => ({
+          courseId: i.id,
+          price: i.price,
+        })),
+
+        // 🔥 PRICING (MOST IMPORTANT)
+        originalAmount: cartItems.reduce((t, i) => t + i.price, 0),
+        discountAmount: discount,
+        finalAmount: finalAmount,
+
+        // 🔥 COUPON
+        couponCode: manualCoupon || autoCoupon || null,
+      };
+
+      initiatePayment(payload, selectedGateway.provider);
+    } catch (e) {
+      toast.error(getErrorMessage(e));
+    }
   };
 
   if (!cartItems || cartItems.length === 0) {

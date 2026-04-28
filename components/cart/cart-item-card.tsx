@@ -5,13 +5,23 @@ import { useCartStore } from "@/store/cart-store";
 import { CartItem } from "@/types/cart";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface CartItemCardProps {
+  showRemove?: boolean;
   item: CartItem;
 }
 
-export const CartItemCard = ({ item }: CartItemCardProps) => {
+export const CartItemCard = ({ item, showRemove }: CartItemCardProps) => {
   const removeFromCart = useCartStore((s) => s.removeFromCart);
+  const { discount } = useCartStore();
+  const total = useCartStore((s) => s.totalPrice());
+
+  // per item proportional discount
+  const itemDiscount =
+    total > 0 ? Math.round((item.price / total) * discount) : 0;
+
+  const finalPrice = item.price - itemDiscount;
 
   const handleRemove = () => {
     removeFromCart(item.id);
@@ -22,19 +32,21 @@ export const CartItemCard = ({ item }: CartItemCardProps) => {
     <div className="flex gap-4 border-b pb-6 group last:border-none">
       {/* Image */}
       <div className="w-44 h-28 relative rounded-lg overflow-hidden">
-        <Image
-          src={item.image || "/placeholder.jpg"}
-          alt={item.title}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
+        <Link href={`/course/${item.slug}`}>
+          <Image
+            src={item.image || "/placeholder.jpg"}
+            alt={item.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </Link>
       </div>
 
       {/* Info */}
       <div className="flex-1">
         {/* Title */}
         <h3 className="font-semibold text-lg leading-snug line-clamp-2">
-          {item.title}
+          <Link href={`/course/${item.slug}`}>{item.title}</Link>
         </h3>
 
         {/* Instructor */}
@@ -57,23 +69,32 @@ export const CartItemCard = ({ item }: CartItemCardProps) => {
         </div>
 
         {/* Actions */}
-        <div className="mt-3 flex items-center gap-5 text-sm">
-          <button
-            onClick={handleRemove}
-            className="flex items-center gap-1 text-red-500 
+        {showRemove && (
+          <div className="mt-3 flex items-center gap-5 text-sm">
+            <button
+              onClick={handleRemove}
+              className="flex items-center gap-1 text-red-500 
                        hover:text-red-600 hover:bg-red-50 
                        active:scale-95 px-2 py-1 rounded-md 
                        transition-all duration-200 cursor-pointer"
-          >
-            <Trash2 className="w-4 h-4" />
-            Remove
-          </button>
-        </div>
+            >
+              <Trash2 className="w-4 h-4" />
+              Remove
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Price */}
       <div className="text-right min-w-25 flex flex-col items-end">
-        <p className="font-bold text-lg text-gray-900">₹{item.price}</p>
+        {discount > 0 ? (
+          <>
+            <p className="font-bold text-lg text-gray-900">₹{finalPrice}</p>
+            <p className="text-xs line-through text-gray-400">₹{item.price}</p>
+          </>
+        ) : (
+          <p className="font-bold text-lg text-gray-900">₹{item.price}</p>
+        )}
       </div>
     </div>
   );

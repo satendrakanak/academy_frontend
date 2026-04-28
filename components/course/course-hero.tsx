@@ -1,7 +1,7 @@
 import { Course } from "@/types/course";
 import Container from "../container";
 import CourseRatingDetails from "../courses/course-rating-details";
-import CourseAuthor from "../courses/course-author";
+import CourseAuthor from "./course-author";
 import CourseUpdateDetails from "../courses/course-update-details";
 import guestAuthor from "@/public/assets/guest-user.webp";
 import { formatDate } from "@/utils/formate-date";
@@ -43,7 +43,7 @@ export const CourseHero = ({ course }: CourseHeroProps) => {
             />
 
             <CourseAuthor
-              authorName={`${course.createdBy.firstName} ${course.createdBy.lastName}`}
+              authorName={`${course.updatedBy.firstName} ${course.updatedBy.lastName}`}
               authorPhoto={guestAuthor}
             />
 

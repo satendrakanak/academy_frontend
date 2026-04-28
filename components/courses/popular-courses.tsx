@@ -1,3 +1,4 @@
+import { CouponBulkClient } from "../coupon/coupon-bulk-client";
 import { CourseCard } from "./course-card";
 import { Course } from "@/types/course";
 
@@ -24,11 +25,7 @@ export default function PopularCourses({ courses }: PopularCoursesProps) {
         </div>
 
         {/* GRID */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {courses.map((course, index) => (
-            <CourseCard key={index} course={course} />
-          ))}
-        </div>
+        <CouponBulkClient courses={courses} />
       </div>
     </section>
   );
