@@ -1,17 +1,43 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import {
   ChangePasswordPayload,
+  CreateBulkUsersPayload,
   CreateUserPayload,
   Role,
   UpdateFacultyProfilePayload,
   UpdateProfilePayload,
   UpdateUserPayload,
   User,
+  UsersQueryParams,
 } from "@/types/user";
+
+const buildUsersQuery = (params?: UsersQueryParams) => {
+  const searchParams = new URLSearchParams();
+
+  if (params?.page) searchParams.set("page", String(params.page));
+  if (params?.limit) searchParams.set("limit", String(params.limit));
+  if (params?.search) searchParams.set("search", params.search);
+  if (params?.roleId) searchParams.set("roleId", String(params.roleId));
+  if (params?.includeDeleted) searchParams.set("includeDeleted", "true");
+
+  const query = searchParams.toString();
+  return query ? `?${query}` : "";
+};
+
 export const userClientService = {
+  list: (params?: UsersQueryParams) =>
+    withAuthRetry(() =>
+      apiClient.get<ApiResponse<Paginated<User>>>(`/api/users${buildUsersQuery(params)}`),
+    ),
+
   create: (data: CreateUserPayload) =>
     withAuthRetry(() => apiClient.post<ApiResponse<User>>("/api/users", data)),
+
+  createBulk: (data: CreateBulkUsersPayload) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<User[]>>("/api/users/bulk", data),
+    ),
 
   update: (id: number, data: UpdateUserPayload) =>
     withAuthRetry(() =>
@@ -50,6 +76,13 @@ export const userClientService = {
   delete: (id: number) =>
     withAuthRetry(() =>
       apiClient.delete<ApiResponse<{ message: string }>>(`/api/users/${id}`),
+    ),
+
+  deleteBulk: (ids: number[]) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<{ message: string }>>("/api/users/bulk-delete", {
+        ids,
+      }),
     ),
 
   getAllFaculties: () =>

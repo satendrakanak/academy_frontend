@@ -22,6 +22,9 @@ const userFacultySchema = z.object({
   experience: z.string().optional(),
   designation: z.string().optional(),
   linkedin: z.string().optional(),
+  instagram: z.string().optional(),
+  twitter: z.string().optional(),
+  youtube: z.string().optional(),
 });
 
 export function FacultyProfileForm({ user }: FacultyProfileFormProps) {
@@ -35,6 +38,9 @@ export function FacultyProfileForm({ user }: FacultyProfileFormProps) {
       designation: user.facultyProfile?.designation ?? "",
       experience: user.facultyProfile?.experience ?? "",
       linkedin: user.facultyProfile?.linkedin ?? "",
+      instagram: user.facultyProfile?.instagram ?? "",
+      twitter: user.facultyProfile?.twitter ?? "",
+      youtube: user.facultyProfile?.youtube ?? "",
     },
   });
 
@@ -101,6 +107,39 @@ export function FacultyProfileForm({ user }: FacultyProfileFormProps) {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <Input {...field} placeholder="LinkedIn" />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="instagram"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Input {...field} placeholder="Instagram" />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="twitter"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Input {...field} placeholder="Twitter / X" />
+                  <FieldError errors={[fieldState.error]} />
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="youtube"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <Input {...field} placeholder="YouTube" />
                   <FieldError errors={[fieldState.error]} />
                 </Field>
               )}

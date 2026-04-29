@@ -37,8 +37,16 @@ export function proxy(request: NextRequest) {
   // =========================
   if (isAuthRoute) {
     if (token) {
+      const callbackUrl = nextUrl.searchParams.get("callbackUrl");
+      const safeRedirect =
+        callbackUrl &&
+        callbackUrl.startsWith("/") &&
+        !callbackUrl.startsWith("//")
+          ? callbackUrl
+          : DEFAULT_LOGIN_REDIRECT;
+
       return NextResponse.redirect(
-        new URL(DEFAULT_LOGIN_REDIRECT, request.url),
+        new URL(safeRedirect, request.url),
       );
     }
     return response;
@@ -49,7 +57,10 @@ export function proxy(request: NextRequest) {
   // =========================
   if (!token) {
     const loginUrl = new URL("/auth/sign-in", request.url);
-    loginUrl.searchParams.set("callbackUrl", pathname);
+    loginUrl.searchParams.set(
+      "callbackUrl",
+      `${pathname}${nextUrl.search || ""}`,
+    );
     return NextResponse.redirect(loginUrl);
   }
 
