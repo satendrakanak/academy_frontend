@@ -7,16 +7,25 @@ import { CourseInstructor } from "./sections/course-instructor";
 import { CourseDetails } from "./sections/course-details";
 import { CourseRequirements } from "./sections/course-requirements";
 import { Course } from "@/types/course";
+import { Testimonial } from "@/types/testimonial";
+import { CourseReviews } from "./sections/course-reviews";
 
 const tabs = [
   { id: "overview", label: "Overview" },
   { id: "content", label: "Course Content" },
   { id: "details", label: "Details" },
   { id: "requirements", label: "Requirements" },
+  { id: "testimonials", label: "Testimonials" },
   { id: "instructor", label: "Instructor" },
 ];
 
-export const CourseTabs = ({ course }: { course: Course }) => {
+export const CourseTabs = ({
+  course,
+  testimonials,
+}: {
+  course: Course;
+  testimonials: Testimonial[];
+}) => {
   const [active, setActive] = useState("overview");
   const [isSticky, setIsSticky] = useState(false);
 
@@ -58,7 +67,7 @@ export const CourseTabs = ({ course }: { course: Course }) => {
     const handleScrollActive = () => {
       let current = "overview";
 
-      for (let tab of tabs) {
+      for (const tab of tabs) {
         const el = document.getElementById(tab.id);
         if (!el) continue;
 
@@ -124,6 +133,10 @@ export const CourseTabs = ({ course }: { course: Course }) => {
 
       <div id="requirements" className="mb-8 scroll-mt-32">
         <CourseRequirements course={course} />
+      </div>
+
+      <div id="testimonials" className="mb-8 scroll-mt-32">
+        <CourseReviews testimonials={testimonials} />
       </div>
 
       <div id="instructor" className="mb-8 scroll-mt-32">

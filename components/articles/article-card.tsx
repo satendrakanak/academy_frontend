@@ -1,47 +1,50 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { Article } from "@/types/article";
 
 interface ArticleCardProps {
-  title: string;
-  desc: string;
-  image: string;
-  date: string;
-  category: string;
+  article: Article;
 }
 
-export function ArticleCard({
-  title,
-  desc,
-  image,
-  date,
-  category,
-}: ArticleCardProps) {
+export function ArticleCard({ article }: ArticleCardProps) {
   return (
-    <div className="group cursor-pointer">
+    <Link
+      href={`/article/${article.slug}`}
+      className="group block cursor-pointer"
+    >
       {/* IMAGE */}
       <div className="relative h-56 w-full rounded-xl overflow-hidden mb-4">
         <Image
-          src={image}
-          alt={title}
+          src={article.featuredImage?.path || "/assets/placeholder.jpg"}
+          alt={article.title}
           fill
           className="object-cover group-hover:scale-105 transition duration-500"
         />
 
         {/* CATEGORY */}
-        <span className="absolute top-3 left-3 bg-white text-xs px-3 py-1 rounded-full text-blue-600 font-medium shadow">
-          {category}
-        </span>
+        {article.categories?.[0] && (
+          <span className="absolute top-3 left-3 bg-white text-xs px-3 py-1 rounded-full text-blue-600 font-medium shadow">
+            {article.categories[0].name}
+          </span>
+        )}
       </div>
 
       {/* CONTENT */}
-      <p className="text-xs text-gray-400 mb-2">{date}</p>
+      <p className="text-xs text-gray-400 mb-2">
+        {article.publishedAt
+          ? new Date(article.publishedAt).toLocaleDateString("en-GB")
+          : "Draft"}
+      </p>
 
       <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition">
-        {title}
+        {article.title}
       </h3>
 
-      <p className="text-sm text-gray-500 mt-2 line-clamp-2">{desc}</p>
-    </div>
+      <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+        {article.excerpt || "No description available"}
+      </p>
+    </Link>
   );
 }

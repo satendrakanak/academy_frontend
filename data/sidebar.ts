@@ -6,6 +6,7 @@ import {
   Users,
   Settings,
   CircleDollarSign,
+  MessageSquare,
 } from "lucide-react";
 
 export const sidebarData = {
@@ -55,6 +56,18 @@ export const sidebarData = {
     },
 
     {
+      title: "Orders",
+      url: "/admin/orders",
+      icon: CircleDollarSign,
+      items: [
+        {
+          title: "All Orders",
+          url: "/admin/orders",
+        },
+      ],
+    },
+
+    {
       title: "Articles",
       url: "/admin/articles",
       icon: FileText,
@@ -66,6 +79,18 @@ export const sidebarData = {
         {
           title: "Create Article",
           url: "/admin/articles/create",
+        },
+      ],
+    },
+
+    {
+      title: "Testimonials",
+      url: "/admin/testimonials",
+      icon: MessageSquare,
+      items: [
+        {
+          title: "All Testimonials",
+          url: "/admin/testimonials",
         },
       ],
     },

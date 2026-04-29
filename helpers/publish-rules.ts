@@ -1,6 +1,7 @@
 import { Lecture } from "@/types/lecture";
 import { Chapter } from "@/types/chapter";
 import { Course, PublishCheckResult } from "@/types/course";
+import { Article } from "@/types/article";
 
 /**
  * 🎥 Lecture publish check
@@ -94,6 +95,38 @@ export const checkCoursePublish = (course: Course): PublishCheckResult => {
 
   // optional strict rule
   if (!course.tags || course.tags.length === 0) {
+    reasons.push("At least one tag is recommended");
+  }
+
+  return {
+    canPublish: reasons.length === 0,
+    reasons,
+  };
+};
+
+export const checkArticlePublish = (article: Article): PublishCheckResult => {
+  const reasons: string[] = [];
+
+  // 🔥 required fields
+  if (!article.title?.trim()) {
+    reasons.push("Title is required");
+  }
+
+  const plainText = stripHtml(article.content || "");
+  if (!plainText?.trim()) {
+    reasons.push("Article content is required");
+  }
+
+  if (!article.featuredImage?.path) {
+    reasons.push("Article image is required");
+  }
+
+  if (!article.categories || article.categories.length === 0) {
+    reasons.push("At least one category is required");
+  }
+
+  // optional strict rule
+  if (!article.tags || article.tags.length === 0) {
     reasons.push("At least one tag is recommended");
   }
 

@@ -2,6 +2,7 @@ import { Category } from "./category";
 import { Chapter } from "./chapter";
 import { FileType } from "./file";
 import { Tag } from "./tag";
+import type { Testimonial } from "./testimonial";
 import { User } from "./user";
 
 export type CreateCoursePayload = {
@@ -88,6 +89,7 @@ export type Course = {
   };
   chapters: Chapter[];
   faculties: User[];
+  testimonials?: Testimonial[];
   createdBy: User;
   updatedBy: User;
   createdAt: string;

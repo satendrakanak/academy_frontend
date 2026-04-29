@@ -9,6 +9,7 @@ import { courseClientService } from "@/services/courses/course.client";
 import { getCourseColumns } from "./course-columns";
 import AddButton from "../data-table/add-button";
 import { CreateCouponForm } from "../coupons/create-coupon-form";
+import { CreateCourseForm } from "./create-course-form";
 
 interface CoursesListProps {
   courses: Course[];
@@ -52,9 +53,9 @@ export const CoursesList = ({ courses }: CoursesListProps) => {
         searchColumn="title"
         action={
           <AddButton
-            title="Add Coupon"
+            title="Add Course"
             redirectPath="/admin/courses"
-            FormComponent={CreateCouponForm}
+            FormComponent={CreateCourseForm}
           />
         }
       />

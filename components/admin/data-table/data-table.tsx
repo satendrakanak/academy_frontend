@@ -7,7 +7,7 @@ import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
 import { usePaginationDataTable } from "@/hooks/use-pagination-data-table";
 
-export function DataTable<T extends { id: number }>({
+export function DataTable<T extends { id: number | string }>({
   data,
   columns,
   searchColumn = "title",

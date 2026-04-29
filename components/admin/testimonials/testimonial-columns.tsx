@@ -1,0 +1,145 @@
+"use client";
+
+import Image from "next/image";
+import { ColumnDef } from "@tanstack/react-table";
+import { IconDotsVertical } from "@tabler/icons-react";
+import { Pencil, PlayCircle, Star, Trash2 } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Testimonial } from "@/types/testimonial";
+
+export const getTestimonialColumns = (
+  onEdit: (testimonial: Testimonial) => void,
+  onDelete: (testimonial: Testimonial) => void,
+): ColumnDef<Testimonial>[] => [
+  {
+    accessorKey: "name",
+    header: "Person",
+    cell: ({ row }) => {
+      const testimonial = row.original;
+      const meta = [testimonial.designation, testimonial.company]
+        .filter(Boolean)
+        .join(", ");
+
+      return (
+        <div
+          onClick={() => onEdit(testimonial)}
+          className="flex cursor-pointer items-center gap-3"
+        >
+          <Image
+            src={testimonial.avatar?.path || "/assets/default.png"}
+            alt={testimonial.avatarAlt || testimonial.name}
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-full object-cover"
+          />
+
+          <div className="space-y-0.5">
+            <p className="font-medium">{testimonial.name}</p>
+            <p className="text-sm text-muted-foreground">
+              {meta || "No designation added"}
+            </p>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => (
+      <Badge variant="outline">
+        {row.original.type === "VIDEO" ? "Video" : "Text"}
+      </Badge>
+    ),
+  },
+  {
+    id: "preview",
+    header: "Preview",
+    cell: ({ row }) => {
+      const testimonial = row.original;
+
+      if (testimonial.type === "VIDEO") {
+        return (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <PlayCircle className="size-4" />
+            {testimonial.video?.name || "Video testimonial"}
+          </div>
+        );
+      }
+
+      return (
+        <p className="max-w-md truncate text-sm text-muted-foreground">
+          {testimonial.message || "No text added"}
+        </p>
+      );
+    },
+  },
+  {
+    accessorKey: "rating",
+    header: "Rating",
+    cell: ({ row }) => (
+      <div className="flex items-center gap-1.5 font-medium">
+        <Star className="size-4 fill-current text-amber-500" />
+        {row.original.rating}/5
+      </div>
+    ),
+  },
+  {
+    accessorKey: "isActive",
+    header: "Status",
+    cell: ({ row }) => (
+      <Badge variant={row.original.isActive ? "default" : "secondary"}>
+        {row.original.isActive ? "Active" : "Inactive"}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created",
+    cell: ({ row }) =>
+      new Date(row.original.createdAt).toLocaleDateString("en-GB"),
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const testimonial = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="icon" variant="ghost">
+              <IconDotsVertical />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() => onEdit(testimonial)}
+              className="cursor-pointer"
+            >
+              <Pencil className="size-4" />
+              Edit
+            </DropdownMenuItem>
+
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={() => onDelete(testimonial)}
+              className="cursor-pointer"
+            >
+              <Trash2 className="size-4" />
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];

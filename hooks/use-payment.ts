@@ -110,8 +110,14 @@ export const usePayment = () => {
     provider: string,
   ) => {
     try {
-      const { cartItems, finalAmount, discount, autoCoupon, manualCoupon } =
-        getCartState();
+      const {
+        cartItems,
+        finalAmount,
+        autoDiscount,
+        manualDiscount,
+        autoCoupon,
+        manualCoupon,
+      } = getCartState();
 
       if (!cartItems.length) {
         toast.error("Cart is empty");
@@ -146,11 +152,12 @@ export const usePayment = () => {
         },
 
         // 🔥 PRICING
-        discount, // coupon
+        discount: autoDiscount + manualDiscount, // coupon
         subTotal, // GST removed
         tax, // GST part
         totalAmount, // final payable
-        couponCode: manualCoupon || autoCoupon || null,
+        manualCouponCode: manualCoupon || null,
+        autoCouponCode: autoCoupon || null,
 
         paymentMethod: provider,
       };

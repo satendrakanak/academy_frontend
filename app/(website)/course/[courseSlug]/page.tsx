@@ -5,7 +5,9 @@ import { CourseTabs } from "@/components/course/course-tabs";
 import { RelatedCourses } from "@/components/course/related-courses";
 import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
+import { testimonialServerService } from "@/services/testimonials/testimonial.server";
 import { Course } from "@/types/course";
+import { Testimonial } from "@/types/testimonial";
 import { notFound } from "next/navigation";
 
 export default async function CourseSlugPage({
@@ -38,6 +40,18 @@ export default async function CourseSlugPage({
     throw new Error(message);
   }
 
+  let testimonials: Testimonial[] = [];
+  try {
+    const response = await testimonialServerService.getPublic({
+      courseId: course.id,
+      limit: 6,
+    });
+    testimonials = response.data.data;
+  } catch (error: unknown) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
+
   return (
     <div className="relative bg-gray-100">
       {/* HERO */}
@@ -47,7 +61,7 @@ export default async function CourseSlugPage({
         <div className="flex gap-10 items-start">
           {/* LEFT */}
           <div className="flex-1 max-w-4xl mt-10">
-            <CourseTabs course={course} />
+            <CourseTabs course={course} testimonials={testimonials} />
           </div>
 
           {/* RIGHT */}

@@ -1,5 +1,7 @@
 import { checkoutSchema } from "@/schemas/checkout";
 import * as z from "zod";
+import { User } from "./user";
+import { Course } from "./course";
 export enum OrderStatus {
   PENDING = "PENDING",
   PAID = "PAID",
@@ -64,24 +66,29 @@ export interface VerifyPaymentPayload {
 }
 
 export interface OrderItem {
+  id: number;
   courseId: number;
   price: number;
   quantity: number;
-  course?: {
-    id: number;
-    title: string;
-  };
+  course: Course;
 }
 
 export interface Order {
   id: number;
   userId: number;
+  user: User;
 
   subTotal: number;
   discount: number;
   tax: number;
   totalAmount: number;
   currency: string;
+
+  autoDiscount: number;
+  manualDiscount: number;
+
+  autoCouponCode?: string | null;
+  manualCouponCode?: string | null;
 
   status: OrderStatus;
 
@@ -94,6 +101,7 @@ export interface Order {
 
   createdAt: string;
   updatedAt: string;
+  paidAt: string | null;
 }
 
 export type RazorpaySuccessResponse = {

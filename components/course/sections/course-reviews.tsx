@@ -1,10 +1,10 @@
-import { ReviewCard } from "@/components/cards/review-card";
+import { CourseTestimonialsSection } from "@/components/testimonials/course-testimonials-section";
+import { Testimonial } from "@/types/testimonial";
 
-export const CourseReviews = () => {
-  return (
-    <div className="space-y-4">
-      <ReviewCard />
-      <ReviewCard />
-    </div>
-  );
+export const CourseReviews = ({
+  testimonials,
+}: {
+  testimonials: Testimonial[];
+}) => {
+  return <CourseTestimonialsSection testimonials={testimonials} />;
 };

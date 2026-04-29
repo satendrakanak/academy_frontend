@@ -4,6 +4,7 @@ import {
   CreateOrderPayload,
   CreateOrderResponse,
   Order,
+  OrderStatus,
   VerifyPaymentPayload,
 } from "@/types/order";
 
@@ -12,6 +13,14 @@ export const orderClientService = {
   create: (data: CreateOrderPayload) =>
     withAuthRetry(() =>
       apiClient.post<ApiResponse<CreateOrderResponse>>("/api/orders", data),
+    ),
+
+  updateStatus: (orderId: number, data: { status: OrderStatus }) =>
+    withAuthRetry(() =>
+      apiClient.patch<ApiResponse<Order>>(
+        `/api/orders/${orderId}/status`,
+        data,
+      ),
     ),
   retry: (orderId: number) =>
     withAuthRetry(() =>

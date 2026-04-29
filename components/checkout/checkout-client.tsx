@@ -25,8 +25,14 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
 
   const { initiatePayment } = usePayment();
 
-  const { cartItems, finalAmount, discount, autoCoupon, manualCoupon } =
-    useCartStore();
+  const {
+    cartItems,
+    finalAmount,
+    autoDiscount,
+    manualDiscount,
+    autoCoupon,
+    manualCoupon,
+  } = useCartStore();
 
   const { user, isLoading } = useSession();
   if (isLoading) return <div>Loading...</div>;
@@ -60,11 +66,12 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
 
         // 🔥 PRICING (MOST IMPORTANT)
         originalAmount: cartItems.reduce((t, i) => t + i.price, 0),
-        discountAmount: discount,
+        discountAmount: autoDiscount + manualDiscount,
         finalAmount: finalAmount,
 
         // 🔥 COUPON
-        couponCode: manualCoupon || autoCoupon || null,
+        manualCouponCode: manualCoupon || null,
+        autoCouponCode: autoCoupon || null,
       };
 
       initiatePayment(payload, selectedGateway.provider);

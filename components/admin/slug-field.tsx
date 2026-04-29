@@ -7,10 +7,16 @@ import { Check, Pencil } from "lucide-react";
 interface SlugFieldProps {
   title: string;
   value: string;
+  forSlug?: string;
   onChange: (val: string) => void;
 }
 
-export const SlugField = ({ title, value, onChange }: SlugFieldProps) => {
+export const SlugField = ({
+  title,
+  value,
+  forSlug,
+  onChange,
+}: SlugFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempSlug, setTempSlug] = useState(value);
   const [isManual, setIsManual] = useState(false);
@@ -42,7 +48,9 @@ export const SlugField = ({ title, value, onChange }: SlugFieldProps) => {
       {/* 🔥 VIEW MODE */}
       {!isEditing ? (
         <div className="flex items-center text-sm">
-          <span className="text-muted-foreground">{baseUrl}/course/</span>
+          <span className="text-muted-foreground">
+            {baseUrl}/{forSlug || "course"}/
+          </span>
 
           <span className="font-medium text-foreground">
             {value || "your-slug"}
@@ -59,7 +67,9 @@ export const SlugField = ({ title, value, onChange }: SlugFieldProps) => {
       ) : (
         /* 🔥 EDIT MODE */
         <div className="flex items-center w-full text-sm">
-          <span className="text-muted-foreground mr-1">{baseUrl}/course/</span>
+          <span className="text-muted-foreground mr-1">
+            {baseUrl}/{forSlug || "course"}/
+          </span>
 
           <div className="relative flex-1">
             <Input

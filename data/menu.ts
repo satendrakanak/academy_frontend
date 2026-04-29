@@ -11,13 +11,18 @@ export const navbarItems = [
   },
   {
     label: "Articles",
-    href: "/blog",
+    href: "/articles",
+    hasChild: false,
+  },
+  {
+    label: "Client Testimonials",
+    href: "/client-testimonials",
     hasChild: false,
   },
 
   {
-    label: "Vedique Diet",
-    href: "/vedique-diet",
+    label: "Our Faculty",
+    href: "/our-faculty",
     hasChild: false,
   },
 
