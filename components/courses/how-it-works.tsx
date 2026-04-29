@@ -32,11 +32,11 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="py-24 bg-white">
+    <section className="bg-[linear-gradient(180deg,var(--brand-50)_0%,#fff_100%)] py-24">
       <div className="max-w-6xl mx-auto px-6">
         {/* HEADER */}
         <div className="text-center mb-16">
-          <p className="text-sm font-medium text-blue-600 mb-2">
+          <p className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-600)]">
             Simple Process
           </p>
 
@@ -54,7 +54,7 @@ export default function HowItWorks() {
               {/* STEP */}
               <div className="flex flex-col items-center text-center max-w-[140px] group">
                 {/* ICON CIRCLE */}
-                <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-100)] text-[var(--brand-700)] transition group-hover:bg-[var(--brand-500)] group-hover:text-white">
                   {step.icon}
                 </div>
 
@@ -70,8 +70,8 @@ export default function HowItWorks() {
               {/* ARROW */}
               {index !== steps.length - 1 && (
                 <div className="hidden md:flex items-center mx-4">
-                  <div className="w-10 h-[2px] bg-gray-300" />
-                  <div className="w-2 h-2 border-t-2 border-r-2 border-gray-400 rotate-45 -ml-1" />
+                  <div className="h-[2px] w-10 bg-[var(--brand-200)]" />
+                  <div className="-ml-1 h-2 w-2 rotate-45 border-t-2 border-r-2 border-[var(--brand-300)]" />
                 </div>
               )}
             </div>

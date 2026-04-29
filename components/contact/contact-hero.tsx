@@ -1,12 +1,18 @@
 export function ContactHero() {
   return (
-    <div className="bg-linear-to-r from-blue-700 to-red-500 text-white py-16">
-      <div className="max-w-4xl mx-auto text-center px-6">
-        <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-        <p className="text-lg opacity-90">
+    <section className="academy-hero-gradient relative overflow-hidden py-18 text-white">
+      <div className="academy-hero-grid absolute inset-0 opacity-20" />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <div className="mb-4 inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
+          We usually reply within one working day
+        </div>
+        <h1 className="mb-4 text-4xl font-extrabold tracking-[-0.03em] md:text-6xl">
+          Contact Us
+        </h1>
+        <p className="text-lg opacity-90 md:text-xl">
           Have questions or need help? Our team is here to assist you.
         </p>
       </div>
-    </div>
+    </section>
   );
 }

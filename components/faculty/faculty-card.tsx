@@ -7,11 +7,11 @@ import { User } from "@/types/user";
 
 export function FacultyCard({ faculty }: { faculty: User }) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition p-5 group">
+    <div className="group rounded-[28px] border border-[var(--brand-100)] bg-white p-5 shadow-[0_18px_50px_-36px_rgba(15,23,42,0.4)] transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-200)] hover:shadow-[0_28px_70px_-34px_rgba(15,23,42,0.35)]">
       {/* IMAGE */}
-      <div className="relative w-full h-56 rounded-xl overflow-hidden mb-4">
+      <div className="relative mb-5 h-64 w-full overflow-hidden rounded-[24px] bg-[var(--brand-50)]">
         <Image
-          src={faculty.avatar?.path || "/assets/placeholder.jpg"}
+          src={faculty.avatar?.path || "/assets/default.png"}
           alt={faculty.firstName}
           fill
           className="object-cover group-hover:scale-105 transition duration-500"
@@ -20,23 +20,24 @@ export function FacultyCard({ faculty }: { faculty: User }) {
 
       {/* NAME */}
       <h3 className="text-lg font-semibold text-gray-900">
-        {faculty.firstName}
+        {faculty.firstName} {faculty.lastName || ""}
       </h3>
 
       {/* ROLE */}
-      <p className="text-sm text-blue-600 font-medium mt-1">
-        {faculty.facultyProfile.designation}
+      <p className="mt-1 text-sm font-medium text-[var(--brand-700)]">
+        {faculty.facultyProfile?.designation || "Faculty Mentor"}
       </p>
 
       {/* BIO */}
-      <p className="text-sm text-gray-500 mt-2 line-clamp-3">
-        {faculty.profile.bio ||
+      <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-500">
+        {faculty.profile?.bio ||
+          faculty.facultyProfile?.expertise ||
           "Experienced professional in health and wellness."}
       </p>
 
       {/* EXPERIENCE */}
-      {faculty.facultyProfile.experience && (
-        <p className="text-xs text-gray-400 mt-3">
+      {faculty.facultyProfile?.experience && (
+        <p className="mt-4 inline-flex rounded-full bg-[var(--brand-50)] px-3 py-1 text-xs font-medium text-[var(--brand-700)]">
           {faculty.facultyProfile.experience} years experience
         </p>
       )}

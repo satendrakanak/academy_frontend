@@ -27,10 +27,10 @@ const stats = [
 
 export default function StatsTimeline() {
   return (
-    <section className="py-28">
+    <section className="py-24">
       <div className="max-w-7xl mx-auto px-6 text-center">
         {/* LABEL */}
-        <span className="inline-block px-5 py-1 text-xs font-medium bg-blue-100 text-blue-600 rounded-full mb-4">
+        <span className="mb-4 inline-block rounded-full bg-[var(--brand-100)] px-5 py-1 text-xs font-semibold tracking-[0.22em] text-[var(--brand-700)]">
           WHY CHOOSE US
         </span>
 
@@ -42,7 +42,7 @@ export default function StatsTimeline() {
         {/* TIMELINE */}
         <div className="relative">
           {/* LINE */}
-          <div className="absolute top-4.5 left-0 w-full h-[1.5px] bg-indigo-200" />
+          <div className="absolute top-4.5 left-0 h-[1.5px] w-full bg-[var(--brand-200)]" />
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10 relative">
             {stats.map((item, index) => (
@@ -51,22 +51,22 @@ export default function StatsTimeline() {
                 className="relative flex mt-2 flex-col items-center"
               >
                 {/* DOT */}
-                <div className="w-5 h-5 rounded-full border-[3px] border-indigo-500 bg-white z-20" />
+                <div className="z-20 h-5 w-5 rounded-full border-[3px] border-[var(--brand-500)] bg-white" />
 
                 {/* CONNECTOR */}
-                <div className="w-0.5 h-15 bg-indigo-200 z-10" />
+                <div className="z-10 h-15 w-0.5 bg-[var(--brand-200)]" />
 
                 {/* CARD */}
-                <div className="relative w-full max-w-65 bg-white rounded-2xl pt-12 pb-8 px-6 shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-visible border-b-4 border-indigo-500">
+                <div className="relative w-full max-w-65 overflow-visible rounded-[26px] border border-[var(--brand-100)] border-b-4 border-b-[var(--brand-500)] bg-white px-6 pt-12 pb-8 shadow-[0_20px_50px_-28px_rgba(15,23,42,0.35)]">
                   {/* ARC (FIXED PERFECT) */}
 
                   {/* ICON CIRCLE (MERGED FEEL) */}
                   <div className="absolute -top-7.5 left-1/2 -translate-x-1/2 w-14 h-14 bg-white rounded-full shadow-md flex items-center justify-center z-20 border border-gray-100">
-                    <div className="text-indigo-500">{item.icon}</div>
+                    <div className="text-[var(--brand-600)]">{item.icon}</div>
                   </div>
 
                   {/* VALUE */}
-                  <h3 className="text-3xl font-bold text-indigo-500 mt-2">
+                  <h3 className="mt-2 text-3xl font-bold text-[var(--brand-700)]">
                     {item.value}
                   </h3>
 

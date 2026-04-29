@@ -64,16 +64,16 @@ export default async function ClientTestimonialsPage({
   }
 
   return (
-    <div className="bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_36%,#eff6ff_100%)] py-20">
+    <div className="academy-surface py-20">
       <Container>
-        <section className="mb-10 rounded-[32px] bg-[radial-gradient(circle_at_top_right,_rgba(59,130,246,0.2),_transparent_30%),linear-gradient(135deg,#0f172a_0%,#1d4ed8_55%,#38bdf8_100%)] px-6 py-14 text-white md:px-10">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-cyan-200">
+        <section className="mb-10 rounded-[32px] border border-[var(--brand-100)] bg-white px-6 py-12 shadow-sm md:px-10">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand-600)]">
             Client Testimonials
           </p>
-          <h1 className="max-w-3xl text-4xl font-bold md:text-6xl">
+          <h1 className="max-w-3xl text-4xl font-bold text-slate-900 md:text-5xl">
             Stories from learners who trusted the process and saw results.
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 md:text-lg">
+          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
             Explore featured written reviews and video testimonials, then drill
             down by course to see exactly how learners experienced Unitus.
           </p>

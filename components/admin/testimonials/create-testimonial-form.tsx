@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,8 @@ import { toast } from "sonner";
 
 import { testimonialSchema } from "@/schemas/testimonial";
 import { testimonialClientService } from "@/services/testimonials/testimonial.client";
+import { courseClientService } from "@/services/courses/course.client";
+import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
 import { FileType } from "@/types/file";
 import { getErrorMessage } from "@/lib/error-handler";
@@ -42,6 +44,10 @@ export const CreateTestimonialForm = ({
   onSuccess,
 }: CreateTestimonialFormProps) => {
   const router = useRouter();
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [selectedCourseIds, setSelectedCourseIds] = useState<number[]>(
+    testimonial?.courses?.map((course) => course.id) || [],
+  );
   const [selectedAvatar, setSelectedAvatar] = useState<FileType | null>(
     testimonial?.avatar || null,
   );
@@ -61,6 +67,10 @@ export const CreateTestimonialForm = ({
       message: testimonial?.message || "",
       rating: testimonial?.rating || 5,
       isActive: testimonial?.isActive ?? true,
+      isFeatured: testimonial?.isFeatured ?? false,
+      status: testimonial?.status || "pending",
+      priority: testimonial?.priority ?? 0,
+      courseIds: testimonial?.courses?.map((course) => course.id) || [],
     },
   });
 
@@ -69,6 +79,19 @@ export const CreateTestimonialForm = ({
     control: form.control,
     name: "type",
   });
+
+  useEffect(() => {
+    const loadCourses = async () => {
+      try {
+        const response = await courseClientService.getAll();
+        setCourses(response.data.data);
+      } catch (error: unknown) {
+        toast.error(getErrorMessage(error));
+      }
+    };
+
+    loadCourses();
+  }, []);
 
   const onSubmit = async (data: z.infer<typeof testimonialSchema>) => {
     try {
@@ -88,6 +111,10 @@ export const CreateTestimonialForm = ({
         avatarAlt: avatarAlt.trim() || data.name,
         videoId: data.type === "VIDEO" ? selectedVideo?.id : undefined,
         isActive: data.isActive,
+        isFeatured: data.isFeatured,
+        status: data.status,
+        priority: data.priority,
+        courseIds: selectedCourseIds,
       };
 
       if (testimonial?.id) {
@@ -104,7 +131,12 @@ export const CreateTestimonialForm = ({
           message: "",
           rating: 5,
           isActive: true,
+          isFeatured: false,
+          status: "pending",
+          priority: 0,
+          courseIds: [],
         });
+        setSelectedCourseIds([]);
         setSelectedAvatar(null);
         setAvatarAlt("");
         setSelectedVideo(null);
@@ -125,6 +157,21 @@ export const CreateTestimonialForm = ({
 
   const handleVideoUpload = async (file: FileType) => {
     setSelectedVideo(file);
+  };
+
+  const toggleCourse = (courseId: number) => {
+    setSelectedCourseIds((prev) => {
+      const updated = prev.includes(courseId)
+        ? prev.filter((id) => id !== courseId)
+        : [...prev, courseId];
+
+      form.setValue("courseIds", updated, {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+
+      return updated;
+    });
   };
 
   return (
@@ -239,6 +286,39 @@ export const CreateTestimonialForm = ({
             )}
           />
 
+          <div className="rounded-xl border bg-white">
+            <div className="border-b px-4 py-3">
+              <h3 className="text-sm font-medium">Assign Courses</h3>
+            </div>
+
+            <div className="max-h-52 space-y-2 overflow-y-auto p-4">
+              {courses.map((course) => {
+                const isChecked = selectedCourseIds.includes(course.id);
+
+                return (
+                  <label
+                    key={course.id}
+                    className="flex cursor-pointer items-center gap-3 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isChecked}
+                      onChange={() => toggleCourse(course.id)}
+                      className="h-4 w-4 cursor-pointer accent-primary"
+                    />
+                    <span>{course.title}</span>
+                  </label>
+                );
+              })}
+
+              {!courses.length && (
+                <p className="text-sm text-muted-foreground">
+                  No courses found yet.
+                </p>
+              )}
+            </div>
+          </div>
+
           <FileUpload
             label="Avatar"
             previewType="image"
@@ -296,6 +376,73 @@ export const CreateTestimonialForm = ({
               </Field>
             )}
           />
+
+          <Controller
+            name="isFeatured"
+            control={form.control}
+            render={({ field }) => (
+              <Field
+                orientation="horizontal"
+                className="items-center justify-between rounded-lg border p-4"
+              >
+                <div className="space-y-1">
+                  <FieldLabel>Featured on website</FieldLabel>
+                  <p className="text-sm text-muted-foreground">
+                    Show this testimonial in the featured website section.
+                  </p>
+                </div>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </Field>
+            )}
+          />
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Controller
+              name="status"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Status</FieldLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="h-11 w-full">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="rejected">Rejected</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="priority"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel>Priority</FieldLabel>
+                  <Input
+                    {...field}
+                    type="number"
+                    min={0}
+                    placeholder="0"
+                    className="h-11"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
         </FieldGroup>
 
         <div className="flex justify-end">

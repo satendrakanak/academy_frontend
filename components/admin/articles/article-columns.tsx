@@ -10,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
@@ -88,7 +87,7 @@ export const getArticleColumns = (
       <Badge
         className={
           row.original.isFeatured
-            ? "bg-purple-600 text-white"
+            ? "bg-[var(--brand-600)] text-white"
             : "bg-gray-200 text-gray-700"
         }
       >
@@ -120,7 +119,6 @@ export const getArticleColumns = (
   {
     id: "actions",
     cell: ({ row }) => {
-      const router = useRouter();
       const article = row.original;
 
       return (
@@ -132,12 +130,11 @@ export const getArticleColumns = (
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => router.push(`/admin/articles/${article.id}`)}
-              className="cursor-pointer flex items-center gap-2"
-            >
-              <Pencil className="size-4" />
-              Edit
+            <DropdownMenuItem asChild className="cursor-pointer flex items-center gap-2">
+              <Link href={`/admin/articles/${article.id}`}>
+                <Pencil className="size-4" />
+                Edit
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"

@@ -36,7 +36,7 @@ export const ArticlesList = ({ articles }: ArticlesListProps) => {
       toast.success("Article deleted");
       setDeleteOpen(false);
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete article");
     } finally {
       setLoading(false);
@@ -45,7 +45,7 @@ export const ArticlesList = ({ articles }: ArticlesListProps) => {
 
   const columns = getArticleColumns(handleDeleteClick);
   return (
-    <div>
+    <div className="rounded-[28px] border border-[var(--brand-100)] bg-white p-4 shadow-[0_18px_50px_-36px_rgba(15,23,42,0.28)] md:p-5">
       <DataTable
         data={articles}
         columns={columns}

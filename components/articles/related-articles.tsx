@@ -18,10 +18,10 @@ export const RelatedArticles = ({ articles }: RelatedArticlesProps) => {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-            Related Courses
+            Related Articles
           </h2>
           <p className="text-gray-500 mt-2">
-            Explore more courses similar to this one
+            Explore more reads connected to this topic
           </p>
         </div>
       </div>

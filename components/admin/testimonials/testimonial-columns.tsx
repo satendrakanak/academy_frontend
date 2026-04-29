@@ -61,6 +61,19 @@ export const getTestimonialColumns = (
     ),
   },
   {
+    id: "courses",
+    header: "Courses",
+    cell: ({ row }) => {
+      const courseNames = row.original.courses?.map((course) => course.title) || [];
+
+      return (
+        <p className="max-w-xs truncate text-sm text-muted-foreground">
+          {courseNames.length ? courseNames.join(", ") : "General testimonial"}
+        </p>
+      );
+    },
+  },
+  {
     id: "preview",
     header: "Preview",
     cell: ({ row }) => {
@@ -96,9 +109,13 @@ export const getTestimonialColumns = (
     accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? "default" : "secondary"}>
-        {row.original.isActive ? "Active" : "Inactive"}
-      </Badge>
+      <div className="flex flex-wrap gap-2">
+        <Badge variant={row.original.isActive ? "default" : "secondary"}>
+          {row.original.isActive ? "Active" : "Inactive"}
+        </Badge>
+        <Badge variant="outline">{row.original.status}</Badge>
+        {row.original.isFeatured && <Badge variant="outline">Featured</Badge>}
+      </div>
     ),
   },
   {

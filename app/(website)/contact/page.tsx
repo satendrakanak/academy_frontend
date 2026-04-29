@@ -5,7 +5,7 @@ import { ContactInfo } from "@/components/contact/contact-info";
 
 export default function ContactPage() {
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="academy-surface min-h-screen">
       <ContactHero />
 
       <Container>

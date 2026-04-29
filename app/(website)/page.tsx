@@ -9,10 +9,12 @@ import { getErrorMessage } from "@/lib/error-handler";
 import { articleServerService } from "@/services/articles/article.server";
 import { courseServerService } from "@/services/courses/course.server";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
+import { userServerService } from "@/services/users/user.server";
 import { Article } from "@/types/article";
 import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
 import { FeaturedTestimonialsSection } from "@/components/testimonials/featured-testimonials-section";
+import { User } from "@/types/user";
 
 export default async function Home() {
   let courses: Course[] = [];
@@ -26,7 +28,7 @@ export default async function Home() {
 
   let articles: Article[] = [];
   try {
-    const response = await articleServerService.getFeaturedArticles();
+    const response = await articleServerService.getAll();
     articles = response.data;
   } catch (error) {
     const message = getErrorMessage(error);
@@ -41,6 +43,15 @@ export default async function Home() {
     const message = getErrorMessage(error);
     throw new Error(message);
   }
+
+  let faculties: User[] = [];
+  try {
+    const response = await userServerService.getFaculties();
+    faculties = response.data;
+  } catch (error) {
+    const message = getErrorMessage(error);
+    throw new Error(message);
+  }
   return (
     <div>
       <Hero courses={courses} />
@@ -48,7 +59,7 @@ export default async function Home() {
       <PopularCourses courses={courses} />
       <FeaturedTestimonialsSection testimonials={testimonials} />
       <WhyJoinOurCourses />
-      <Faculty />
+      <Faculty faculties={faculties} />
       <HowItWorks />
       <ArticlesSection articles={articles} />
     </div>
