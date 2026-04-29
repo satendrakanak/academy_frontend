@@ -1,65 +1,51 @@
 "use client";
 
-import { z } from "zod";
-
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-
+import { ColumnDef } from "@tanstack/react-table";
 import { DataTableContent } from "./data-table-content";
 import { useDataTable } from "@/hooks/use-data-table";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableToolbar } from "./data-table-toolbar";
-import { ColumnDef } from "@tanstack/react-table";
+import { usePaginationDataTable } from "@/hooks/use-pagination-data-table";
 
-export const schema = z.object({
-  id: z.number(),
-  header: z.string(),
-  type: z.string(),
-  status: z.string(),
-  target: z.string(),
-  limit: z.string(),
-  reviewer: z.string(),
-});
-
-export function DataTable({
+export function DataTable<T extends { id: number | string }>({
   data,
   columns,
+  searchColumn = "title",
+  isClient,
+  action,
 }: {
-  data: z.infer<typeof schema>[];
-  columns: ColumnDef<z.infer<typeof schema>>[];
+  data: T[];
+  columns: ColumnDef<T>[];
+  searchColumn?: string;
+  isClient?: boolean;
+  action?: React.ReactNode;
 }) {
-  const { table } = useDataTable({
-    data,
-    columns,
-  });
+  const { table } = isClient
+    ? usePaginationDataTable({ data, columns })
+    : useDataTable({ data, columns });
 
   return (
-    <Tabs
-      defaultValue="outline"
-      className="w-full flex-col justify-start gap-6"
-    >
-      <DataTableToolbar table={table} />
-      <TabsContent
-        value="outline"
-        className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6"
-      >
-        <DataTableContent table={table} data={data} />
+    <div className="w-full flex flex-col gap-4">
+      {/* 🔥 Toolbar */}
+      <DataTableToolbar
+        table={table}
+        searchColumn={searchColumn}
+        action={action}
+      />
+
+      {/* 🔥 Table */}
+      <div className="px-4 lg:px-6">
+        <DataTableContent
+          table={table}
+          data={data}
+          getRowId={(row) => row.id}
+        />
+      </div>
+
+      {/* 🔥 Pagination */}
+      <div className="px-4 lg:px-6">
         <DataTablePagination table={table} />
-      </TabsContent>
-      <TabsContent
-        value="past-performance"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent value="key-personnel" className="flex flex-col px-4 lg:px-6">
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-      <TabsContent
-        value="focus-documents"
-        className="flex flex-col px-4 lg:px-6"
-      >
-        <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
-      </TabsContent>
-    </Tabs>
+      </div>
+    </div>
   );
 }

@@ -5,6 +5,8 @@ import {
   FolderTree,
   Users,
   Settings,
+  CircleDollarSign,
+  MessageSquare,
 } from "lucide-react";
 
 export const sidebarData = {
@@ -31,8 +33,36 @@ export const sidebarData = {
           url: "/admin/courses",
         },
         {
-          title: "Create Course",
-          url: "/admin/courses/create",
+          title: "Categories",
+          url: "/admin/courses/categories",
+        },
+        {
+          title: "Tags",
+          url: "/admin/courses/tags",
+        },
+      ],
+    },
+
+    {
+      title: "Coupons",
+      url: "/admin/coupons",
+      icon: CircleDollarSign,
+      items: [
+        {
+          title: "All Coupons",
+          url: "/admin/coupons",
+        },
+      ],
+    },
+
+    {
+      title: "Orders",
+      url: "/admin/orders",
+      icon: CircleDollarSign,
+      items: [
+        {
+          title: "All Orders",
+          url: "/admin/orders",
         },
       ],
     },
@@ -49,6 +79,18 @@ export const sidebarData = {
         {
           title: "Create Article",
           url: "/admin/articles/create",
+        },
+      ],
+    },
+
+    {
+      title: "Testimonials",
+      url: "/admin/testimonials",
+      icon: MessageSquare,
+      items: [
+        {
+          title: "All Testimonials",
+          url: "/admin/testimonials",
         },
       ],
     },

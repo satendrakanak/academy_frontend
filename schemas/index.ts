@@ -21,3 +21,22 @@ export const registerFormSchema = z
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
+
+export const loginFormSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z.string().min(8, "Minimum 8 characters"),
+});
+
+export const fogotPasswordFormSchema = z.object({
+  email: z.string().email("Invalid email"),
+});
+
+export const resetPasswordFormSchema = z
+  .object({
+    password: z.string().min(8, "Minimum 8 characters"),
+    confirmPassword: z.string().min(8, "Minimum 8 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });

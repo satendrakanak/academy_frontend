@@ -14,10 +14,10 @@ interface CardWrapperProps {
   backButtonLabel: string;
   backButtonHref: string;
   showSocial?: boolean;
-  imageUrl: string;
-  alt: string;
-  width: number;
-  height: number;
+  imageUrl?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
 }
 
 export const CardWrapper = ({ children, ...props }: CardWrapperProps) => {
@@ -36,12 +36,14 @@ export const CardWrapper = ({ children, ...props }: CardWrapperProps) => {
               />
             </FieldGroup>
           </div>
-          <FormImage
-            imageUrl={props.imageUrl}
-            alt={props.alt}
-            width={props.width}
-            height={props.height}
-          />
+          {props.imageUrl && props.alt && props.width && props.height && (
+            <FormImage
+              imageUrl={props.imageUrl}
+              alt={props.alt}
+              width={props.width}
+              height={props.height}
+            />
+          )}
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">

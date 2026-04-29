@@ -1,16 +1,30 @@
-import { apiClient } from "@/lib/api-client";
-import { AuthResponse, LoginPayload, RegisterPayload } from "@/types/auth";
+import { apiClient } from "@/lib/api/client";
+import {
+  AuthResponse,
+  ForgotPasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  ResetPasswordPayload,
+} from "@/types/auth";
 
 export const authService = {
   register: (data: RegisterPayload) =>
-    apiClient<{ message: string }>("/auth/sign-up", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    apiClient.post<{ message: string }>("/api/auth/sign-up", data),
 
   login: (data: LoginPayload) =>
-    apiClient<AuthResponse>("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-    }),
+    apiClient.post<AuthResponse>("/api/auth/sign-in", data),
+
+  verifyEmail: (token: string) =>
+    apiClient.get<AuthResponse>(
+      `/api/auth/verify-email?token=${encodeURIComponent(token)}`,
+    ),
+
+  forgotPassword: (data: ForgotPasswordPayload) =>
+    apiClient.post<AuthResponse>("/api/auth/forgot-password", data),
+
+  resetPassword: (data: ResetPasswordPayload) =>
+    apiClient.post<AuthResponse>("/api/auth/reset-password", data),
+
+  refreshToken: () =>
+    apiClient.post<{ success: boolean }>("/api/auth/refresh-tokens"),
 };

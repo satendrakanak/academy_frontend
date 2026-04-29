@@ -1,0 +1,44 @@
+"use client";
+
+import { useState } from "react";
+import { FileType } from "@/types/file";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { FileUpload } from "@/components/media/file-upload";
+import { getErrorMessage } from "@/lib/error-handler";
+import { Article } from "@/types/article";
+import { articleClientService } from "@/services/articles/article.client";
+
+interface FeaturedImageFormProps {
+  article: Article;
+}
+export const FeaturedImageForm = ({ article }: FeaturedImageFormProps) => {
+  const [selectedImage, setSelectedImage] = useState<FileType | null>(null);
+  const router = useRouter();
+  const handleImageUpload = async (file: FileType, alt: string) => {
+    try {
+      await articleClientService.update(article.id, {
+        featuredImageId: file.id,
+        imageAlt: alt || "",
+      });
+
+      setSelectedImage(file);
+      toast.success("Image Updated");
+      router.refresh();
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      toast.error(message);
+    }
+  };
+  return (
+    <div className="rounded-2xl border p-4 bg-white shadow-sm">
+      <FileUpload
+        label="Featured Image"
+        previewType="image"
+        value={selectedImage || article.featuredImage}
+        onUpload={handleImageUpload}
+        className="h-40"
+      />
+    </div>
+  );
+};
