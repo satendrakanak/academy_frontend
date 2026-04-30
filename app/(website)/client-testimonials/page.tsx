@@ -3,6 +3,7 @@ import { TestimonialsFilterBar } from "@/components/testimonials/testimonials-fi
 import { TestimonialsPagination } from "@/components/testimonials/testimonials-pagination";
 import { TestimonialCard } from "@/components/testimonials/testimonial-card";
 import { getErrorMessage } from "@/lib/error-handler";
+import { buildMetadata } from "@/lib/seo";
 import { courseServerService } from "@/services/courses/course.server";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
 import { Course } from "@/types/course";
@@ -20,6 +21,13 @@ const buildPageHref = (
 
   return `/client-testimonials${params.toString() ? `?${params}` : ""}`;
 };
+
+export const metadata = buildMetadata({
+  title: "Client Testimonials",
+  description:
+    "Explore learner stories, written testimonials, and video reviews from Unitus Health Academy students.",
+  path: "/client-testimonials",
+});
 
 export default async function ClientTestimonialsPage({
   searchParams,

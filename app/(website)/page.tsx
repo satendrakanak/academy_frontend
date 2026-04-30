@@ -15,6 +15,14 @@ import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
 import { FeaturedTestimonialsSection } from "@/components/testimonials/featured-testimonials-section";
 import { User } from "@/types/user";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  path: "/",
+  title: "Wellness & Nutrition Courses",
+  description:
+    "Explore practical health, wellness, Ayurveda, and nutrition courses designed for modern learners.",
+});
 
 export default async function Home() {
   let courses: Course[] = [];

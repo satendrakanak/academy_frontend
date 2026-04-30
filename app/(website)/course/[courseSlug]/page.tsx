@@ -8,13 +8,42 @@ import { courseServerService } from "@/services/courses/course.server";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
 import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
+import { buildMetadata } from "@/lib/seo";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+type CoursePageProps = {
+  params: Promise<{ courseSlug: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: CoursePageProps): Promise<Metadata> {
+  const { courseSlug } = await params;
+
+  try {
+    const response = await courseServerService.getBySlug(courseSlug);
+    const course = response.data;
+
+    return buildMetadata({
+      title: course.metaTitle || course.title,
+      description:
+        course.metaDescription || course.shortDescription || course.description,
+      path: `/course/${course.slug}`,
+      image: course.image?.path,
+    });
+  } catch {
+    return buildMetadata({
+      title: "Course not found",
+      description: "This course is not currently available.",
+      path: `/course/${courseSlug}`,
+    });
+  }
+}
 
 export default async function CourseSlugPage({
   params,
-}: {
-  params: Promise<{ courseSlug: string }>;
-}) {
+}: CoursePageProps) {
   const { courseSlug } = await params;
 
   if (!courseSlug) {
@@ -27,8 +56,11 @@ export default async function CourseSlugPage({
     const response = await courseServerService.getBySlug(courseSlug);
     course = response.data;
   } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+    const message = getErrorMessage(error).toLowerCase();
+    if (message.includes("not found") || message.includes("404")) {
+      notFound();
+    }
+    throw new Error(getErrorMessage(error));
   }
 
   let relatedCourses: Course[] = [];

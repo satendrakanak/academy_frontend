@@ -1,6 +1,7 @@
 import { ArticleCard } from "@/components/articles/article-card";
 import Container from "@/components/container";
 import { getErrorMessage } from "@/lib/error-handler";
+import { buildMetadata } from "@/lib/seo";
 import { articleServerService } from "@/services/articles/article.server";
 import { Article } from "@/types/article";
 import Link from "next/link";
@@ -11,6 +12,13 @@ type ArticleCategorySummary = {
   slug: string;
   count: number;
 };
+
+export const metadata = buildMetadata({
+  title: "Articles",
+  description:
+    "Read practical wellness, health, learning, and nutrition articles from Unitus Health Academy.",
+  path: "/articles",
+});
 
 export default async function ArticlesPage({
   searchParams,

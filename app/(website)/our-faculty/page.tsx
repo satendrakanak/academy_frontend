@@ -3,6 +3,14 @@ import { FacultyGrid } from "@/components/faculty/faculty-grid";
 import { userServerService } from "@/services/users/user.server";
 import { User } from "@/types/user";
 import { PageHero } from "@/components/sliders/page-hero";
+import { buildMetadata } from "@/lib/seo";
+
+export const metadata = buildMetadata({
+  title: "Our Faculty",
+  description:
+    "Meet experienced Unitus Health Academy faculty across nutrition, wellness, Ayurveda, and lifestyle sciences.",
+  path: "/our-faculty",
+});
 
 export default async function FacultiesPage() {
   let faculties: User[] = [];

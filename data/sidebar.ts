@@ -112,9 +112,21 @@ export const sidebarData = {
 
     {
       title: "Settings",
-      url: "/admin/settings/access-control",
+      url: "/admin/settings/site",
       icon: Settings,
       requiredPermissions: ["view_settings", "view_permission", "view_role"],
+      items: [
+        {
+          title: "Site Settings",
+          url: "/admin/settings/site",
+          requiredPermissions: ["view_settings"],
+        },
+        {
+          title: "Roles & Permissions",
+          url: "/admin/settings/access-control",
+          requiredPermissions: ["view_permission", "view_role"],
+        },
+      ],
     },
   ],
 };
