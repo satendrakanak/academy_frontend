@@ -39,6 +39,9 @@ interface CreateTestimonialFormProps {
   onSuccess?: () => void;
 }
 
+type TestimonialFormInput = z.input<typeof testimonialSchema>;
+type TestimonialFormOutput = z.output<typeof testimonialSchema>;
+
 export const CreateTestimonialForm = ({
   testimonial,
   onSuccess,
@@ -56,7 +59,7 @@ export const CreateTestimonialForm = ({
     testimonial?.video || null,
   );
 
-  const form = useForm<z.infer<typeof testimonialSchema>>({
+  const form = useForm<TestimonialFormInput, unknown, TestimonialFormOutput>({
     resolver: zodResolver(testimonialSchema),
     mode: "onChange",
     defaultValues: {
@@ -93,7 +96,7 @@ export const CreateTestimonialForm = ({
     loadCourses();
   }, []);
 
-  const onSubmit = async (data: z.infer<typeof testimonialSchema>) => {
+  const onSubmit = async (data: TestimonialFormOutput) => {
     try {
       if (data.type === "VIDEO" && !selectedVideo?.id) {
         toast.error("Please upload a video testimonial");

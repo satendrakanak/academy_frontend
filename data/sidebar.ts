@@ -8,6 +8,7 @@ import {
   MessageSquare,
   TicketPercent,
   ShoppingBag,
+  Tags,
   type LucideIcon,
 } from "lucide-react";
 
@@ -42,23 +43,6 @@ export const sidebarData = {
       url: "/admin/courses",
       icon: BookOpen,
       requiredPermissions: ["view_course", "create_course", "update_course"],
-      items: [
-        {
-          title: "All Courses",
-          url: "/admin/courses",
-          requiredPermissions: ["view_course"],
-        },
-        {
-          title: "Categories",
-          url: "/admin/courses/categories",
-          requiredPermissions: ["view_category"],
-        },
-        {
-          title: "Tags",
-          url: "/admin/courses/tags",
-          requiredPermissions: ["view_tag"],
-        },
-      ],
     },
 
     {
@@ -110,18 +94,13 @@ export const sidebarData = {
       url: "/admin/categories",
       icon: FolderTree,
       requiredPermissions: ["view_category", "create_category", "update_category"],
-      items: [
-        {
-          title: "All Categories",
-          url: "/admin/categories",
-          requiredPermissions: ["view_category"],
-        },
-        {
-          title: "Create Category",
-          url: "/admin/categories/create",
-          requiredPermissions: ["create_category"],
-        },
-      ],
+    },
+
+    {
+      title: "Tags",
+      url: "/admin/tags",
+      icon: Tags,
+      requiredPermissions: ["view_tag", "create_tag", "update_tag"],
     },
 
     {

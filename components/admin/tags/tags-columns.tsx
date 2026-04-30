@@ -1,21 +1,39 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { IconDotsVertical } from "@tabler/icons-react";
+import { Pencil, Trash2 } from "lucide-react";
+
+import { Tag } from "@/types/tag";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tag } from "@/types/tag";
-import { Pencil, Trash2 } from "lucide-react";
 
 export const getTagsColumns = (
   onEdit: (tag: Tag) => void,
   onDelete: (tag: Tag) => void,
 ): ColumnDef<Tag>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+      />
+    ),
+  },
   {
     accessorKey: "name",
     header: "Tag",
@@ -23,23 +41,37 @@ export const getTagsColumns = (
       const tag = row.original;
 
       return (
-        <div
+        <button
+          type="button"
           onClick={() => onEdit(tag)}
-          className="flex items-center gap-3 cursor-pointer"
+          className="text-left"
         >
-          <span className="font-medium">{tag.name}</span>
-        </div>
+          <p className="font-semibold text-slate-900">{tag.name}</p>
+          <p className="text-xs text-slate-500">
+            {tag.description || "Reusable shared tag"}
+          </p>
+        </button>
       );
     },
   },
-
+  {
+    accessorKey: "slug",
+    header: "Slug",
+    cell: ({ row }) => (
+      <span className="font-medium text-slate-700">{row.original.slug}</span>
+    ),
+  },
+  {
+    id: "scope",
+    header: "Scope",
+    cell: () => <Badge variant="outline">Courses + Articles</Badge>,
+  },
   {
     accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) =>
       new Date(row.original.createdAt).toLocaleDateString("en-GB"),
   },
-
   {
     id: "actions",
     cell: ({ row }) => {
@@ -52,7 +84,6 @@ export const getTagsColumns = (
               <IconDotsVertical />
             </Button>
           </DropdownMenuTrigger>
-
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() => onEdit(tag)}
@@ -61,7 +92,6 @@ export const getTagsColumns = (
               <Pencil className="size-4" />
               Edit
             </DropdownMenuItem>
-
             <DropdownMenuItem
               variant="destructive"
               onClick={() => onDelete(tag)}

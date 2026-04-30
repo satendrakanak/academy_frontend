@@ -1,15 +1,21 @@
 "use client";
-import { DataTable } from "@/components/admin/data-table/data-table";
-import { useState } from "react";
-import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
-import { toast } from "sonner";
+
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { BookOpen, Eye, Sparkles } from "lucide-react";
+
+import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
 import { Course } from "@/types/course";
 import { courseClientService } from "@/services/courses/course.client";
 import { getCourseColumns } from "./course-columns";
 import AddButton from "../data-table/add-button";
-import { CreateCouponForm } from "../coupons/create-coupon-form";
 import { CreateCourseForm } from "./create-course-form";
+import {
+  AdminResourceDashboard,
+  DeleteSelectedButton,
+} from "@/components/admin/shared/admin-resource-dashboard";
+import { getErrorMessage } from "@/lib/error-handler";
 
 interface CoursesListProps {
   courses: Course[];
@@ -18,47 +24,112 @@ interface CoursesListProps {
 export const CoursesList = ({ courses }: CoursesListProps) => {
   const [deleteItem, setDeleteItem] = useState<Course | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [selectedForDelete, setSelectedForDelete] = useState<Course[]>([]);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // 🔥 DELETE CLICK
-  const handleDeleteClick = (course: Course) => {
-    setDeleteItem(course);
-    setDeleteOpen(true);
-  };
+  const columns = useMemo(
+    () =>
+      getCourseColumns((course) => {
+        setDeleteItem(course);
+        setDeleteOpen(true);
+      }),
+    [],
+  );
+
   const handleConfirmDelete = async () => {
     if (!deleteItem) return;
 
     try {
       setLoading(true);
-
       await courseClientService.delete(deleteItem.id);
-
       toast.success("Course deleted");
       setDeleteOpen(false);
       router.refresh();
-    } catch (error) {
-      toast.error("Failed to delete course");
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
-  const columns = getCourseColumns(handleDeleteClick);
+  const handleBulkDelete = async () => {
+    if (!selectedForDelete.length) return;
+
+    try {
+      setLoading(true);
+      await Promise.all(
+        selectedForDelete.map((course) => courseClientService.delete(course.id)),
+      );
+      toast.success(`${selectedForDelete.length} courses deleted`);
+      setBulkDeleteOpen(false);
+      router.refresh();
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <DataTable
+    <>
+      <AdminResourceDashboard
+        eyebrow="Course Library"
+        title="Courses dashboard"
+        description="Review, search, export, and manage every course without changing the existing course creation flow."
         data={courses}
         columns={columns}
-        searchColumn="title"
-        action={
+        searchPlaceholder="Search courses by title, category, or slug"
+        searchFields={[
+          (course) => course.title,
+          (course) => course.slug,
+          (course) => course.categories?.map((category) => category.name).join(" "),
+        ]}
+        stats={[
+          { label: "Total Courses", value: courses.length, icon: BookOpen },
+          {
+            label: "Published",
+            value: courses.filter((course) => course.isPublished).length,
+            icon: Eye,
+          },
+          {
+            label: "Featured",
+            value: courses.filter((course) => course.isFeatured).length,
+            icon: Sparkles,
+          },
+        ]}
+        actions={
           <AddButton
             title="Add Course"
             redirectPath="/admin/courses"
             FormComponent={CreateCourseForm}
           />
         }
+        selectedActions={(selectedRows) => (
+          <DeleteSelectedButton
+            disabled={!selectedRows.length}
+            onClick={() => {
+              setSelectedForDelete(selectedRows);
+              setBulkDeleteOpen(true);
+            }}
+          />
+        )}
+        exportFileName="courses-export.xlsx"
+        mapExportRow={(course) => ({
+          ID: course.id,
+          Title: course.title,
+          Slug: course.slug,
+          PriceINR: course.priceInr ?? "",
+          Published: course.isPublished ? "Yes" : "No",
+          Featured: course.isFeatured ? "Yes" : "No",
+          Categories: course.categories?.map((category) => category.name).join(", ") ?? "",
+          CreatedAt: course.createdAt,
+        })}
+        emptyTitle="No courses found"
+        emptyDescription="Courses will appear here once they are created."
       />
+
       <ConfirmDeleteDialog
         deleteText="course"
         open={deleteOpen}
@@ -66,6 +137,14 @@ export const CoursesList = ({ courses }: CoursesListProps) => {
         onConfirm={handleConfirmDelete}
         loading={loading}
       />
-    </div>
+
+      <ConfirmDeleteDialog
+        deleteText="selected courses"
+        open={bulkDeleteOpen}
+        onClose={() => setBulkDeleteOpen(false)}
+        onConfirm={handleBulkDelete}
+        loading={loading}
+      />
+    </>
   );
 };

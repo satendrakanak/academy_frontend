@@ -40,7 +40,7 @@ export const TagsList = ({ tags }: TagsListProps) => {
       toast.success("Tag deleted");
       setDeleteOpen(false);
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete tag");
     } finally {
       setLoading(false);
@@ -51,7 +51,7 @@ export const TagsList = ({ tags }: TagsListProps) => {
   return (
     <div>
       <DataTable data={tags} columns={columns} searchColumn="name" isClient />
-      <TagDrawer open={open} onClose={() => setOpen(false)} tag={selected} />
+      <TagDrawer open={open} onOpenChange={setOpen} tag={selected} />
       <ConfirmDeleteDialog
         deleteText="tag"
         open={deleteOpen}

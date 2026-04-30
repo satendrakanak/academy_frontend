@@ -1,4 +1,4 @@
-import { CouponsList } from "@/components/admin/coupons/coupons-list";
+import { CouponsListLoader } from "@/components/admin/coupons/coupons-list-loader";
 import { getErrorMessage } from "@/lib/error-handler";
 import { couponServerService } from "@/services/coupons/coupon.server";
 import { Coupon } from "@/types/coupon";
@@ -15,7 +15,7 @@ const CouponsPage = async () => {
 
   return (
     <div>
-      <CouponsList coupons={coupons} />
+      <CouponsListLoader coupons={coupons} />
     </div>
   );
 };

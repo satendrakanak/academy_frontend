@@ -1,22 +1,41 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { IconDotsVertical } from "@tabler/icons-react";
+import { Pencil, Trash2 } from "lucide-react";
+
+import { Category } from "@/types/category";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Category } from "@/types/category";
-import { Pencil, Trash2 } from "lucide-react";
 
 export const getCategoriesColumns = (
   onEdit: (category: Category) => void,
   onDelete: (category: Category) => void,
 ): ColumnDef<Category>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+      />
+    ),
+  },
   {
     accessorKey: "name",
     header: "Category",
@@ -24,28 +43,50 @@ export const getCategoriesColumns = (
       const category = row.original;
 
       return (
-        <div
+        <button
+          type="button"
           onClick={() => onEdit(category)}
-          className="flex items-center gap-3 cursor-pointer"
+          className="flex items-center gap-3 text-left"
         >
-          <img
+          <Image
             src={category.image?.path || "/assets/default.png"}
-            className="w-10 h-10 rounded object-cover"
+            alt={category.imageAlt || category.name}
+            width={44}
+            height={44}
+            className="h-11 w-11 rounded-2xl object-cover"
           />
-
-          <span className="font-medium">{category.name}</span>
-        </div>
+          <div className="min-w-0">
+            <p className="truncate font-semibold text-slate-900">{category.name}</p>
+            <p className="truncate text-xs text-slate-500">
+              {category.description || "No description added yet."}
+            </p>
+          </div>
+        </button>
       );
     },
   },
-
+  {
+    accessorKey: "type",
+    header: "Type",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="capitalize">
+        {row.original.type}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "slug",
+    header: "Slug",
+    cell: ({ row }) => (
+      <span className="font-medium text-slate-700">{row.original.slug}</span>
+    ),
+  },
   {
     accessorKey: "createdAt",
     header: "Created",
     cell: ({ row }) =>
       new Date(row.original.createdAt).toLocaleDateString("en-GB"),
   },
-
   {
     id: "actions",
     cell: ({ row }) => {
@@ -58,7 +99,6 @@ export const getCategoriesColumns = (
               <IconDotsVertical />
             </Button>
           </DropdownMenuTrigger>
-
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() => onEdit(category)}
@@ -67,7 +107,11 @@ export const getCategoriesColumns = (
               <Pencil className="size-4" />
               Edit
             </DropdownMenuItem>
-
+            <DropdownMenuItem asChild className="cursor-pointer">
+              <Link href={category.type === "course" ? "/admin/courses" : "/admin/articles"}>
+                Open {category.type}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"
               onClick={() => onDelete(category)}

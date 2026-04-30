@@ -1,59 +1,77 @@
 "use client";
-import { DataTable } from "@/components/admin/data-table/data-table";
-import { useState } from "react";
-import { ConfirmDeleteDialog } from "@/components/modals/confirm-dialog";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+
+import { useMemo } from "react";
+import { CircleCheck, IndianRupee, ReceiptText } from "lucide-react";
+
 import { getOrderColumns } from "./order-columns";
-import { userClientService } from "@/services/users/user.client";
-import { getErrorMessage } from "@/lib/error-handler";
-import { Order } from "@/types/order";
+import { Order, OrderStatus } from "@/types/order";
+import { AdminResourceDashboard } from "@/components/admin/shared/admin-resource-dashboard";
 
 interface OrdersListProps {
   orders: Order[];
 }
 
+const currencyFormatter = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
+  maximumFractionDigits: 0,
+});
+
 export const OrdersList = ({ orders }: OrdersListProps) => {
-  const [deleteItem, setDeleteItem] = useState<Order | null>(null);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const columns = useMemo(() => getOrderColumns(), []);
+  const paidOrders = orders.filter((order) => order.status === OrderStatus.PAID);
+  const totalRevenue = paidOrders.reduce(
+    (sum, order) => sum + Number(order.totalAmount || 0),
+    0,
+  );
 
-  console.log("Orders", orders);
-
-  const handleDeleteClick = (order: Order) => {
-    setDeleteItem(order);
-    setDeleteOpen(true);
-  };
-  const handleConfirmDelete = async () => {
-    if (!deleteItem) return;
-
-    try {
-      setLoading(true);
-
-      await userClientService.delete(deleteItem.id);
-
-      toast.success("Order deleted");
-      setDeleteOpen(false);
-      router.refresh();
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const columns = getOrderColumns(handleDeleteClick);
   return (
-    <div>
-      <DataTable data={orders} columns={columns} searchColumn="id" />
-      <ConfirmDeleteDialog
-        deleteText="order"
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        onConfirm={handleConfirmDelete}
-        loading={loading}
-      />
-    </div>
+    <AdminResourceDashboard
+      eyebrow="Commerce"
+      title="Orders dashboard"
+      description="Review purchases, customers, payment status, revenue, and export order reports."
+      data={orders}
+      columns={columns}
+      searchPlaceholder="Search orders by id, customer, email, or status"
+      searchFields={[
+        (order) => order.id,
+        (order) => order.status,
+        (order) => order.user?.firstName,
+        (order) => order.user?.lastName,
+        (order) => order.user?.email,
+        (order) => order.manualCouponCode,
+        (order) => order.autoCouponCode,
+      ]}
+      stats={[
+        { label: "Total Orders", value: orders.length, icon: ReceiptText },
+        {
+          label: "Paid Orders",
+          value: paidOrders.length,
+          icon: CircleCheck,
+        },
+        {
+          label: "Revenue",
+          value: currencyFormatter.format(totalRevenue),
+          icon: IndianRupee,
+        },
+      ]}
+      exportFileName="orders-export.xlsx"
+      mapExportRow={(order) => ({
+        ID: order.id,
+        Customer: `${order.user?.firstName ?? ""} ${order.user?.lastName ?? ""}`.trim(),
+        Email: order.user?.email ?? "",
+        Status: order.status,
+        SubTotal: order.subTotal,
+        Discount: order.discount,
+        Tax: order.tax,
+        TotalAmount: order.totalAmount,
+        Currency: order.currency,
+        ManualCoupon: order.manualCouponCode ?? "",
+        AutoCoupon: order.autoCouponCode ?? "",
+        CreatedAt: order.createdAt,
+      })}
+      emptyTitle="No orders found"
+      emptyDescription="Orders will appear here once users start purchasing."
+    />
   );
 };

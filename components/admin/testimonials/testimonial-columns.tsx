@@ -7,6 +7,7 @@ import { Pencil, PlayCircle, Star, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,21 @@ export const getTestimonialColumns = (
   onEdit: (testimonial: Testimonial) => void,
   onDelete: (testimonial: Testimonial) => void,
 ): ColumnDef<Testimonial>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+      />
+    ),
+  },
   {
     accessorKey: "name",
     header: "Person",

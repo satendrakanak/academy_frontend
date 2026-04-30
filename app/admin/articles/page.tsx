@@ -1,4 +1,4 @@
-import { ArticlesList } from "@/components/admin/articles/articles-list";
+import { ArticlesListLoader } from "@/components/admin/articles/articles-list-loader";
 import { getErrorMessage } from "@/lib/error-handler";
 import { articleServerService } from "@/services/articles/article.server";
 import { Article } from "@/types/article";
@@ -14,7 +14,7 @@ const ArticlesPage = async () => {
 
   return (
     <div>
-      <ArticlesList articles={articles} />
+      <ArticlesListLoader articles={articles} />
     </div>
   );
 };

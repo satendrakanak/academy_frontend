@@ -40,7 +40,7 @@ export const CategoriesList = ({ categories }: CategoriesListProps) => {
       toast.success("Category deleted");
       setDeleteOpen(false);
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete category");
     } finally {
       setLoading(false);
@@ -53,7 +53,7 @@ export const CategoriesList = ({ categories }: CategoriesListProps) => {
       <DataTable data={categories} columns={columns} searchColumn="name" />
       <CategoryDrawer
         open={open}
-        onClose={() => setOpen(false)}
+        onOpenChange={setOpen}
         category={selected}
       />
       <ConfirmDeleteDialog
