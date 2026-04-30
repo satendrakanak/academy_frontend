@@ -5,6 +5,8 @@ import { Course } from "@/types/course";
 import DashboardClient from "@/components/profile/dashboard-client";
 import { WeeklyProgress } from "@/types/user";
 import { getErrorMessage } from "@/lib/error-handler";
+import { orderServerService } from "@/services/orders/order.server";
+import { Order } from "@/types/order";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -12,17 +14,21 @@ export default async function DashboardPage() {
   let stats = { courses: 0, completed: 0, progress: 0 };
   let courses: Course[] = [];
   let weeklyProgress: WeeklyProgress[] = [];
+  let orders: Order[] = [];
 
   try {
-    const [statsRes, coursesRes, weeklyProgressRes] = await Promise.all([
+    const [statsRes, coursesRes, weeklyProgressRes, ordersRes] =
+      await Promise.all([
       userServerService.getDashboardStats(session.id),
       userServerService.getEnrolledCourses(session.id),
       userServerService.getWeeklyProgress(session.id),
+      orderServerService.getMine(),
     ]);
 
     stats = statsRes.data;
     courses = coursesRes.data;
     weeklyProgress = weeklyProgressRes.data;
+    orders = ordersRes.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
@@ -42,6 +48,7 @@ export default async function DashboardPage() {
         stats={stats}
         courses={courses}
         weeklyProgress={weeklyProgress}
+        orders={orders}
       />
     </div>
   );

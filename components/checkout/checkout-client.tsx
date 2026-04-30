@@ -14,10 +14,11 @@ import { getErrorMessage } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { Gateway } from "@/types/settings";
 import { usePayment } from "@/hooks/use-payment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { authService } from "@/services/auth.service";
 import { GuestCheckoutVerificationDialog } from "./guest-checkout-verification-dialog";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { orderClientService } from "@/services/orders/order.client";
 
 interface CheckoutClientProps {
   gateways: Gateway[];
@@ -33,8 +34,11 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   >(null);
   const [isGuestVerifying, setIsGuestVerifying] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const retryOrderId = Number(searchParams.get("retryOrderId") || 0);
+  const isRetryFlow = Number.isFinite(retryOrderId) && retryOrderId > 0;
 
-  const { initiatePayment } = usePayment();
+  const { initiatePayment, retryPayment } = usePayment();
 
   const {
     cartItems,
@@ -44,8 +48,47 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   const checkoutForm = useCheckoutForm(user);
   const {
     handleSubmit,
+    reset,
     formState: { isSubmitting, isValid },
   } = checkoutForm;
+
+  useEffect(() => {
+    if (!user) return;
+
+    let isMounted = true;
+
+    orderClientService
+      .getMyOrders()
+      .then((response) => {
+        if (!isMounted) return;
+
+        const orders = response.data || [];
+        const matchedOrder = isRetryFlow
+          ? orders.find((order) => order.id === retryOrderId)
+          : orders[0];
+
+        if (!matchedOrder?.billingAddress) return;
+
+        const address = matchedOrder.billingAddress;
+
+        reset({
+          firstName: address.firstName || user.firstName || "",
+          lastName: address.lastName || user.lastName || "",
+          email: address.email || user.email || "",
+          phoneNumber: address.phoneNumber || user.phoneNumber || "",
+          address: address.address || "",
+          country: address.country || "",
+          state: address.state || "",
+          city: address.city || "",
+          pincode: address.pincode || "",
+        });
+      })
+      .catch(() => {});
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isRetryFlow, reset, retryOrderId, user]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -76,6 +119,11 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
         return;
       }
 
+      if (isRetryFlow) {
+        await retryPayment(retryOrderId, data);
+        return;
+      }
+
       await initiatePayment(data, selectedGateway.provider);
     } catch (e) {
       toast.error(getErrorMessage(e));
@@ -95,6 +143,11 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
       toast.success("Email verified. Continuing to payment.");
       setVerificationOpen(false);
       router.refresh();
+      if (isRetryFlow) {
+        await retryPayment(retryOrderId, pendingGuestData);
+        return;
+      }
+
       await initiatePayment(pendingGuestData, selectedGateway.provider);
     } catch (error: unknown) {
       toast.error(getErrorMessage(error));
@@ -132,7 +185,7 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   }
 
   return (
-    <FormProvider {...checkoutForm}>
+      <FormProvider {...checkoutForm}>
       <div>
         <form onSubmit={handleSubmit(handlePaymentSubmit)}>
           <div className="min-h-screen lg:grid lg:grid-cols-3">
@@ -144,6 +197,12 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
                   <p className="rounded-2xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-900">
                     Complete your billing details first. We will create your
                     account and verify your email with an OTP before payment.
+                  </p>
+                ) : null}
+                {isRetryFlow ? (
+                  <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                    You are retrying a previous payment. We will continue with
+                    your existing order instead of creating a new one.
                   </p>
                 ) : null}
 

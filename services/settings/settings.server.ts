@@ -1,6 +1,14 @@
 import { apiServer } from "@/lib/api/server";
 import { ApiResponse } from "@/types/api";
-import { Gateway, PaymentGatewayAdmin } from "@/types/settings";
+import {
+  AwsStorageSettings,
+  EmailSettings,
+  Gateway,
+  PaymentGatewayAdmin,
+  PublicSettingsBundle,
+  SiteSettings,
+  SocialAuthProvider,
+} from "@/types/settings";
 
 export const settingsServerService = {
   getGatewaysInfo: () =>
@@ -8,4 +16,21 @@ export const settingsServerService = {
 
   getGateways: () =>
     apiServer.get<ApiResponse<PaymentGatewayAdmin[]>>("/settings/gateways"),
+
+  getSiteSettings: () =>
+    apiServer.get<ApiResponse<SiteSettings>>("/settings/site"),
+
+  getEmailSettings: () =>
+    apiServer.get<ApiResponse<EmailSettings>>("/settings/email"),
+
+  getAwsStorageSettings: () =>
+    apiServer.get<ApiResponse<AwsStorageSettings>>("/settings/aws-storage"),
+
+  getSocialAuthSettings: () =>
+    apiServer.get<ApiResponse<{ providers: SocialAuthProvider[] }>>(
+      "/settings/social-auth",
+    ),
+
+  getPublicSettingsBundle: () =>
+    apiServer.get<ApiResponse<PublicSettingsBundle>>("/settings/public"),
 };

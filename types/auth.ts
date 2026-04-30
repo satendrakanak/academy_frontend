@@ -6,6 +6,12 @@ export type RegisterPayload = {
   password: string;
 };
 
+export type RegisterStartResponse = {
+  email: string;
+  maskedEmail: string;
+  isExistingUser: boolean;
+};
+
 export type LoginPayload = {
   email: string;
   password: string;

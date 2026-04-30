@@ -117,6 +117,7 @@ export type CourseRedirect = {
 };
 
 export type OpenRazorpayParams = {
+  orderId: number;
   keyId: string;
   razorpayOrderId: string;
   amount: number;
@@ -155,5 +156,5 @@ export type RazorpayOptions = {
 
 export interface RazorpayInstance {
   open(): void;
-  on(event: "payment.failed", handler: (response: any) => void): void;
+  on(event: "payment.failed", handler: (response: unknown) => void): void;
 }

@@ -28,6 +28,22 @@ export const orderClientService = {
         `/api/orders/${orderId}/retry`,
       ),
     ),
+  cancelPayment: (orderId: number) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<{ success: boolean }>>(
+        `/api/orders/${orderId}/cancel-payment`,
+      ),
+    ),
+  reportPaymentFailure: (
+    orderId: number,
+    data: { paymentId?: string | null; gatewayOrderId?: string | null },
+  ) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<{ success: boolean }>>(
+        `/api/orders/${orderId}/mark-failed`,
+        data,
+      ),
+    ),
   getPaymentConfig: () =>
     withAuthRetry(() =>
       apiClient.get<ApiResponse<{ keyId: string }>>(

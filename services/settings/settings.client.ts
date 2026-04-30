@@ -1,7 +1,14 @@
 import { apiClient, withAuthRetry } from "@/lib/api/client";
 import { ApiResponse } from "@/types/api";
 import {
+  AwsStorageSettings,
+  EmailSettings,
   PaymentGatewayAdmin,
+  PublicSettingsBundle,
+  PublicSocialProvider,
+  SiteSettings,
+  SocialAuthProvider,
+  SocialProvider,
   UpsertPaymentGatewayPayload,
 } from "@/types/settings";
 
@@ -26,5 +33,70 @@ export const settingsClientService = {
         "/api/settings/gateway",
         data,
       ),
+    ),
+
+  getSiteSettings: () =>
+    withAuthRetry(() =>
+      apiClient.get<ApiResponse<SiteSettings>>("/api/settings/site"),
+    ),
+
+  upsertSiteSettings: (data: Partial<SiteSettings>) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<SiteSettings>>("/api/settings/site", data),
+    ),
+
+  getEmailSettings: () =>
+    withAuthRetry(() =>
+      apiClient.get<ApiResponse<EmailSettings>>("/api/settings/email"),
+    ),
+
+  upsertEmailSettings: (data: Partial<EmailSettings>) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<EmailSettings>>("/api/settings/email", data),
+    ),
+
+  getAwsStorageSettings: () =>
+    withAuthRetry(() =>
+      apiClient.get<ApiResponse<AwsStorageSettings>>("/api/settings/aws-storage"),
+    ),
+
+  upsertAwsStorageSettings: (data: Partial<AwsStorageSettings>) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<AwsStorageSettings>>(
+        "/api/settings/aws-storage",
+        data,
+      ),
+    ),
+
+  getSocialAuthSettings: () =>
+    withAuthRetry(() =>
+      apiClient.get<ApiResponse<{ providers: SocialAuthProvider[] }>>(
+        "/api/settings/social-auth",
+      ),
+    ),
+
+  upsertSocialAuthSettings: (
+    providers: Array<{
+      provider: SocialProvider;
+      label: string;
+      isEnabled: boolean;
+      redirectUrl: string;
+      clientId?: string;
+      clientSecret?: string;
+    }>,
+  ) =>
+    withAuthRetry(() =>
+      apiClient.post<ApiResponse<{ providers: SocialAuthProvider[] }>>(
+        "/api/settings/social-auth",
+        { providers },
+      ),
+    ),
+
+  getPublicSettingsBundle: () =>
+    apiClient.get<ApiResponse<PublicSettingsBundle>>("/api/settings/public"),
+
+  getActiveSocialProviders: () =>
+    apiClient.get<ApiResponse<PublicSocialProvider[]>>(
+      "/api/settings/social-auth/active",
     ),
 };

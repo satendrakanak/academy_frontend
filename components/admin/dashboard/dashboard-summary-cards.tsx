@@ -32,7 +32,7 @@ const statCards = (data: AdminDashboardData) => [
   {
     title: "Total Users",
     value: compactNumberFormatter.format(data.summary.totalUsers),
-    description: "Registered learners and admins",
+    description: `${data.summary.enrolledUsers}/${data.summary.totalUsers} users have enrolled in at least one paid order`,
     icon: Users,
     tone: "from-emerald-500/16 via-emerald-50 to-white",
   },

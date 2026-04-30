@@ -4,8 +4,18 @@ import Link from "next/link";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Container from "../container";
+import { useSiteSettings } from "@/context/site-settings-context";
+import Logo from "../logo";
 
 export default function Footer() {
+  const { site } = useSiteSettings();
+  const socialLinks = [
+    { href: site.facebookUrl, icon: <FaFacebookF size={18} /> },
+    { href: site.twitterUrl, icon: <FaXTwitter size={18} /> },
+    { href: site.instagramUrl, icon: <FaInstagram size={18} /> },
+    { href: site.linkedinUrl, icon: <FaLinkedinIn size={18} /> },
+  ].filter((item) => item.href);
+
   return (
     <footer className="bg-[#f5f7fb] text-gray-700">
       <div className="academy-hero-gradient text-white">
@@ -13,28 +23,26 @@ export default function Footer() {
           <div className="grid gap-10 py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
-                Start Your Learning Journey
+                {site.footerCtaEyebrow}
               </p>
               <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-[-0.03em] md:text-3xl">
-                Build practical wellness expertise with a learning system that
-                actually supports you.
+                {site.footerCtaHeading}
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 md:text-lg">
-                Explore guided programs, thoughtful faculty, and a curriculum
-                designed to help you learn clearly and apply with confidence.
+                {site.footerCtaDescription}
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
-                  href="/courses"
+                  href={site.footerPrimaryCtaHref || "/courses"}
                   className="inline-flex items-center rounded-full bg-white px-6 py-3 font-semibold text-(--brand-900) transition hover:bg-(--brand-50)"
                 >
-                  Explore Courses
+                  {site.footerPrimaryCtaLabel}
                 </Link>
                 <Link
-                  href="/contact"
+                  href={site.footerSecondaryCtaHref || "/contact"}
                   className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/16"
                 >
-                  Talk to Us
+                  {site.footerSecondaryCtaLabel}
                 </Link>
               </div>
             </div>
@@ -62,11 +70,12 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-4 gap-10">
         <div>
-          <h2 className="mb-4 text-2xl font-bold text-(--brand-600)">Unitus</h2>
+          <div className="mb-4">
+            <Logo footer />
+          </div>
 
           <p className="text-sm text-gray-500 mb-6 leading-relaxed">
-            Practical wellness education for learners who want clarity,
-            mentorship, and real-world application.
+            {site.footerAbout || site.siteDescription}
           </p>
 
           <Link
@@ -149,40 +158,35 @@ export default function Footer() {
 
           <ul className="space-y-2 text-sm text-gray-500 mb-4">
             <li>
-              <span className="font-medium">Phone:</span> +91-9809-XXXXXX
+              <span className="font-medium">Phone:</span> {site.supportPhone}
             </li>
             <li>
-              <span className="font-medium">Email:</span> info@academy.com
+              <span className="font-medium">Email:</span> {site.supportEmail}
             </li>
             <li>
-              <span className="font-medium">Location:</span> India
+              <span className="font-medium">Location:</span> {site.supportAddress}
             </li>
           </ul>
 
           {/* SOCIAL */}
           <div className="flex gap-4 text-gray-500">
-            <FaFacebookF
-              size={18}
-              className="cursor-pointer hover:text-(--brand-600)"
-            />
-            <FaXTwitter
-              size={18}
-              className="cursor-pointer hover:text-(--brand-600)"
-            />
-            <FaInstagram
-              size={18}
-              className="cursor-pointer hover:text-(--brand-600)"
-            />
-            <FaLinkedinIn
-              size={18}
-              className="cursor-pointer hover:text-(--brand-600)"
-            />
+            {socialLinks.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                target="_blank"
+                rel="noreferrer"
+                className="cursor-pointer hover:text-(--brand-600)"
+              >
+                {item.icon}
+              </a>
+            ))}
           </div>
         </div>
       </div>
 
       <div className="border-t text-sm text-gray-500 py-6 px-6 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        <p>© 2026 Unitus. All Rights Reserved</p>
+        <p>{site.footerCopyright}</p>
 
         <div className="flex gap-4">
           <span className="cursor-pointer hover:text-(--brand-600)">Terms</span>

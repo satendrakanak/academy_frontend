@@ -26,7 +26,6 @@ export default async function LearnPage({
       await courseServerService.getLearningCourseBySlug(courseSlug);
 
     course = response.data;
-    console.log("Course in learn", course);
   } catch (error: unknown) {
     const message = getErrorMessage(error);
 

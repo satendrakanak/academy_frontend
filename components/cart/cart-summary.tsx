@@ -20,7 +20,10 @@ export const CartSummary = () => {
   const originalTotal = cartItems.reduce((sum, i) => sum + i.price, 0);
 
   const totalDiscount = autoDiscount + manualDiscount;
-  const finalTotal = finalAmount || originalTotal;
+  const finalTotal = Math.max(
+    totalDiscount > 0 ? finalAmount : originalTotal,
+    0,
+  );
 
   const gstRate = 0.18;
   const baseAmount = Math.round(finalTotal / (1 + gstRate));

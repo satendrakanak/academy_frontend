@@ -37,7 +37,8 @@ export default function Hero({ courses }: HeroProps) {
     run();
   }, [courses]);
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-500 to-red-500 text-white">
+    <section className="academy-hero-gradient relative overflow-hidden text-white">
+      <div className="academy-hero-grid absolute inset-0 opacity-20" />
       {/* CONTAINER */}
       <div className="max-w-7xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-3 gap-10 items-center">
         {/* LEFT */}

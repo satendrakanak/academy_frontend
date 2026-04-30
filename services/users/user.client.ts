@@ -87,4 +87,7 @@ export const userClientService = {
 
   getAllFaculties: () =>
     apiClient.get<ApiResponse<User[]>>(`/api/users/all-faculty`),
+
+  getFacultyProfile: (id: number) =>
+    apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/${id}`),
 };

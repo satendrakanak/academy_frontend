@@ -33,6 +33,7 @@ export const usePayment = () => {
   // 🔥 COMMON RAZORPAY HANDLER
   // ===============================
   const openRazorpay = async ({
+    orderId,
     keyId,
     razorpayOrderId,
     amount,
@@ -68,14 +69,19 @@ export const usePayment = () => {
           } else {
             router.push("/my-courses");
           }
-        } catch (err) {
+        } catch {
           toast("Payment received. Verifying...");
           router.push("/my-courses");
         }
       },
 
       modal: {
-        ondismiss: function () {
+        ondismiss: async function () {
+          try {
+            await orderClientService.cancelPayment(orderId);
+          } catch (error) {
+            console.error("Cancel payment reporting failed", error);
+          }
           toast.error("⚠️ Payment cancelled");
         },
       },
@@ -93,11 +99,29 @@ export const usePayment = () => {
 
     rzp.open();
 
-    rzp.on("payment.failed", function (response: any) {
+    rzp.on("payment.failed", function (response: unknown) {
       console.error("❌ Payment Failed:", response);
+      const failureResponse = response as {
+        error?: {
+          description?: string;
+          metadata?: {
+            payment_id?: string;
+            order_id?: string;
+          };
+        };
+      };
+
+      void orderClientService.reportPaymentFailure(orderId, {
+        paymentId: failureResponse?.error?.metadata?.payment_id || null,
+        gatewayOrderId:
+          failureResponse?.error?.metadata?.order_id || razorpayOrderId,
+      }).catch((error) => {
+        console.error("Payment failure reporting failed", error);
+      });
 
       toast.error(
-        response?.error?.description || "Payment failed. Please try again.",
+        failureResponse?.error?.description ||
+          "Payment failed. Please try again.",
       );
     });
   };
@@ -127,7 +151,10 @@ export const usePayment = () => {
       const originalPrice = cartItems.reduce((t, i) => t + i.price, 0);
 
       // 🔥 FINAL PAYABLE (after discount)
-      const totalAmount = finalAmount || originalPrice;
+      const totalAmount =
+        autoDiscount + manualDiscount > 0
+          ? Math.max(finalAmount, 0)
+          : originalPrice;
 
       // 🔥 REVERSE GST (consistent with your UI)
       const subTotal = Math.round(totalAmount / 1.18);
@@ -170,6 +197,7 @@ export const usePayment = () => {
       const { keyId } = configRes.data;
 
       await openRazorpay({
+        orderId: res.data.orderId,
         keyId,
         razorpayOrderId,
         amount,
@@ -198,6 +226,7 @@ export const usePayment = () => {
       const { keyId } = configRes.data;
 
       await openRazorpay({
+        orderId: res.data.orderId,
         keyId,
         razorpayOrderId,
         amount,

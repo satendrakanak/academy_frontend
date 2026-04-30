@@ -2,6 +2,7 @@ export type AdminDashboardSummary = {
   totalRevenue: number;
   paidOrders: number;
   totalUsers: number;
+  enrolledUsers: number;
   totalCourses: number;
   publishedCourses: number;
   totalCoupons: number;

@@ -25,14 +25,16 @@ export const OrderSummary = ({
     autoDiscount,
     manualDiscount,
     finalAmount,
-    autoCoupon,
     manualCoupon,
   } = useCartStore();
 
   const originalPrice = cartItems.reduce((acc, item) => acc + item.price, 0);
 
   const totalDiscount = autoDiscount + manualDiscount;
-  const finalPrice = finalAmount || originalPrice;
+  const finalPrice = Math.max(
+    totalDiscount > 0 ? finalAmount : originalPrice,
+    0,
+  );
 
   // 🔥 GST reverse
   const gstRate = 0.18;
@@ -49,7 +51,7 @@ export const OrderSummary = ({
     if (gateways.length === 1) {
       onSelectGateway(gateways[0]);
     }
-  }, [gateways]);
+  }, [gateways, onSelectGateway]);
 
   return (
     <div className="max-w-sm w-full space-y-5">

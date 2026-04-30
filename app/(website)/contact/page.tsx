@@ -16,16 +16,13 @@ export default function ContactPage() {
     <div className="academy-surface min-h-screen">
       <PageHero
         pageTitle="Contact Us"
-        pageHeadline="We usually reply within one working day"
-        pageDescription="Have questions or need help? Our team is here to assist you."
+        pageHeadline="Talk to the academy team with context, not confusion."
+        pageDescription="Ask about admissions, course fit, faculty, support, or next steps and we will guide you clearly."
       />
 
       <Container>
-        <div className="py-16 grid md:grid-cols-2 gap-10">
-          {/* LEFT */}
+        <div className="grid gap-10 py-16 lg:grid-cols-[1.08fr_0.92fr]">
           <ContactForm />
-
-          {/* RIGHT */}
           <ContactInfo />
         </div>
       </Container>

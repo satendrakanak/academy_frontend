@@ -11,6 +11,7 @@ import {
   Tags,
   Mail,
   ShieldCheck,
+  MessageCircleHeart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -116,6 +117,13 @@ export const sidebarData = {
       url: "/admin/users",
       icon: Users,
       requiredPermissions: ["view_user", "create_user", "update_user"],
+    },
+
+    {
+      title: "Contact Leads",
+      url: "/admin/contact-leads",
+      icon: MessageCircleHeart,
+      requiredPermissions: ["view_contact_lead"],
     },
 
     {

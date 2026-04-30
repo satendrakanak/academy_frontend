@@ -8,12 +8,13 @@ import {
   ForgotPasswordPayload,
   LoginPayload,
   RegisterPayload,
+  RegisterStartResponse,
   ResetPasswordPayload,
 } from "@/types/auth";
 
 export const authService = {
   register: (data: RegisterPayload) =>
-    apiClient.post<{ message: string }>("/api/auth/sign-up", data),
+    apiClient.post<ApiResponse<RegisterStartResponse>>("/api/auth/sign-up", data),
 
   login: (data: LoginPayload) =>
     apiClient.post<AuthResponse>("/api/auth/sign-in", data),
@@ -40,4 +41,7 @@ export const authService = {
 
   verifyCheckoutOtp: (data: CheckoutVerificationOtpPayload) =>
     apiClient.post<ApiResponse<null>>("/api/auth/checkout/verify-otp", data),
+
+  verifySignupOtp: (data: CheckoutVerificationOtpPayload) =>
+    apiClient.post<ApiResponse<null>>("/api/auth/sign-up/verify-otp", data),
 };

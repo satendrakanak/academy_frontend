@@ -22,6 +22,24 @@ interface CourseCardProps {
   coupon?: CouponApplyResponse | null;
 }
 
+const getInstructorLabel = (course: Course) => {
+  const facultyNames =
+    course.faculties
+      ?.map((faculty) =>
+        [faculty.firstName, faculty.lastName].filter(Boolean).join(" ").trim(),
+      )
+      .filter(Boolean) || [];
+
+  if (facultyNames.length) {
+    return facultyNames.join(", ");
+  }
+
+  return [course.createdBy?.firstName, course.createdBy?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+};
+
 export function CourseCard({ course, coupon }: CourseCardProps) {
   const addToCart = useCartStore((s) => s.addToCart);
   const [meta, setMeta] = useState({
@@ -62,9 +80,10 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
       title: course.title,
       price: Number(course.priceInr),
       image: course.image?.path,
-      instructor: course.createdBy?.firstName,
+      instructor: getInstructorLabel(course),
       totalDuration: meta.totalDuration,
       totalLectures: meta.totalLectures,
+      slug: course.slug,
     });
 
     toast.success("Added to cart 🛒", {
