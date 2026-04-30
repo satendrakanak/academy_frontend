@@ -13,14 +13,14 @@ export const FeaturedTestimonialsSection = ({
   if (!testimonials.length) return null;
 
   return (
-    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(56,189,248,0.18),_transparent_28%),linear-gradient(180deg,#eff6ff_0%,#ffffff_48%,#f8fafc_100%)] py-24">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(37,99,235,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(37,99,235,0.05)_1px,transparent_1px)] bg-[size:72px_72px]" />
+    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_color-mix(in_oklab,var(--brand-100)_60%,white)_0%,_transparent_30%),linear-gradient(180deg,var(--brand-50)_0%,#ffffff_48%,color-mix(in_oklab,var(--brand-50)_70%,white)_100%)] py-24">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--brand-200)_35%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--brand-200)_35%,transparent)_1px,transparent_1px)] bg-[size:72px_72px]" />
 
       <Container>
         <div className="relative z-10">
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-sky-700">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)]">
                 Client Testimonials
               </p>
               <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
@@ -35,7 +35,7 @@ export const FeaturedTestimonialsSection = ({
             <Button
               asChild
               variant="outline"
-              className="h-12 rounded-full border-sky-200 bg-white/80 px-6 text-sky-800 hover:bg-sky-50"
+              className="h-12 rounded-full border-[var(--brand-200)] bg-white/80 px-6 text-[var(--brand-800)] hover:bg-[var(--brand-50)]"
             >
               <Link href="/client-testimonials">View All Testimonials</Link>
             </Button>

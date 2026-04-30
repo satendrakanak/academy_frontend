@@ -17,6 +17,15 @@ const schema = z.object({
   bio: z.string().optional(),
   location: z.string().optional(),
   website: z.string().optional(),
+  headline: z.string().optional(),
+  company: z.string().optional(),
+  facebook: z.string().optional(),
+  instagram: z.string().optional(),
+  twitter: z.string().optional(),
+  linkedin: z.string().optional(),
+  youtube: z.string().optional(),
+  whatsapp: z.string().optional(),
+  telegram: z.string().optional(),
 });
 
 interface UserProfileFormProps {
@@ -32,6 +41,15 @@ export function UserProfileForm({ user }: UserProfileFormProps) {
       bio: user.profile?.bio || "",
       location: user.profile?.location || "",
       website: user.profile?.website || "",
+      headline: user.profile?.headline || "",
+      company: user.profile?.company || "",
+      facebook: user.profile?.facebook || "",
+      instagram: user.profile?.instagram || "",
+      twitter: user.profile?.twitter || "",
+      linkedin: user.profile?.linkedin || "",
+      youtube: user.profile?.youtube || "",
+      whatsapp: user.profile?.whatsapp || "",
+      telegram: user.profile?.telegram || "",
     },
   });
 
@@ -55,11 +73,29 @@ export function UserProfileForm({ user }: UserProfileFormProps) {
           <CardContent className="p-5 space-y-4">
             <h3 className="font-semibold">Profile Details</h3>
 
+            <div className="grid gap-4 md:grid-cols-2">
+              <Controller
+                name="headline"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Professional headline" />
+                )}
+              />
+
+              <Controller
+                name="company"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Company or organization" />
+                )}
+              />
+            </div>
+
             <Controller
               name="bio"
               control={form.control}
               render={({ field }) => (
-                <Textarea {...field} placeholder="Bio..." />
+                <Textarea {...field} placeholder="Bio..." rows={5} />
               )}
             />
 
@@ -77,6 +113,58 @@ export function UserProfileForm({ user }: UserProfileFormProps) {
                 control={form.control}
                 render={({ field }) => (
                   <Input {...field} placeholder="Website" />
+                )}
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <Controller
+                name="facebook"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Facebook URL" />
+                )}
+              />
+              <Controller
+                name="instagram"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Instagram URL" />
+                )}
+              />
+              <Controller
+                name="twitter"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Twitter / X URL" />
+                )}
+              />
+              <Controller
+                name="linkedin"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="LinkedIn URL" />
+                )}
+              />
+              <Controller
+                name="youtube"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="YouTube URL" />
+                )}
+              />
+              <Controller
+                name="telegram"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="Telegram handle or link" />
+                )}
+              />
+              <Controller
+                name="whatsapp"
+                control={form.control}
+                render={({ field }) => (
+                  <Input {...field} placeholder="WhatsApp number" />
                 )}
               />
             </div>

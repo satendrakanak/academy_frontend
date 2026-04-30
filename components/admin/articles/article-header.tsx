@@ -100,7 +100,7 @@ export const ArticleHeader = ({ article }: ArticleHeaderProps) => {
               {article.isPublished ? "Published" : "Draft"}
             </Badge>
             {article.isFeatured && (
-              <Badge className="text-xs bg-purple-100 text-purple-700 border border-purple-200">
+              <Badge className="border-[var(--brand-200)] bg-[var(--brand-50)] text-xs text-[var(--brand-700)]">
                 Featured
               </Badge>
             )}
@@ -119,8 +119,8 @@ export const ArticleHeader = ({ article }: ArticleHeaderProps) => {
             className={cn(
               "flex items-center gap-1 transition",
               article.isFeatured
-                ? "bg-purple-500 hover:bg-purple-600"
-                : "bg-gray-700 hover:bg-gray-800",
+                ? "bg-[var(--brand-600)] hover:bg-[var(--brand-700)]"
+                : "bg-slate-700 hover:bg-slate-800",
             )}
           >
             {article.isFeatured ? <>⭐ Unfeature</> : <>⭐ Feature</>}

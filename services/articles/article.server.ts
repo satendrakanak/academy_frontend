@@ -4,7 +4,7 @@ import { Article } from "@/types/article";
 
 export const articleServerService = {
   getAll: () =>
-    apiServer.get<ApiResponse<Article[]>>("/aricles?isPublished=true"),
+    apiServer.get<ApiResponse<Article[]>>("/articles?isPublished=true"),
   getAllArticles: () =>
     apiServer.get<ApiResponse<{ data: Article[] }>>("/articles"),
 

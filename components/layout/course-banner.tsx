@@ -12,9 +12,9 @@ interface CourseBannerProps {
 
 export function CourseBanner({ course }: CourseBannerProps) {
   return (
-    <section className="bg-linear-to-r from-blue-600 to-purple-600 text-white py-20">
+    <section className="academy-hero-gradient relative overflow-hidden py-20 text-white">
       <Container>
-        <div className="flex justify-between items-start flex-col lg:flex-row">
+        <div className="relative flex justify-between items-start flex-col lg:flex-row">
           <div className="w-full lg:pr-8">
             {/* <CourseBreadcum currentCourse={course.title} /> */}
             <h1 className="text-2xl lg:text-5xl font-bold mb-4 text-center lg:text-left">

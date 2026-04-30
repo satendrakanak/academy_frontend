@@ -1,4 +1,4 @@
-import { OrdersList } from "@/components/admin/orders/orders-list";
+import { OrdersListLoader } from "@/components/admin/orders/orders-list-loader";
 import { getErrorMessage } from "@/lib/error-handler";
 import { orderServerService } from "@/services/orders/order.server";
 import { Order } from "@/types/order";
@@ -30,7 +30,7 @@ const OrdersPage = async () => {
 
   return (
     <div>
-      <OrdersList orders={orders} />
+      <OrdersListLoader orders={orders} />
     </div>
   );
 };

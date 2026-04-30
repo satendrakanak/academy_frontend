@@ -66,6 +66,17 @@
   --secondary: oklch(87.977% 0.06401 15.971);
   --secondary-foreground: oklch(0.505 0.213 27.518);
   --webprimary: #265dfc;
+  --brand-50: #eef4ff;
+  --brand-100: #dee8ff;
+  --brand-200: #c7d7ff;
+  --brand-300: #a7befd;
+  --brand-400: #7f9cf7;
+  --brand-500: #265dfc;
+  --brand-600: #214ed8;
+  --brand-700: #1c3faa;
+  --brand-800: #182f7d;
+  --brand-900: #142457;
+  --brand-950: #0d1636;
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
@@ -133,6 +144,50 @@
   }
   html {
     @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .academy-hero-gradient {
+    background-image:
+      radial-gradient(circle at top left, rgba(255, 255, 255, 0.16), transparent 26%),
+      linear-gradient(120deg, #23357f 0%, #2946b6 34%, #3558f4 67%, #e25667 100%);
+  }
+
+  .academy-hero-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 84px 84px;
+  }
+
+  .academy-surface {
+    background:
+      radial-gradient(circle at top left, rgba(83, 123, 255, 0.09), transparent 26%),
+      linear-gradient(180deg, #f8faff 0%, #ffffff 44%, #f1f5ff 100%);
+  }
+
+  .brand-prose {
+    color: rgb(51 65 85);
+  }
+
+  .brand-prose h1,
+  .brand-prose h2,
+  .brand-prose h3,
+  .brand-prose h4,
+  .brand-prose strong {
+    color: rgb(15 23 42);
+  }
+
+  .brand-prose a {
+    color: var(--brand-600);
+  }
+
+  .brand-prose blockquote {
+    border-left: 4px solid var(--brand-300);
+    background: color-mix(in oklab, white 82%, var(--brand-50));
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
   }
 }
 [data-radix-arrow] {

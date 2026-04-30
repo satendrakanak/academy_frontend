@@ -16,6 +16,10 @@ export const testimonialSchema = z
       .min(1, "Rating must be between 1 and 5")
       .max(5, "Rating must be between 1 and 5"),
     isActive: z.boolean(),
+    isFeatured: z.boolean(),
+    status: z.enum(["pending", "approved", "rejected"]),
+    priority: z.coerce.number().min(0, "Priority cannot be negative"),
+    courseIds: z.array(z.number()).default([]),
   })
   .superRefine((data, ctx) => {
     if (

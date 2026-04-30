@@ -9,36 +9,52 @@ import { Field, FieldGroup, FieldError } from "@/components/ui/field";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/error-handler";
 import { userClientService } from "@/services/users/user.client";
-import { registerFormSchema } from "@/schemas";
+const adminCreateUserSchema = z.object({
+  firstName: z
+    .string()
+    .min(3, "Min 3 characters")
+    .max(96, "First name too long"),
+  lastName: z
+    .string()
+    .max(96, "Last name too long")
+    .optional()
+    .or(z.literal("")),
+  email: z.string().email("Invalid email"),
+  phoneNumber: z
+    .string()
+    .max(15, "Phone too long")
+    .optional()
+    .or(z.literal("")),
+});
 
 interface CreateUserFormProps {
-  onSuccess?: (userId: number) => void;
+  onSuccess?: (userId?: number) => void;
 }
 
+const DEFAULT_USER_PASSWORD = "Temp@1234";
+
 export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
-  const form = useForm<z.infer<typeof registerFormSchema>>({
-    resolver: zodResolver(registerFormSchema),
+  const form = useForm<z.infer<typeof adminCreateUserSchema>>({
+    resolver: zodResolver(adminCreateUserSchema),
     mode: "onChange",
     defaultValues: {
       firstName: "",
       lastName: "",
       email: "",
       phoneNumber: "",
-      password: "Temp@1234",
-      confirmPassword: "Temp@1234",
     },
   });
 
   const { isValid, isSubmitting } = form.formState;
 
-  const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof adminCreateUserSchema>) => {
     try {
       const payload = {
         firstName: data.firstName,
-        lastName: data.lastName,
+        lastName: data.lastName?.trim() || undefined,
         email: data.email,
-        phoneNumber: data.phoneNumber,
-        password: data.password,
+        phoneNumber: data.phoneNumber?.trim() || undefined,
+        password: DEFAULT_USER_PASSWORD,
       };
       const response = await userClientService.create(payload);
 
@@ -52,17 +68,15 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
 
   return (
     <div className="w-full max-w-none">
-      {/* Header */}
       <div>
         <h4 className="text-sm font-semibold">Create User</h4>
         <p className="text-xs text-muted-foreground">
-          Add a new user to the platform
+          Add a new user with just the essentials. Username, student role, and default password are handled automatically.
         </p>
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-3">
         <FieldGroup>
-          {/* First Name */}
           <Controller
             name="firstName"
             control={form.control}
@@ -76,7 +90,6 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
             )}
           />
 
-          {/* Last Name */}
           <Controller
             name="lastName"
             control={form.control}
@@ -90,7 +103,6 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
         </FieldGroup>
 
         <FieldGroup>
-          {/* Email */}
           <Controller
             name="email"
             control={form.control}
@@ -106,7 +118,6 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
             )}
           />
 
-          {/* Phone */}
           <Controller
             name="phoneNumber"
             control={form.control}
@@ -119,7 +130,38 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
           />
         </FieldGroup>
 
-        {/* Footer */}
+        <div className="rounded-2xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4">
+          <h4 className="text-sm font-semibold text-slate-900">
+            Default account setup
+          </h4>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Username
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-900">
+                Auto-generated
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Password
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-900">
+                {DEFAULT_USER_PASSWORD}
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Role
+              </p>
+              <p className="mt-1 text-sm font-medium text-slate-900">
+                student
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="flex justify-end">
           <SubmitButton
             type="submit"

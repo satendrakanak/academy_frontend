@@ -1,6 +1,5 @@
 import Container from "@/components/container";
 import { CouponBulkClient } from "@/components/coupon/coupon-bulk-client";
-import { CourseCard } from "@/components/courses/course-card";
 import { CoursesBanner } from "@/components/layout/courses-banner";
 import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
@@ -18,11 +17,9 @@ export default async function CoursesPage() {
   }
   return (
     <div>
-      {/* HERO */}
-      <CoursesBanner />
+      <CoursesBanner totalCourses={courses.length} />
 
-      {/* COURSES GRID */}
-      <section className="py-20 bg-gray-50">
+      <section className="academy-surface py-20">
         <Container>
           <CouponBulkClient courses={courses} />
         </Container>

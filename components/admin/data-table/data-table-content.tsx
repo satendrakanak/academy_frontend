@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/table";
 
 import { DraggableRow } from "./draggable-row";
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 interface DataTableContentProps<TData> {
   table: TableType<TData>;
@@ -57,6 +57,10 @@ export function DataTableContent<TData>({
     () => data.map((item) => getRowId(item)),
     [data, getRowId],
   );
+
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;

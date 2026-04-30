@@ -15,8 +15,8 @@ const tabs = [
   { id: "content", label: "Course Content" },
   { id: "details", label: "Details" },
   { id: "requirements", label: "Requirements" },
-  { id: "testimonials", label: "Testimonials" },
   { id: "instructor", label: "Instructor" },
+  { id: "testimonials", label: "Testimonials" },
 ];
 
 export const CourseTabs = ({
@@ -135,12 +135,12 @@ export const CourseTabs = ({
         <CourseRequirements course={course} />
       </div>
 
-      <div id="testimonials" className="mb-8 scroll-mt-32">
-        <CourseReviews testimonials={testimonials} />
-      </div>
-
       <div id="instructor" className="mb-8 scroll-mt-32">
         <CourseInstructor course={course} />
+      </div>
+
+      <div id="testimonials" className="mb-8 scroll-mt-32">
+        <CourseReviews testimonials={testimonials} />
       </div>
     </div>
   );

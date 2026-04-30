@@ -1,5 +1,6 @@
 export type CreateTagPayload = {
   name: string;
+  slug?: string;
   description?: string;
 };
 

@@ -13,14 +13,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SubmitButton } from "../submit-button";
 import Link from "next/link";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -34,10 +36,17 @@ export function LoginForm() {
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
       await authService.login(data);
+      const rawCallbackUrl = searchParams.get("callbackUrl");
+      const callbackUrl =
+        rawCallbackUrl &&
+        rawCallbackUrl.startsWith("/") &&
+        !rawCallbackUrl.startsWith("//")
+          ? rawCallbackUrl
+          : DEFAULT_LOGIN_REDIRECT;
 
       startTransition(() => {
         router.refresh();
-        router.push("/admin/dashboard");
+        router.push(callbackUrl);
       });
     } catch (err: unknown) {
       if (err instanceof Error) {

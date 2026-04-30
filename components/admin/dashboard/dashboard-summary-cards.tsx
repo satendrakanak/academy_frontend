@@ -1,0 +1,97 @@
+"use client";
+
+import {
+  BadgeIndianRupee,
+  BookOpen,
+  TicketPercent,
+  Users,
+} from "lucide-react";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { AdminDashboardData } from "@/types/admin-dashboard";
+import {
+  compactNumberFormatter,
+  currencyFormatter,
+} from "./dashboard-utils";
+
+const statCards = (data: AdminDashboardData) => [
+  {
+    title: "Total Revenue",
+    value: currencyFormatter.format(data.summary.totalRevenue),
+    description: `${data.summary.paidOrders} paid orders processed`,
+    icon: BadgeIndianRupee,
+    tone: "from-[var(--brand-500)]/18 via-[var(--brand-100)] to-white",
+  },
+  {
+    title: "Total Users",
+    value: compactNumberFormatter.format(data.summary.totalUsers),
+    description: "Registered learners and admins",
+    icon: Users,
+    tone: "from-emerald-500/16 via-emerald-50 to-white",
+  },
+  {
+    title: "Published Courses",
+    value: `${data.summary.publishedCourses}/${data.summary.totalCourses}`,
+    description: "Live courses visible to learners",
+    icon: BookOpen,
+    tone: "from-sky-500/16 via-sky-50 to-white",
+  },
+  {
+    title: "Coupon Redemptions",
+    value: compactNumberFormatter.format(data.summary.couponRedemptions),
+    description: `${currencyFormatter.format(data.summary.totalDiscountGiven)} discount granted`,
+    icon: TicketPercent,
+    tone: "from-violet-500/16 via-violet-50 to-white",
+  },
+];
+
+export function DashboardSummaryCards({
+  data,
+}: {
+  data: AdminDashboardData;
+}) {
+  const stats = statCards(data);
+
+  return (
+    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {stats.map((item) => {
+        const Icon = item.icon;
+        return (
+          <Card
+            key={item.title}
+            className={cn(
+              "border border-[var(--brand-100)] bg-gradient-to-br transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.4)]",
+              item.tone,
+            )}
+          >
+            <CardHeader className="pb-0">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <CardDescription className="text-slate-600">
+                    {item.title}
+                  </CardDescription>
+                  <CardTitle className="mt-2 text-2xl font-bold text-slate-950">
+                    {item.value}
+                  </CardTitle>
+                </div>
+                <div className="rounded-2xl bg-white/80 p-3 text-[var(--brand-700)] shadow-sm">
+                  <Icon className="size-5" />
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-3">
+              <p className="text-sm text-slate-500">{item.description}</p>
+            </CardContent>
+          </Card>
+        );
+      })}
+    </section>
+  );
+}

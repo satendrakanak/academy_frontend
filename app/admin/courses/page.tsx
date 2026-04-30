@@ -1,4 +1,4 @@
-import { CoursesList } from "@/components/admin/courses/courses-list";
+import { CoursesListLoader } from "@/components/admin/courses/courses-list-loader";
 import { getErrorMessage } from "@/lib/error-handler";
 import { courseServerService } from "@/services/courses/course.server";
 import { Course } from "@/types/course";
@@ -14,7 +14,7 @@ const CoursesPage = async () => {
 
   return (
     <div>
-      <CoursesList courses={courses} />
+      <CoursesListLoader courses={courses} />
     </div>
   );
 };

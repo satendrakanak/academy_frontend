@@ -22,20 +22,21 @@ export const TestimonialCard = ({
 }: TestimonialCardProps) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const isVideo = testimonial.type === "VIDEO";
+  const primaryCourse = testimonial.courses?.[0] || null;
 
   return (
     <>
       <article
-        className={`group relative overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_60px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_-36px_rgba(37,99,235,0.45)] ${
+        className={`group relative overflow-hidden rounded-[28px] border border-[var(--brand-100)] bg-white shadow-[0_18px_60px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-200)] hover:shadow-[0_28px_80px_-36px_rgba(120,53,15,0.35)] ${
           variant === "featured" ? "h-full" : ""
         }`}
       >
-        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-sky-500 via-blue-600 to-cyan-400" />
+        <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-[var(--brand-400)] via-[var(--brand-500)] to-[var(--brand-700)]" />
 
         <div className="flex h-full flex-col p-6 md:p-7">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-sky-100">
+              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-[var(--brand-100)]">
                 <Image
                   src={testimonial.avatar?.path || "/assets/default.png"}
                   alt={testimonial.avatarAlt || testimonial.name}
@@ -58,7 +59,7 @@ export const TestimonialCard = ({
 
             <Badge
               variant="outline"
-              className="rounded-full border-sky-200 bg-sky-50 px-3 py-1 text-sky-700"
+              className="rounded-full border-[var(--brand-200)] bg-[var(--brand-50)] px-3 py-1 text-[var(--brand-700)]"
             >
               {isVideo ? "Video Story" : "Written Review"}
             </Badge>
@@ -67,22 +68,22 @@ export const TestimonialCard = ({
           <div className="mb-4 flex items-center justify-between gap-3">
             <TestimonialRating rating={testimonial.rating} />
 
-            {testimonial.course && (
+            {primaryCourse && (
               <Link
-                href={`/course/${testimonial.course.slug}`}
-                className="text-xs font-medium text-sky-700 underline-offset-4 hover:underline"
+                href={`/course/${primaryCourse.slug}`}
+                className="text-xs font-medium text-[var(--brand-700)] underline-offset-4 hover:underline"
               >
-                {testimonial.course.title}
+                {primaryCourse.title}
               </Link>
             )}
           </div>
 
           {isVideo ? (
             <div className="relative mb-5 overflow-hidden rounded-[24px] border border-slate-200 bg-slate-950">
-              <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-900/70 to-sky-900/50" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-[var(--brand-950)]/80 to-[var(--brand-600)]/55" />
               <div className="relative flex aspect-video flex-col justify-between p-5 text-white">
                 <div className="flex items-center justify-between">
-                  <Quote className="size-8 text-cyan-300/90" />
+                  <Quote className="size-8 text-[var(--brand-200)]" />
                   <span className="text-xs uppercase tracking-[0.28em] text-white/70">
                     Student Voice
                   </span>
@@ -96,7 +97,7 @@ export const TestimonialCard = ({
                   <Button
                     type="button"
                     onClick={() => setPreviewOpen(true)}
-                    className="h-11 rounded-full bg-white text-slate-950 hover:bg-cyan-50"
+                    className="h-11 rounded-full bg-white text-[var(--brand-900)] hover:bg-[var(--brand-50)]"
                   >
                     <PlayCircle className="mr-2 size-4" />
                     Watch Testimonial
@@ -105,8 +106,8 @@ export const TestimonialCard = ({
               </div>
             </div>
           ) : (
-            <div className="relative mb-5 flex-1 rounded-[24px] bg-slate-50 p-5">
-              <Quote className="mb-4 size-8 text-sky-500/70" />
+            <div className="relative mb-5 flex-1 rounded-[24px] bg-[linear-gradient(180deg,#fff_0%,var(--brand-50)_100%)] p-5">
+              <Quote className="mb-4 size-8 text-[var(--brand-500)]/70" />
               <p className="text-[15px] leading-7 text-slate-700">
                 {testimonial.message}
               </p>

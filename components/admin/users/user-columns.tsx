@@ -11,8 +11,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Pencil, Trash2 } from "lucide-react";
 import { Role, User } from "@/types/user";
@@ -68,6 +66,16 @@ export const getUserColumns = (
     },
   },
 
+  {
+    accessorKey: "username",
+    header: "Username",
+    cell: ({ row }) => (
+      <span className="font-medium text-slate-700">
+        {row.original.username || "Auto-generated"}
+      </span>
+    ),
+  },
+
   // ✅ Email
   {
     accessorKey: "email",
@@ -111,6 +119,23 @@ export const getUserColumns = (
     },
   },
 
+  {
+    id: "status",
+    header: "Profile",
+    cell: ({ row }) => (
+      <div className="flex flex-wrap gap-1">
+        <Badge variant="outline">
+          {row.original.profile?.isPublic ? "Public" : "Private"}
+        </Badge>
+        {row.original.roles?.some((role) => role.name === "faculty") && (
+          <Badge variant="outline">
+            {row.original.facultyProfile?.isApproved ? "Faculty Approved" : "Faculty Pending"}
+          </Badge>
+        )}
+      </div>
+    ),
+  },
+
   // ✅ Created Date
   {
     accessorKey: "createdAt",
@@ -123,7 +148,6 @@ export const getUserColumns = (
   {
     id: "actions",
     cell: ({ row }) => {
-      const router = useRouter();
       const user = row.original;
 
       return (
@@ -135,12 +159,11 @@ export const getUserColumns = (
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-            <DropdownMenuItem
-              onClick={() => router.push(`/admin/users/${user.id}`)}
-              className="cursor-pointer flex items-center gap-2"
-            >
-              <Pencil className="size-4" />
-              Edit
+            <DropdownMenuItem asChild className="cursor-pointer flex items-center gap-2">
+              <Link href={`/admin/users/${user.id}`}>
+                <Pencil className="size-4" />
+                Edit
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               variant="destructive"

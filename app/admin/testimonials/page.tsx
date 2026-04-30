@@ -1,4 +1,4 @@
-import { TestimonialsList } from "@/components/admin/testimonials/testimonials-list";
+import { TestimonialsListLoader } from "@/components/admin/testimonials/testimonials-list-loader";
 import { getErrorMessage } from "@/lib/error-handler";
 import { testimonialServerService } from "@/services/testimonials/testimonial.server";
 import { Testimonial } from "@/types/testimonial";
@@ -16,7 +16,7 @@ const TestimonialsPage = async () => {
 
   return (
     <div>
-      <TestimonialsList testimonials={testimonials} />
+      <TestimonialsListLoader testimonials={testimonials} />
     </div>
   );
 };

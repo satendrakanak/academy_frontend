@@ -38,7 +38,7 @@ export const TestimonialsFilterBar = ({
   };
 
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-4 shadow-sm md:p-5">
+    <div className="rounded-[28px] border border-[var(--brand-100)] bg-white p-4 shadow-sm md:p-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-sm font-semibold text-slate-900">

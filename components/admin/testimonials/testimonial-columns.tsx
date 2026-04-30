@@ -7,6 +7,7 @@ import { Pencil, PlayCircle, Star, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,6 +20,21 @@ export const getTestimonialColumns = (
   onEdit: (testimonial: Testimonial) => void,
   onDelete: (testimonial: Testimonial) => void,
 ): ColumnDef<Testimonial>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected()}
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+      />
+    ),
+  },
   {
     accessorKey: "name",
     header: "Person",
@@ -61,6 +77,19 @@ export const getTestimonialColumns = (
     ),
   },
   {
+    id: "courses",
+    header: "Courses",
+    cell: ({ row }) => {
+      const courseNames = row.original.courses?.map((course) => course.title) || [];
+
+      return (
+        <p className="max-w-xs truncate text-sm text-muted-foreground">
+          {courseNames.length ? courseNames.join(", ") : "General testimonial"}
+        </p>
+      );
+    },
+  },
+  {
     id: "preview",
     header: "Preview",
     cell: ({ row }) => {
@@ -96,9 +125,13 @@ export const getTestimonialColumns = (
     accessorKey: "isActive",
     header: "Status",
     cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? "default" : "secondary"}>
-        {row.original.isActive ? "Active" : "Inactive"}
-      </Badge>
+      <div className="flex flex-wrap gap-2">
+        <Badge variant={row.original.isActive ? "default" : "secondary"}>
+          {row.original.isActive ? "Active" : "Inactive"}
+        </Badge>
+        <Badge variant="outline">{row.original.status}</Badge>
+        {row.original.isFeatured && <Badge variant="outline">Featured</Badge>}
+      </div>
     ),
   },
   {

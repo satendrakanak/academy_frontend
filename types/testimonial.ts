@@ -14,8 +14,11 @@ export type CreateTestimonialPayload = {
   avatarId?: number;
   avatarAlt?: string;
   videoId?: number;
-  courseId?: number | null;
+  courseIds?: number[];
   isActive: boolean;
+  isFeatured?: boolean;
+  status?: TestimonialStatus;
+  priority?: number;
 };
 
 export type UpdateTestimonialPayload = Partial<CreateTestimonialPayload>;
@@ -35,7 +38,7 @@ export type Testimonial = {
   isFeatured: boolean;
   priority: number;
   status: TestimonialStatus;
-  course: Course | null;
+  courses: Course[];
   createdAt: string;
   updatedAt: string;
 };

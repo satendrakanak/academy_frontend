@@ -7,9 +7,9 @@ export const CourseTestimonialsSection = ({
   testimonials: Testimonial[];
 }) => {
   return (
-    <section className="space-y-6">
-      <div className="max-w-2xl">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.22em] text-sky-700">
+    <section className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="max-w-2xl border-b border-gray-100 pb-5">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
           Testimonials
         </p>
         <h3 className="text-2xl font-bold text-slate-900">
@@ -22,7 +22,7 @@ export const CourseTestimonialsSection = ({
       </div>
 
       {testimonials.length ? (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="mt-6 grid gap-6 lg:grid-cols-2">
           {testimonials.map((testimonial) => (
             <TestimonialCard
               key={testimonial.id}
@@ -32,7 +32,7 @@ export const CourseTestimonialsSection = ({
           ))}
         </div>
       ) : (
-        <div className="rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">
+        <div className="mt-6 rounded-[24px] border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-slate-500">
           Course testimonials will appear here as soon as approved feedback is
           available.
         </div>

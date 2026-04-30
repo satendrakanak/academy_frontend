@@ -10,12 +10,12 @@ export default async function FacultiesPage() {
   try {
     const response = await userServerService.getFaculties();
     faculties = response.data;
-  } catch (error) {
+  } catch {
     console.error("Failed to load faculties");
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#fff_0%,var(--brand-50)_100%)]">
       <FacultyHero />
 
       <Container>

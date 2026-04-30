@@ -9,6 +9,7 @@ export const registerFormSchema = z
       .string()
       .min(3, "Min 3 characters")
       .max(96, "Last name too long"),
+    username: z.string().max(255, "Username too long").optional(),
     email: z.string().email("Invalid email"),
     phoneNumber: z
       .string()

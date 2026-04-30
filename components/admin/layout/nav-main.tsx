@@ -1,8 +1,11 @@
 "use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { useSession } from "@/context/session-context";
+import { hasAnyPermission, hasRole } from "@/lib/access-control";
+import { ChevronRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { SidebarNavItem } from "@/data/sidebar";
 
 import {
   Collapsible,
@@ -13,6 +16,7 @@ import {
 import {
   SidebarGroup,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -23,22 +27,44 @@ import {
 export function NavMain({
   items,
 }: {
-  items: {
-    title: string;
-    url: string;
-    icon?: LucideIcon;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
+  items: SidebarNavItem[];
 }) {
   const pathname = usePathname();
+  const { user } = useSession();
+
+  const visibleItems = items
+    .map((item) => {
+      const visibleChildren = item.items?.filter((subItem) => {
+        if (hasRole(user, "admin")) {
+          return true;
+        }
+
+        return hasAnyPermission(user, subItem.requiredPermissions);
+      });
+
+      const canSeeParent =
+        hasRole(user, "admin") ||
+        hasAnyPermission(user, item.requiredPermissions);
+
+      if (item.items?.length) {
+        if ((visibleChildren?.length ?? 0) === 0 && !canSeeParent) {
+          return null;
+        }
+
+        return {
+          ...item,
+          items: visibleChildren,
+        };
+      }
+
+      return canSeeParent ? item : null;
+    })
+    .filter(Boolean) as SidebarNavItem[];
 
   return (
     <SidebarGroup className="bg-white">
       <SidebarMenu>
-        {items.map((item) => {
+        {visibleItems.map((item) => {
           const hasChildren = !!item.items?.length;
 
           const isParentActive =
@@ -78,23 +104,31 @@ export function NavMain({
               className="group/collapsible"
             >
               <SidebarMenuItem>
-                {/* Parent */}
-                <CollapsibleTrigger asChild>
-                  <SidebarMenuButton
-                    data-active={isParentActive}
-                    className="w-full justify-between"
-                    isActive={isParentActive}
-                    variant="primary"
-                    size="md"
-                    tooltip={item.title}
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  asChild
+                  data-active={pathname === item.url}
+                  isActive={isParentActive}
+                  variant="primary"
+                  size="md"
+                >
+                  <Link
+                    href={item.url}
+                    className="flex w-full items-center gap-2"
                   >
-                    <div className="flex items-center gap-2">
-                      {item.icon && <item.icon />}
-                      <span>{item.title}</span>
-                    </div>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
 
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                  </SidebarMenuButton>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuAction
+                    showOnHover
+                    className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                  >
+                    <ChevronRight />
+                    <span className="sr-only">Toggle {item.title}</span>
+                  </SidebarMenuAction>
                 </CollapsibleTrigger>
 
                 {/* Submenu */}

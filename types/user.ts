@@ -1,8 +1,14 @@
 import { FileType } from "./file";
 
+export type Permission = {
+  id: number;
+  name: string;
+};
+
 export type Role = {
   id: number;
   name: string;
+  permissions?: Permission[];
 };
 
 export type UserProfile = {
@@ -15,6 +21,15 @@ export type UserProfile = {
   showCertificates: boolean;
   location?: string;
   website?: string;
+  headline?: string;
+  company?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  linkedin?: string;
+  youtube?: string;
+  whatsapp?: string;
+  telegram?: string;
 };
 export type FacultyProfile = {
   id: number;
@@ -22,6 +37,9 @@ export type FacultyProfile = {
   experience?: string;
   designation?: string;
   linkedin: string;
+  instagram?: string;
+  twitter?: string;
+  youtube?: string;
   isApproved: boolean;
 };
 
@@ -49,8 +67,10 @@ export type CreateUserPayload = {
   firstName: string;
   lastName?: string;
   email: string;
-  phoneNumber: string;
+  phoneNumber?: string;
   password: string;
+  username?: string;
+  roleIds?: number[];
 };
 
 export type UpdateUserPayload = {
@@ -70,6 +90,15 @@ export type UpdateProfilePayload = {
   showCertificates?: boolean;
   location?: string;
   website?: string;
+  headline?: string;
+  company?: string;
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  linkedin?: string;
+  youtube?: string;
+  whatsapp?: string;
+  telegram?: string;
 };
 
 export type UpdateFacultyProfilePayload = {
@@ -77,7 +106,22 @@ export type UpdateFacultyProfilePayload = {
   experience?: string;
   designation?: string;
   linkedin?: string;
+  instagram?: string;
+  twitter?: string;
+  youtube?: string;
   isApproved?: boolean;
+};
+
+export type CreateBulkUsersPayload = {
+  users: CreateUserPayload[];
+};
+
+export type UsersQueryParams = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  roleId?: number;
+  includeDeleted?: boolean;
 };
 
 export type ChangePasswordPayload = {

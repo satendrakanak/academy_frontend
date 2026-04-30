@@ -23,4 +23,6 @@ export const tagClientService = {
     withAuthRetry(() =>
       apiClient.delete<ApiResponse<{ message: string }>>(`/api/tags/${id}`),
     ),
+  deleteBulk: async (ids: number[]) =>
+    Promise.all(ids.map((id) => tagClientService.delete(id))),
 };

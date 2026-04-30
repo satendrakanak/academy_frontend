@@ -1,10 +1,24 @@
 import { apiServer } from "@/lib/api/server";
-import { ApiResponse } from "@/types/api";
+import { ApiResponse, Paginated } from "@/types/api";
 import { Course } from "@/types/course";
-import { DashboardStats, User, WeeklyProgress } from "@/types/user";
+import { DashboardStats, User, UsersQueryParams, WeeklyProgress } from "@/types/user";
+
+const buildUsersQuery = (params?: UsersQueryParams) => {
+  const searchParams = new URLSearchParams();
+
+  if (params?.page) searchParams.set("page", String(params.page));
+  if (params?.limit) searchParams.set("limit", String(params.limit));
+  if (params?.search) searchParams.set("search", params.search);
+  if (params?.roleId) searchParams.set("roleId", String(params.roleId));
+  if (params?.includeDeleted) searchParams.set("includeDeleted", "true");
+
+  const query = searchParams.toString();
+  return query ? `?${query}` : "";
+};
 
 export const userServerService = {
-  getAll: () => apiServer.get<ApiResponse<{ data: User[] }>>("/users"),
+  getAll: (params?: UsersQueryParams) =>
+    apiServer.get<ApiResponse<Paginated<User>>>(`/users${buildUsersQuery(params)}`),
   getById: (userId: number) =>
     apiServer.get<ApiResponse<User>>(`/users/${userId}`),
   getEnrolledCourses: (userId: number) =>

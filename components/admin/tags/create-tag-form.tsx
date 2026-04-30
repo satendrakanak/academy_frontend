@@ -1,31 +1,36 @@
 "use client";
 
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
-
-import { Input } from "@/components/ui/input";
-import { SubmitButton } from "@/components/submit-button";
-import { Field, FieldGroup, FieldError } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
-import { tagsSchema } from "@/schemas/courses";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { slugify } from "@/utils/slugify";
 import { useEffect } from "react";
-import { Tag } from "@/types/tag";
+import { useRouter } from "next/navigation";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { toast } from "sonner";
+
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { SubmitButton } from "@/components/submit-button";
 import { tagClientService } from "@/services/tags/tag.client";
+import { Tag } from "@/types/tag";
+import { slugify } from "@/utils/slugify";
 import { getErrorMessage } from "@/lib/error-handler";
+
+const tagFormSchema = z.object({
+  name: z.string().min(3, "Min 3 characters").max(96, "Max 96 characters"),
+  description: z.string().optional(),
+});
 
 interface CreateTagFormProps {
   tag?: Tag;
+  onSuccess?: () => void;
 }
 
-export const CreateTagForm = ({ tag }: CreateTagFormProps) => {
+export const CreateTagForm = ({ tag, onSuccess }: CreateTagFormProps) => {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof tagsSchema>>({
-    resolver: zodResolver(tagsSchema),
+  const form = useForm<z.infer<typeof tagFormSchema>>({
+    resolver: zodResolver(tagFormSchema),
     mode: "onChange",
     defaultValues: {
       name: tag?.name || "",
@@ -33,86 +38,96 @@ export const CreateTagForm = ({ tag }: CreateTagFormProps) => {
     },
   });
 
-  const { isValid, isSubmitting } = form.formState;
-
-  // 🔥 reset on category change
   useEffect(() => {
     form.reset({
       name: tag?.name || "",
       description: tag?.description || "",
     });
-  }, [tag]);
+  }, [tag, form]);
 
-  // 🔥 MAIN LOGIC
-  const onSubmit = async (data: z.infer<typeof tagsSchema>) => {
+  const { isValid, isSubmitting } = form.formState;
+
+  const onSubmit = async (data: z.infer<typeof tagFormSchema>) => {
     try {
       const payload = {
-        name: data.name,
+        name: data.name.trim(),
         slug: slugify(data.name),
-        description: data.description,
+        description: data.description?.trim() || undefined,
       };
 
       if (tag?.id) {
-        // 🔥 UPDATE
         await tagClientService.update(tag.id, payload);
         toast.success("Tag updated successfully");
       } else {
-        // 🔥 CREATE
         await tagClientService.create(payload);
         toast.success("Tag created successfully");
-        form.reset();
+        form.reset({
+          name: "",
+          description: "",
+        });
       }
 
+      onSuccess?.();
       router.refresh();
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      toast.error(message);
+      toast.error(getErrorMessage(error));
     }
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <div className="rounded-3xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)]">
+          Shared tag
+        </p>
+        <p className="mt-1 text-sm text-slate-600">
+          Tags are reusable across both courses and articles, so keep names short and evergreen.
+        </p>
+      </div>
+
       <FieldGroup>
-        {/* 🔥 TITLE */}
-        <h3 className="text-sm font-semibold">Tag Name</h3>
         <Controller
           name="name"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <Input {...field} placeholder="Tag name" className="h-10" />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Tag name
+              </label>
+              <Input {...field} placeholder="e.g. ayurveda, yoga, wellness" className="h-11" />
+              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />
 
-        {/* 🔥 DESCRIPTION */}
-        <h3 className="text-sm font-semibold">Tag Description</h3>
         <Controller
           name="description"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
+              <label className="mb-2 block text-sm font-medium text-slate-700">
+                Description
+              </label>
               <Textarea
                 {...field}
-                placeholder="Tag description"
-                className="min-h-28"
+                value={field.value ?? ""}
+                placeholder="Optional internal context for editors."
+                className="min-h-32"
               />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />
       </FieldGroup>
 
-      {/* 🔥 FOOTER */}
-      <div className="flex items-center justify-end">
+      <div className="flex justify-end">
         <SubmitButton
           type="submit"
           disabled={!isValid}
           loading={isSubmitting}
           className="px-6"
         >
-          {tag?.id ? "Update" : "Create"}
+          {tag?.id ? "Update Tag" : "Create Tag"}
         </SubmitButton>
       </div>
     </form>
