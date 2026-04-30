@@ -1,8 +1,12 @@
 "use client";
 
 import { Course } from "@/types/course";
+import { Certificate } from "@/types/certificate";
+import { certificateClientService } from "@/services/certificates/certificate.client";
+import { getCourseProgress } from "@/helpers/course-progress";
 import { getCourseMeta } from "@/helpers/course-meta";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface CourseTabsProps {
   course: Course;
@@ -13,6 +17,11 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
     totalLectures: 0,
     totalDuration: "0m",
   });
+  const [certificate, setCertificate] = useState<Certificate | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { completed, total, percent } = getCourseProgress(course);
+  const isCourseCompleted = total > 0 && completed >= total;
+
   useEffect(() => {
     const loadMeta = async () => {
       const data = await getCourseMeta(course);
@@ -21,6 +30,61 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 
     loadMeta();
   }, [course]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadCertificate = async () => {
+      try {
+        const response = await certificateClientService.getForCourse(course.id);
+        if (mounted) setCertificate(response.data);
+      } catch {
+        if (mounted) setCertificate(null);
+      }
+    };
+
+    loadCertificate();
+
+    return () => {
+      mounted = false;
+    };
+  }, [course.id]);
+
+  const downloadCertificate = (nextCertificate: Certificate) => {
+    if (!nextCertificate.file?.path) return;
+
+    window.open(nextCertificate.file.path, "_blank", "noopener,noreferrer");
+  };
+
+  const handleCertificateClick = async () => {
+    if (certificate) {
+      downloadCertificate(certificate);
+      return;
+    }
+
+    if (!isCourseCompleted) {
+      toast.info("Complete all lectures to unlock your certificate");
+      return;
+    }
+
+    try {
+      setIsGenerating(true);
+      const response = await certificateClientService.generateForCourse(
+        course.id,
+      );
+      setCertificate(response.data);
+      toast.success("Certificate generated and emailed successfully");
+      downloadCertificate(response.data);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Certificate could not be generated",
+      );
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   return (
     <div className="bg-white border-t">
@@ -69,15 +133,38 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
 
         {/* 🎓 CERTIFICATE */}
         <div className="border-t pt-6">
-          <h3 className="font-semibold text-base mb-2">Certificate</h3>
+          <div className="overflow-hidden rounded-2xl border border-primary/15 bg-linear-to-br from-primary/10 via-white to-orange-50 p-5">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                  Certificate
+                </p>
+                <h3 className="mt-2 text-lg font-semibold text-gray-950">
+                  {certificate
+                    ? "Your certificate is ready"
+                    : "Unlock your completion certificate"}
+                </h3>
+                <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
+                  {certificate
+                    ? `Certificate ID ${certificate.certificateNumber}. You can download it anytime from here or your profile.`
+                    : `Complete all ${total || meta.totalLectures} lectures to generate your official Unitus certificate. Current progress: ${percent}%.`}
+                </p>
+              </div>
 
-          <p className="text-gray-600 mb-3">
-            Get your certificate by completing the entire course.
-          </p>
-
-          <button className="border border-primary text-primary px-4 py-2 rounded-md text-sm hover:bg-primary/10 transition">
-            Get Certificate
-          </button>
+              <button
+                type="button"
+                disabled={(!isCourseCompleted && !certificate) || isGenerating}
+                onClick={handleCertificateClick}
+                className="rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-gray-300 disabled:shadow-none"
+              >
+                {isGenerating
+                  ? "Generating..."
+                  : certificate
+                    ? "Download Certificate"
+                    : "Get Certificate"}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* 📚 FULL DESCRIPTION */}
