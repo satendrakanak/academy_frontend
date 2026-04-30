@@ -64,22 +64,27 @@ export default async function ClientTestimonialsPage({
   }
 
   return (
-    <div className="academy-surface py-20">
+    <div className="academy-surface pb-20">
+      <section className="academy-hero-gradient relative overflow-hidden py-20 text-white">
+        <div className="academy-hero-grid absolute inset-0 opacity-20" />
+        <Container>
+          <div className="relative">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
+              Client Testimonials
+            </p>
+            <h1 className="max-w-3xl text-4xl font-bold md:text-4xl">
+              Stories from learners who trusted the process and saw results.
+            </h1>
+            <p className="mt-5 max-w-2xl text-lg text-white/80">
+              Explore featured written reviews and video testimonials, then
+              drill down by course to see exactly how learners experienced
+              Unitus.
+            </p>
+          </div>
+        </Container>
+      </section>
       <Container>
-        <section className="mb-10 rounded-[32px] border border-[var(--brand-100)] bg-white px-6 py-12 shadow-sm md:px-10">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand-600)]">
-            Client Testimonials
-          </p>
-          <h1 className="max-w-3xl text-4xl font-bold text-slate-900 md:text-5xl">
-            Stories from learners who trusted the process and saw results.
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg">
-            Explore featured written reviews and video testimonials, then drill
-            down by course to see exactly how learners experienced Unitus.
-          </p>
-        </section>
-
-        <div className="space-y-8">
+        <div className="space-y-8 mt-10">
           <TestimonialsFilterBar courses={courses} />
 
           {testimonials.length ? (

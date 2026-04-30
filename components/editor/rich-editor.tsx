@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import { Mark, mergeAttributes, Node } from "@tiptap/core";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
@@ -10,7 +11,67 @@ import Heading from "@tiptap/extension-heading";
 import BulletList from "@tiptap/extension-bullet-list";
 import OrderedList from "@tiptap/extension-ordered-list";
 import ListItem from "@tiptap/extension-list-item";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  Bold as BoldIcon,
+  Heading1,
+  Heading2,
+  ImagePlus,
+  Italic as ItalicIcon,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+  Pilcrow,
+  Unlink,
+} from "lucide-react";
+import { MediaModal } from "@/components/media/media-modal";
+import { FileType } from "@/types/file";
+
+const EmailLink = Mark.create({
+  name: "emailLink",
+  inclusive: false,
+  addAttributes() {
+    return {
+      href: { default: null },
+      target: { default: "_blank" },
+      rel: { default: "noopener noreferrer" },
+    };
+  },
+  parseHTML() {
+    return [{ tag: "a[href]" }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ["a", mergeAttributes(HTMLAttributes), 0];
+  },
+});
+
+const EmailImage = Node.create({
+  name: "emailImage",
+  group: "block",
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      alt: { default: "" },
+      title: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: "img[src]" }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return [
+      "img",
+      mergeAttributes(HTMLAttributes, {
+        style:
+          "max-width:100%;height:auto;border-radius:14px;display:block;margin:16px auto;",
+      }),
+    ];
+  },
+});
+
+const toolbarButton =
+  "inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-[var(--brand-300)] hover:bg-[var(--brand-50)] data-[active=true]:border-[var(--brand-500)] data-[active=true]:bg-[var(--brand-50)] data-[active=true]:text-[var(--brand-700)]";
 
 interface Props {
   value: string;
@@ -18,6 +79,7 @@ interface Props {
 }
 
 export default function RichEditor({ value, onChange }: Props) {
+  const [mediaOpen, setMediaOpen] = useState(false);
   const editor = useEditor({
     extensions: [
       Document,
@@ -29,6 +91,8 @@ export default function RichEditor({ value, onChange }: Props) {
       BulletList,
       OrderedList,
       ListItem,
+      EmailLink,
+      EmailImage,
     ],
     content: value || "<p></p>",
     immediatelyRender: false,
@@ -37,61 +101,163 @@ export default function RichEditor({ value, onChange }: Props) {
     },
   });
 
-  // 🔥 sync external value (important for RHF)
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value || "<p></p>");
     }
-  }, [value]);
+  }, [editor, value]);
 
   if (!editor) return null;
 
+  const setLink = () => {
+    const href = window.prompt("Paste link URL");
+    if (!href) return;
+
+    editor
+      .chain()
+      .focus()
+      .setMark("emailLink", {
+        href,
+      })
+      .run();
+  };
+
+  const setImage = () => {
+    const src = window.prompt("Paste image URL");
+    if (!src) return;
+
+    const alt = window.prompt("Image alt text") || "";
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "emailImage",
+        attrs: { src, alt },
+      })
+      .run();
+  };
+
+  const insertMediaImage = (file: FileType, alt: string) => {
+    editor
+      .chain()
+      .focus()
+      .insertContent({
+        type: "emailImage",
+        attrs: { src: file.path, alt: alt || file.name },
+      })
+      .run();
+    setMediaOpen(false);
+  };
+
   return (
-    <div className="border rounded-lg">
-      {/* 🔥 Toolbar */}
-      <div className="flex gap-2 border-b p-2 flex-wrap">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+      <div className="flex flex-wrap gap-2 border-b border-slate-100 bg-slate-50/80 p-3">
         <button
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className="px-2 py-1 border rounded text-xs"
+          type="button"
+          data-active={editor.isActive("paragraph")}
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={toolbarButton}
         >
+          <Pilcrow className="size-3.5" />
+          Body
+        </button>
+        <button
+          type="button"
+          data-active={editor.isActive("heading", { level: 1 })}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={toolbarButton}
+        >
+          <Heading1 className="size-3.5" />
+          H1
+        </button>
+        <button
+          type="button"
+          data-active={editor.isActive("heading", { level: 2 })}
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={toolbarButton}
+        >
+          <Heading2 className="size-3.5" />
+          H2
+        </button>
+        <button
+          type="button"
+          data-active={editor.isActive("bold")}
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={toolbarButton}
+        >
+          <BoldIcon className="size-3.5" />
           Bold
         </button>
 
         <button
+          type="button"
+          data-active={editor.isActive("italic")}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className="px-2 py-1 border rounded text-xs"
+          className={toolbarButton}
         >
+          <ItalicIcon className="size-3.5" />
           Italic
         </button>
 
         <button
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className="px-2 py-1 border rounded text-xs"
-        >
-          H2
-        </button>
-
-        <button
+          type="button"
+          data-active={editor.isActive("bulletList")}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className="px-2 py-1 border rounded text-xs"
+          className={toolbarButton}
         >
-          • List
+          <List className="size-3.5" />
+          Bullets
         </button>
 
         <button
+          type="button"
+          data-active={editor.isActive("orderedList")}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className="px-2 py-1 border rounded text-xs"
+          className={toolbarButton}
         >
-          1. List
+          <ListOrdered className="size-3.5" />
+          Numbers
+        </button>
+        <button type="button" onClick={setLink} className={toolbarButton}>
+          <LinkIcon className="size-3.5" />
+          Link
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().unsetMark("emailLink").run()}
+          className={toolbarButton}
+        >
+          <Unlink className="size-3.5" />
+          Unlink
+        </button>
+        <button type="button" onClick={setImage} className={toolbarButton}>
+          <ImagePlus className="size-3.5" />
+          Image URL
+        </button>
+        <button
+          type="button"
+          onClick={() => setMediaOpen(true)}
+          className={toolbarButton}
+        >
+          <ImagePlus className="size-3.5" />
+          Media Image
         </button>
       </div>
 
-      {/* 🔥 Editor */}
       <EditorContent
         editor={editor}
-        className="p-4 min-h-[200px] outline-none focus:outline-none [&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-[200px]"
+        className="min-h-[320px] p-5 outline-none focus:outline-none [&_.ProseMirror]:min-h-[320px] [&_.ProseMirror]:outline-none [&_.ProseMirror_a]:text-[var(--brand-700)] [&_.ProseMirror_a]:underline [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-semibold [&_.ProseMirror_ul]:ml-5 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ol]:ml-5 [&_.ProseMirror_ol]:list-decimal"
+      />
+
+      <MediaModal
+        open={mediaOpen}
+        onClose={() => setMediaOpen(false)}
+        onSelect={insertMediaImage}
+        previewType="image"
       />
     </div>
   );

@@ -9,6 +9,7 @@ import {
   TicketPercent,
   ShoppingBag,
   Tags,
+  Mail,
   type LucideIcon,
 } from "lucide-react";
 
@@ -64,17 +65,16 @@ export const sidebarData = {
       url: "/admin/articles",
       icon: FileText,
       requiredPermissions: ["view_article", "create_article", "update_article"],
-      items: [
-        {
-          title: "All Articles",
-          url: "/admin/articles",
-          requiredPermissions: ["view_article"],
-        },
-        {
-          title: "Create Article",
-          url: "/admin/articles/create",
-          requiredPermissions: ["create_article"],
-        },
+    },
+
+    {
+      title: "Email Templates",
+      url: "/admin/email-templates",
+      icon: Mail,
+      requiredPermissions: [
+        "view_email_template",
+        "create_email_template",
+        "update_email_template",
       ],
     },
 
