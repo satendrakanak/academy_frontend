@@ -3,7 +3,32 @@
  * These routes do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/auth/verify-email"];
+export const publicRoutes = [
+  "/",
+  "/articles",
+  "/article",
+  "/courses",
+  "/course",
+  "/client-testimonials",
+  "/our-faculty",
+  "/contact",
+  "/cart",
+  "/checkout",
+  "/auth/verify-email",
+];
+
+/**
+ * Routes that must always require a logged-in user.
+ * Everything outside admin/auth/protected routes is treated as public website.
+ */
+export const protectedRoutes = [
+  "/dashboard",
+  "/profile",
+  "/my-courses",
+  "/certificates",
+  "/settings",
+  "/learn",
+];
 
 /**
  * An array of routes that are used for authentication

@@ -7,12 +7,17 @@ import { getCourseProgress } from "@/helpers/course-progress";
 import { getCourseMeta } from "@/helpers/course-meta";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { CourseQaSection } from "@/components/course/sections/course-qa-section";
+import { CourseRatingReviews } from "@/components/course/sections/course-rating-reviews";
 
 interface CourseTabsProps {
   course: Course;
 }
 
 export const CourseTabs = ({ course }: CourseTabsProps) => {
+  const [activeTab, setActiveTab] = useState<"overview" | "qa" | "reviews">(
+    "overview",
+  );
   const [meta, setMeta] = useState({
     totalLectures: 0,
     totalDuration: "0m",
@@ -89,13 +94,52 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
   return (
     <div className="bg-white border-t">
       {/* 🔥 TAB HEADER */}
-      <div className="px-6 pt-4 border-b">
-        <span className="text-sm font-medium border-b-2 border-primary pb-2 inline-block">
+      <div className="flex gap-5 px-6 pt-4 border-b">
+        <button
+          type="button"
+          onClick={() => setActiveTab("overview")}
+          className={`pb-2 text-sm font-medium ${
+            activeTab === "overview"
+              ? "border-b-2 border-primary text-primary"
+              : "text-gray-500"
+          }`}
+        >
           Overview
-        </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("qa")}
+          className={`pb-2 text-sm font-medium ${
+            activeTab === "qa"
+              ? "border-b-2 border-primary text-primary"
+              : "text-gray-500"
+          }`}
+        >
+          Q&A
+        </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("reviews")}
+          className={`pb-2 text-sm font-medium ${
+            activeTab === "reviews"
+              ? "border-b-2 border-primary text-primary"
+              : "text-gray-500"
+          }`}
+        >
+          Reviews
+        </button>
       </div>
 
       {/* 🔥 CONTENT */}
+      {activeTab === "qa" ? (
+        <div className="px-6 py-6">
+          <CourseQaSection course={{ ...course, isEnrolled: true }} />
+        </div>
+      ) : activeTab === "reviews" ? (
+        <div className="px-6 py-6">
+          <CourseRatingReviews course={{ ...course, isEnrolled: true }} />
+        </div>
+      ) : (
       <div className="px-6 py-6 space-y-4 text-sm text-gray-700">
         <h1 className="text-2xl font-semibold ">{course.title}</h1>
 
@@ -183,6 +227,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   Tags,
   Mail,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 
@@ -76,6 +77,13 @@ export const sidebarData = {
         "create_email_template",
         "update_email_template",
       ],
+    },
+
+    {
+      title: "Moderation",
+      url: "/admin/moderation",
+      icon: ShieldCheck,
+      requiredPermissions: ["view_comment", "view_review", "view_question"],
     },
 
     {

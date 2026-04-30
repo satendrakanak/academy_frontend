@@ -8,13 +8,9 @@ import {
 
 export const articleClientService = {
   getAll: () =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<{ data: Article[] }>>("/api/articles"),
-    ),
+    apiClient.get<ApiResponse<{ data: Article[] }>>("/api/articles"),
   getById: (id: number) =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<Article>>(`/api/articles/${id}`),
-    ),
+    apiClient.get<ApiResponse<Article>>(`/api/articles/${id}`),
   create: (data: CreateArticePayload) =>
     withAuthRetry(() =>
       apiClient.post<ApiResponse<Article>>("/api/articles", data),

@@ -1,4 +1,5 @@
 import { ArticleContent } from "@/components/articles/article-content";
+import { ArticleComments } from "@/components/articles/article-comments";
 import { ArticleHero } from "@/components/articles/article-hero";
 import { ArticleMeta } from "@/components/articles/article-meta";
 import { ArticleSidebar } from "@/components/articles/article-sidebar";
@@ -102,6 +103,7 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
           <div className="mt-10 max-w-4xl flex-1">
             <ArticleContent article={article} />
             <ArticleMeta article={article} />
+            <ArticleComments articleId={article.id} />
           </div>
 
           <div className="sticky top-24 mt-10 w-full lg:w-80 self-start">

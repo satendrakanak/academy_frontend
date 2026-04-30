@@ -1,6 +1,10 @@
 import { apiClient } from "@/lib/api/client";
+import { ApiResponse } from "@/types/api";
 import {
   AuthResponse,
+  CheckoutVerificationOtpPayload,
+  CheckoutVerificationStartPayload,
+  CheckoutVerificationStartResponse,
   ForgotPasswordPayload,
   LoginPayload,
   RegisterPayload,
@@ -27,4 +31,13 @@ export const authService = {
 
   refreshToken: () =>
     apiClient.post<{ success: boolean }>("/api/auth/refresh-tokens"),
+
+  startCheckoutVerification: (data: CheckoutVerificationStartPayload) =>
+    apiClient.post<ApiResponse<CheckoutVerificationStartResponse>>(
+      "/api/auth/checkout/start-verification",
+      data,
+    ),
+
+  verifyCheckoutOtp: (data: CheckoutVerificationOtpPayload) =>
+    apiClient.post<ApiResponse<null>>("/api/auth/checkout/verify-otp", data),
 };

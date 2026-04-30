@@ -8,8 +8,6 @@ import { CouponMap } from "@/types/coupon";
 import { useEffect, useState } from "react";
 import { couponClientService } from "@/services/coupons/coupon.client";
 import Link from "next/link";
-import { getErrorMessage } from "@/lib/error-handler";
-import { toast } from "sonner";
 
 interface HeroProps {
   courses: Course[];
@@ -31,8 +29,8 @@ export default function Hero({ courses }: HeroProps) {
         });
 
         setCouponMap(res.data?.data || {});
-      } catch (error: unknown) {
-        toast.error(getErrorMessage(error));
+      } catch {
+        setCouponMap({});
       }
     };
 

@@ -7,13 +7,9 @@ import {
 } from "@/types/course";
 export const courseClientService = {
   getAll: () =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<{ data: Course[] }>>("/api/courses"),
-    ),
+    apiClient.get<ApiResponse<{ data: Course[] }>>("/api/courses"),
   getById: (id: number) =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<Course>>(`/api/courses/${id}`),
-    ),
+    apiClient.get<ApiResponse<Course>>(`/api/courses/${id}`),
   create: (data: CreateCoursePayload) =>
     withAuthRetry(() =>
       apiClient.post<ApiResponse<Course>>("/api/courses", data),

@@ -26,6 +26,15 @@ import {
 } from "lucide-react";
 import { MediaModal } from "@/components/media/media-modal";
 import { FileType } from "@/types/file";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const EmailLink = Mark.create({
   name: "emailLink",
@@ -80,6 +89,11 @@ interface Props {
 
 export default function RichEditor({ value, onChange }: Props) {
   const [mediaOpen, setMediaOpen] = useState(false);
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
+  const [linkHref, setLinkHref] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [imageAlt, setImageAlt] = useState("");
   const editor = useEditor({
     extensions: [
       Document,
@@ -109,32 +123,34 @@ export default function RichEditor({ value, onChange }: Props) {
 
   if (!editor) return null;
 
-  const setLink = () => {
-    const href = window.prompt("Paste link URL");
-    if (!href) return;
+  const insertLink = () => {
+    if (!linkHref.trim()) return;
 
     editor
       .chain()
       .focus()
       .setMark("emailLink", {
-        href,
+        href: linkHref.trim(),
       })
       .run();
+    setLinkHref("");
+    setLinkOpen(false);
   };
 
-  const setImage = () => {
-    const src = window.prompt("Paste image URL");
-    if (!src) return;
+  const insertImageUrl = () => {
+    if (!imageUrl.trim()) return;
 
-    const alt = window.prompt("Image alt text") || "";
     editor
       .chain()
       .focus()
       .insertContent({
         type: "emailImage",
-        attrs: { src, alt },
+        attrs: { src: imageUrl.trim(), alt: imageAlt.trim() },
       })
       .run();
+    setImageUrl("");
+    setImageAlt("");
+    setImageOpen(false);
   };
 
   const insertMediaImage = (file: FileType, alt: string) => {
@@ -222,7 +238,11 @@ export default function RichEditor({ value, onChange }: Props) {
           <ListOrdered className="size-3.5" />
           Numbers
         </button>
-        <button type="button" onClick={setLink} className={toolbarButton}>
+        <button
+          type="button"
+          onClick={() => setLinkOpen(true)}
+          className={toolbarButton}
+        >
           <LinkIcon className="size-3.5" />
           Link
         </button>
@@ -234,7 +254,11 @@ export default function RichEditor({ value, onChange }: Props) {
           <Unlink className="size-3.5" />
           Unlink
         </button>
-        <button type="button" onClick={setImage} className={toolbarButton}>
+        <button
+          type="button"
+          onClick={() => setImageOpen(true)}
+          className={toolbarButton}
+        >
           <ImagePlus className="size-3.5" />
           Image URL
         </button>
@@ -259,6 +283,51 @@ export default function RichEditor({ value, onChange }: Props) {
         onSelect={insertMediaImage}
         previewType="image"
       />
+
+      <Dialog open={linkOpen} onOpenChange={setLinkOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert link</DialogTitle>
+          </DialogHeader>
+          <Input
+            value={linkHref}
+            onChange={(event) => setLinkHref(event.target.value)}
+            placeholder="https://example.com"
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setLinkOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={insertLink}>Insert link</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={imageOpen} onOpenChange={setImageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert image URL</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Input
+              value={imageUrl}
+              onChange={(event) => setImageUrl(event.target.value)}
+              placeholder="https://example.com/image.jpg"
+            />
+            <Input
+              value={imageAlt}
+              onChange={(event) => setImageAlt(event.target.value)}
+              placeholder="Image alt text"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImageOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={insertImageUrl}>Insert image</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

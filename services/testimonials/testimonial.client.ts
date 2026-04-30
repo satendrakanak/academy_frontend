@@ -54,17 +54,13 @@ export const testimonialClientService = {
   getPublic: (query: PublicTestimonialsQuery = {}) => {
     const queryString = buildQueryString(query);
 
-    return withAuthRetry(() =>
-      apiClient.get<ApiResponse<Paginated<Testimonial>>>(
-        `/api/testimonials/public${queryString ? `?${queryString}` : ""}`,
-      ),
+    return apiClient.get<ApiResponse<Paginated<Testimonial>>>(
+      `/api/testimonials/public${queryString ? `?${queryString}` : ""}`,
     );
   },
 
   getFeatured: (limit = 6) =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<Testimonial[]>>(
-        `/api/testimonials/featured?limit=${limit}`,
-      ),
+    apiClient.get<ApiResponse<Testimonial[]>>(
+      `/api/testimonials/featured?limit=${limit}`,
     ),
 };

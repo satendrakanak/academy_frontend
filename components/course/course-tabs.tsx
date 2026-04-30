@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { WhatYouWillLearn } from "./sections/what-you-will-learn";
 import { CourseContent } from "./sections/course-content";
 import { CourseInstructor } from "./sections/course-instructor";
@@ -9,13 +9,15 @@ import { CourseRequirements } from "./sections/course-requirements";
 import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
 import { CourseReviews } from "./sections/course-reviews";
+import { CourseRatingReviews } from "./sections/course-rating-reviews";
 
-const tabs = [
+const baseTabs = [
   { id: "overview", label: "Overview" },
   { id: "content", label: "Course Content" },
   { id: "details", label: "Details" },
   { id: "requirements", label: "Requirements" },
   { id: "instructor", label: "Instructor" },
+  { id: "reviews", label: "Reviews" },
   { id: "testimonials", label: "Testimonials" },
 ];
 
@@ -28,6 +30,7 @@ export const CourseTabs = ({
 }) => {
   const [active, setActive] = useState("overview");
   const [isSticky, setIsSticky] = useState(false);
+  const tabs = useMemo(() => baseTabs, []);
 
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -83,7 +86,7 @@ export const CourseTabs = ({
 
     window.addEventListener("scroll", handleScrollActive);
     return () => window.removeEventListener("scroll", handleScrollActive);
-  }, []);
+  }, [tabs]);
 
   return (
     <div>
@@ -137,6 +140,10 @@ export const CourseTabs = ({
 
       <div id="instructor" className="mb-8 scroll-mt-32">
         <CourseInstructor course={course} />
+      </div>
+
+      <div id="reviews" className="mb-8 scroll-mt-32">
+        <CourseRatingReviews course={course} />
       </div>
 
       <div id="testimonials" className="mb-8 scroll-mt-32">
