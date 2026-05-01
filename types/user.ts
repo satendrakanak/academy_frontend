@@ -1,5 +1,4 @@
 import type { Course } from "./course";
-import type { ExamHistoryRecord } from "./exam";
 import { FileType } from "./file";
 
 export type Permission = {
@@ -163,14 +162,13 @@ export type PublicProfileBundle = {
   weeklyProgress: WeeklyProgress[];
   courses: Course[];
   certificates: PublicCertificateSummary[];
-  examHistory: Array<
-    Pick<
-      ExamHistoryRecord,
-      | "course"
-      | "attemptsCount"
-      | "bestScore"
-      | "latestPercentage"
-      | "passed"
-    >
-  >;
+  examHistory: Array<{
+    courseId: number;
+    courseTitle: string;
+    courseSlug: string;
+    attempts: number;
+    bestPercentage: number;
+    latestPercentage: number;
+    passed: boolean;
+  }>;
 };

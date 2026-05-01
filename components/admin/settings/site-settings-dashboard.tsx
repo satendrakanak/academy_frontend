@@ -263,10 +263,11 @@ export function SiteSettingsDashboard({
   const saveEmailSettings = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     startTransition(async () => {
-      console.log("emailForm", emailForm);
       try {
+        const payload = { ...emailForm };
+        delete payload.hasPassword;
         const response =
-          await settingsClientService.upsertEmailSettings(emailForm);
+          await settingsClientService.upsertEmailSettings(payload);
         setEmailForm({
           ...response.data,
           smtpPassword: "",

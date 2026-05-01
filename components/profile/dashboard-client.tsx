@@ -34,14 +34,9 @@ export default function DashboardClient({
     <>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard
-          title="Active Courses"
-          value={stats.courses}
-          description="Programs currently available in your learner area."
-        />
-        <StatCard
-          title="Completed"
-          value={stats.completed}
-          description="Courses you have fully finished so far."
+          title="Courses Completed"
+          value={`${stats.completed}/${stats.courses}`}
+          description="Completed courses out of your total active enrollments."
         />
         <StatCard
           title="Average Progress"

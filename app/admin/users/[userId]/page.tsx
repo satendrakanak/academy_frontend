@@ -7,6 +7,9 @@ import { UserProfileForm } from "@/components/admin/users/user-profile-form";
 import { UserProfileSettingsForm } from "@/components/admin/users/user-profile-settings-form";
 import { UserRightSidebar } from "@/components/admin/users/user-right-sidebar";
 import { FacultyProfileForm } from "@/components/admin/users/faculty-profile-form";
+import { UserExamAccessForm } from "@/components/admin/users/user-exam-access-form";
+import { courseExamsServerService } from "@/services/course-exams/course-exams.server";
+import { UserExamAccessOverview } from "@/types/exam";
 
 export default async function UserIdPage({
   params,
@@ -16,10 +19,15 @@ export default async function UserIdPage({
   const { userId } = await params;
 
   let user: User;
+  let examAccessItems: UserExamAccessOverview[] = [];
 
   try {
-    const response = await userServerService.getById(userId);
+    const [response, examAccessResponse] = await Promise.all([
+      userServerService.getById(userId),
+      courseExamsServerService.getUserAccessOverview(userId),
+    ]);
     user = response.data;
+    examAccessItems = examAccessResponse.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error);
     throw new Error(message);
@@ -37,6 +45,7 @@ export default async function UserIdPage({
 
           <UserProfileSettingsForm user={user} />
           {isFaculty && <FacultyProfileForm user={user} />}
+          <UserExamAccessForm userId={user.id} items={examAccessItems} />
         </div>
 
         <div className="col-span-1">

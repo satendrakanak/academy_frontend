@@ -9,6 +9,7 @@ import {
   BookOpen,
   Award,
   ReceiptText,
+  ClipboardCheck,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -142,6 +143,16 @@ export const WebsiteNavUser = () => {
             >
               <BookOpen className="w-4 h-4" />
               My Courses
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href="/exams"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              Exams
             </Link>
           </DropdownMenuItem>
 

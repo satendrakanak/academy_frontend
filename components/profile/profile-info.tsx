@@ -25,21 +25,21 @@ export function ProfileInfo({ name, email, stats }: ProfileInfoProps) {
 
       {stats && (
         <div className="flex flex-wrap gap-3">
-          <div className="min-w-[112px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+          <div className="min-w-[132px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
             <p className="text-lg font-semibold text-slate-950">
-              {stats.courses || 0}
+              {stats.completed || 0}/{stats.courses || 0}
             </p>
             <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
-              Courses
+              Courses Completed
             </p>
           </div>
 
           <div className="min-w-[112px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
             <p className="text-lg font-semibold text-slate-950">
-              {stats.completed || 0}
+              {stats.examsTaken || 0}
             </p>
             <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
-              Completed
+              Exam Attempts
             </p>
           </div>
 
@@ -49,6 +49,15 @@ export function ProfileInfo({ name, email, stats }: ProfileInfoProps) {
             </p>
             <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[var(--brand-700)]">
               Progress
+            </p>
+          </div>
+
+          <div className="min-w-[112px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <p className="text-lg font-semibold text-slate-950">
+              {stats.certificatesEarned || 0}
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
+              Certificates
             </p>
           </div>
         </div>
