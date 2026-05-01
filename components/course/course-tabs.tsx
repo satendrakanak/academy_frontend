@@ -10,15 +10,17 @@ import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
 import { CourseReviews } from "./sections/course-reviews";
 import { CourseRatingReviews } from "./sections/course-rating-reviews";
+import { CourseFaqs } from "./sections/course-faqs";
 
 const baseTabs = [
   { id: "overview", label: "Overview" },
-  { id: "content", label: "Course Content" },
+  { id: "content", label: "Content" },
   { id: "details", label: "Details" },
   { id: "requirements", label: "Requirements" },
   { id: "instructor", label: "Instructor" },
   { id: "reviews", label: "Reviews" },
   { id: "testimonials", label: "Testimonials" },
+  { id: "faqs", label: "FAQs" },
 ];
 
 export const CourseTabs = ({
@@ -102,12 +104,12 @@ export const CourseTabs = ({
             : "bg-white shadow-none"
         }`}
       >
-        <div className="flex gap-3 overflow-x-auto px-2">
+        <div className="flex gap-2 overflow-x-auto px-1 md:px-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleScroll(tab.id)}
-              className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium transition cursor-pointer ${
+              className={`px-3 py-2 whitespace-nowrap rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition cursor-pointer md:px-4 ${
                 active === tab.id
                   ? "bg-primary text-white"
                   : isSticky
@@ -148,6 +150,10 @@ export const CourseTabs = ({
 
       <div id="testimonials" className="mb-8 scroll-mt-32">
         <CourseReviews testimonials={testimonials} />
+      </div>
+
+      <div id="faqs" className="mb-8 scroll-mt-32">
+        <CourseFaqs faqs={course.faqs} />
       </div>
     </div>
   );

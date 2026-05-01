@@ -4,12 +4,11 @@ import { BasicInfoForm } from "@/components/admin/courses/basic-info-form";
 import { CourseDetailsForm } from "@/components/admin/courses/course-details-form";
 import { RequirementsForm } from "@/components/admin/courses/requirements-form";
 import { MetaForm } from "@/components/admin/courses/meta-form";
+import { CourseFaqsForm } from "@/components/admin/courses/course-faqs-form";
 import { courseServerService } from "@/services/courses/course.server";
 import ChaptersForm from "@/components/admin/courses/chapters-form";
 import { Course } from "@/types/course";
 import { CourseDescription } from "@/components/admin/courses/course-description-form";
-import { User } from "@/types/user";
-import { userServerService } from "@/services/users/user.server";
 import { getErrorMessage } from "@/lib/error-handler";
 
 export default async function CourseIdPage({
@@ -20,8 +19,6 @@ export default async function CourseIdPage({
   const { courseId } = await params;
 
   let course: Course;
-
-  let user: User;
 
   try {
     const response = await courseServerService.getById(courseId);
@@ -40,6 +37,7 @@ export default async function CourseIdPage({
           <BasicInfoForm course={course} />
           <CourseDescription course={course} />
           <CourseDetailsForm course={course} />
+          <CourseFaqsForm course={course} />
           <ChaptersForm course={course} />
 
           <RequirementsForm course={course} />

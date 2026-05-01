@@ -76,6 +76,23 @@ export const courseDetailsSchema = z
     },
   );
 
+export const courseFaqsSchema = z.object({
+  faqs: z
+    .array(
+      z.object({
+        question: z
+          .string()
+          .trim()
+          .min(3, "Question must be at least 3 characters"),
+        answer: z
+          .string()
+          .trim()
+          .min(3, "Answer must be at least 3 characters"),
+      }),
+    )
+    .default([]),
+});
+
 export const metaSchema = z.object({
   metaTitle: z.string().max(60).optional(),
   metaDescription: z.string().max(160).optional(),

@@ -5,6 +5,11 @@ import { Tag } from "./tag";
 import type { Testimonial } from "./testimonial";
 import { User } from "./user";
 
+export type CourseFaqItem = {
+  question: string;
+  answer: string;
+};
+
 export type CreateCoursePayload = {
   title: string;
   slug?: string;
@@ -38,6 +43,7 @@ export type CreateCoursePayload = {
   eligibilityRequirements?: string;
 
   disclaimer?: string;
+  faqs?: CourseFaqItem[];
 
   metaTitle?: string;
   metaSlug?: string;
@@ -76,6 +82,7 @@ export type Course = {
   technologyRequirements: string | null;
   eligibilityRequirements: string | null;
   disclaimer: string | null;
+  faqs?: CourseFaqItem[];
   metaTitle: string | null;
   metaSlug: string | null;
   metaDescription: string | null;
