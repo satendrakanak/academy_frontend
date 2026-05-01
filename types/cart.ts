@@ -9,3 +9,10 @@ export type CartItem = {
   totalLectures?: number;
   discountPrice?: number;
 };
+
+export type CartSyncItem = {
+  courseId: number;
+  instructor?: string | null;
+  totalDuration?: string | null;
+  totalLectures?: number | null;
+};

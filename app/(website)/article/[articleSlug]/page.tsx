@@ -1,19 +1,46 @@
 import { ArticleContent } from "@/components/articles/article-content";
+import { ArticleComments } from "@/components/articles/article-comments";
 import { ArticleHero } from "@/components/articles/article-hero";
 import { ArticleMeta } from "@/components/articles/article-meta";
 import { ArticleSidebar } from "@/components/articles/article-sidebar";
 import { RelatedArticles } from "@/components/articles/related-articles";
 import Container from "@/components/container";
 import { getErrorMessage } from "@/lib/error-handler";
+import { buildMetadata } from "@/lib/seo";
 import { articleServerService } from "@/services/articles/article.server";
 import { Article } from "@/types/article";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-export default async function ArticleSlugPage({
-  params,
-}: {
+type ArticlePageProps = {
   params: Promise<{ articleSlug: string }>;
-}) {
+};
+
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
+  const { articleSlug } = await params;
+
+  try {
+    const response = await articleServerService.getBySlug(articleSlug);
+    const article = response.data;
+
+    return buildMetadata({
+      title: article.metaTitle || article.title,
+      description: article.metaDescription || article.excerpt,
+      path: `/article/${article.slug}`,
+      image: article.featuredImage?.path,
+    });
+  } catch {
+    return buildMetadata({
+      title: "Article not found",
+      description: "This article is not currently available.",
+      path: `/article/${articleSlug}`,
+    });
+  }
+}
+
+export default async function ArticleSlugPage({ params }: ArticlePageProps) {
   const { articleSlug } = await params;
 
   if (!articleSlug) {
@@ -26,8 +53,11 @@ export default async function ArticleSlugPage({
     const response = await articleServerService.getBySlug(articleSlug);
     article = response.data;
   } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+    const message = getErrorMessage(error).toLowerCase();
+    if (message.includes("not found") || message.includes("404")) {
+      notFound();
+    }
+    throw new Error(getErrorMessage(error));
   }
 
   let relatedArticles: Article[] = [];
@@ -73,6 +103,7 @@ export default async function ArticleSlugPage({
           <div className="mt-10 max-w-4xl flex-1">
             <ArticleContent article={article} />
             <ArticleMeta article={article} />
+            <ArticleComments articleId={article.id} />
           </div>
 
           <div className="sticky top-24 mt-10 w-full lg:w-80 self-start">

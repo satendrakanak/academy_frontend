@@ -4,8 +4,8 @@ import { Article } from "@/types/article";
 
 export function ArticleMeta({ article }: { article: Article }) {
   return (
-    <div className="mb-8 flex flex-wrap items-center gap-3 rounded-[22px] border border-[var(--brand-100)] bg-white p-4 text-sm text-gray-500 shadow-sm">
-      <span className="rounded-full bg-[var(--brand-50)] px-3 py-1 font-medium text-[var(--brand-700)]">
+    <div className="my-8 flex flex-wrap items-center gap-3 rounded-[22px] border border-(--brand-100) bg-white p-4 text-sm text-gray-500 shadow-sm">
+      <span className="rounded-full bg-(--brand-50) px-3 py-1 font-medium text-(--brand-700)">
         By {article.author?.firstName || "Admin"}
       </span>
       {article.publishedAt && (

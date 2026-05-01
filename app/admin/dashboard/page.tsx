@@ -20,6 +20,9 @@ function buildDashboardData(
   coupons: Coupon[],
 ): AdminDashboardData {
   const paidOrders = orders.filter((order) => order.status === OrderStatus.PAID);
+  const enrolledUsers = new Set(
+    paidOrders.map((order) => order.user?.id).filter(Boolean),
+  ).size;
   const totalRevenue = paidOrders.reduce(
     (sum, order) => sum + Number(order.totalAmount || 0),
     0,
@@ -100,6 +103,7 @@ function buildDashboardData(
       totalRevenue,
       paidOrders: paidOrders.length,
       totalUsers: users.length,
+      enrolledUsers,
       totalCourses: courses.length,
       publishedCourses: courses.filter((course) => course.isPublished).length,
       totalCoupons: coupons.length,

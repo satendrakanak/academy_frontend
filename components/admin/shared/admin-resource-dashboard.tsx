@@ -95,14 +95,16 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original);
+  const selectedRows = table
+    .getSelectedRowModel()
+    .rows.map((row) => row.original);
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
+      <section className="rounded-[28px] border border-(--brand-100) bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-(--brand-200) bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-(--brand-700)">
               {eyebrow}
             </span>
             <div>
@@ -136,8 +138,10 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
               className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm"
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-                <stat.icon className="size-5 text-[var(--brand-600)]" />
+                <p className="text-sm font-medium text-slate-500">
+                  {stat.label}
+                </p>
+                <stat.icon className="size-5 text-(--brand-600)" />
               </div>
               <p className="mt-3 text-3xl font-semibold text-slate-950">
                 {stat.value}
@@ -193,7 +197,9 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
             </>
           ) : (
             <div className="px-6 py-16 text-center">
-              <p className="text-base font-semibold text-slate-950">{emptyTitle}</p>
+              <p className="text-base font-semibold text-slate-950">
+                {emptyTitle}
+              </p>
               <p className="mt-1 text-sm text-slate-500">{emptyDescription}</p>
             </div>
           )}

@@ -6,6 +6,12 @@ export type RegisterPayload = {
   password: string;
 };
 
+export type RegisterStartResponse = {
+  email: string;
+  maskedEmail: string;
+  isExistingUser: boolean;
+};
+
 export type LoginPayload = {
   email: string;
   password: string;
@@ -24,4 +30,22 @@ export type ResetPasswordPayload = {
 export type AuthResponse = {
   accessToken: string;
   refreshToken: string;
+};
+
+export type CheckoutVerificationStartPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+};
+
+export type CheckoutVerificationStartResponse = {
+  email: string;
+  maskedEmail: string;
+  isExistingUser: boolean;
+};
+
+export type CheckoutVerificationOtpPayload = {
+  email: string;
+  code: string;
 };

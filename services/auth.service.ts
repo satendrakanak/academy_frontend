@@ -1,15 +1,20 @@
 import { apiClient } from "@/lib/api/client";
+import { ApiResponse } from "@/types/api";
 import {
   AuthResponse,
+  CheckoutVerificationOtpPayload,
+  CheckoutVerificationStartPayload,
+  CheckoutVerificationStartResponse,
   ForgotPasswordPayload,
   LoginPayload,
   RegisterPayload,
+  RegisterStartResponse,
   ResetPasswordPayload,
 } from "@/types/auth";
 
 export const authService = {
   register: (data: RegisterPayload) =>
-    apiClient.post<{ message: string }>("/api/auth/sign-up", data),
+    apiClient.post<ApiResponse<RegisterStartResponse>>("/api/auth/sign-up", data),
 
   login: (data: LoginPayload) =>
     apiClient.post<AuthResponse>("/api/auth/sign-in", data),
@@ -27,4 +32,16 @@ export const authService = {
 
   refreshToken: () =>
     apiClient.post<{ success: boolean }>("/api/auth/refresh-tokens"),
+
+  startCheckoutVerification: (data: CheckoutVerificationStartPayload) =>
+    apiClient.post<ApiResponse<CheckoutVerificationStartResponse>>(
+      "/api/auth/checkout/start-verification",
+      data,
+    ),
+
+  verifyCheckoutOtp: (data: CheckoutVerificationOtpPayload) =>
+    apiClient.post<ApiResponse<null>>("/api/auth/checkout/verify-otp", data),
+
+  verifySignupOtp: (data: CheckoutVerificationOtpPayload) =>
+    apiClient.post<ApiResponse<null>>("/api/auth/sign-up/verify-otp", data),
 };

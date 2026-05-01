@@ -60,7 +60,7 @@ export const LearnClient = ({ course }: LearnClientProps) => {
             ? {
                 ...l,
                 progress: {
-                  isCompleted: alreadyCompleted || progress >= 90, // 🔥 FIX
+                  isCompleted: alreadyCompleted || progress >= 90,
                   progress,
                   lastTime,
                 },

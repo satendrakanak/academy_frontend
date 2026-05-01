@@ -3,8 +3,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { couponClientService } from "@/services/coupons/coupon.client";
 
+let latestPricingRun = 0;
+
 type CartState = {
   cartItems: CartItem[];
+  hasHydrated: boolean;
 
   autoCoupon: string | null;
   manualCoupon: string | null;
@@ -17,6 +20,8 @@ type CartState = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
+  replaceCartItems: (items: CartItem[]) => void;
+  setHasHydrated: (value: boolean) => void;
 
   isInCart: (id: number) => boolean;
   totalPrice: () => number;
@@ -26,12 +31,14 @@ type CartState = {
   removeCoupon: () => Promise<void>;
 
   recalculateTotal: () => void;
+  refreshPricing: () => Promise<void>;
 };
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       cartItems: [],
+      hasHydrated: false,
 
       autoCoupon: null,
       manualCoupon: null,
@@ -40,6 +47,11 @@ export const useCartStore = create<CartState>()(
       manualDiscount: 0,
 
       finalAmount: 0,
+
+      setHasHydrated: (value) =>
+        set({
+          hasHydrated: value,
+        }),
 
       // =========================
       // 🛒 CART
@@ -53,7 +65,7 @@ export const useCartStore = create<CartState>()(
           cartItems: [...get().cartItems, item],
         });
 
-        get().applyAutoCoupon();
+        void get().refreshPricing();
       },
 
       removeFromCart: (id) => {
@@ -61,7 +73,7 @@ export const useCartStore = create<CartState>()(
           cartItems: get().cartItems.filter((i) => i.id !== id),
         });
 
-        get().applyAutoCoupon();
+        void get().refreshPricing();
       },
 
       clearCart: () =>
@@ -73,6 +85,14 @@ export const useCartStore = create<CartState>()(
           manualDiscount: 0,
           finalAmount: 0,
         }),
+
+      replaceCartItems: (items) => {
+        set({
+          cartItems: items,
+        });
+
+        void get().refreshPricing();
+      },
 
       isInCart: (id) => {
         return get().cartItems.some((i) => i.id === id);
@@ -87,52 +107,7 @@ export const useCartStore = create<CartState>()(
       // =========================
 
       applyAutoCoupon: async () => {
-        const { cartItems } = get();
-
-        if (!cartItems.length) {
-          set({
-            autoCoupon: null,
-            autoDiscount: 0,
-            finalAmount: 0,
-          });
-          return;
-        }
-
-        const cartTotal = cartItems.reduce((t, i) => t + i.price, 0);
-        const courseIds = cartItems.map((i) => i.id);
-
-        try {
-          const res = await couponClientService.autoApplyCoupon({
-            cartTotal,
-            courseIds,
-          });
-
-          const data = res.data;
-
-          if (!data) {
-            set({
-              autoCoupon: null,
-              autoDiscount: 0,
-            });
-          } else {
-            set({
-              autoCoupon: data.code,
-              autoDiscount: data.discount,
-            });
-          }
-
-          // 🔥 ALWAYS recalc
-          get().recalculateTotal();
-        } catch (e) {
-          console.log("Auto coupon failed", e);
-
-          set({
-            autoCoupon: null,
-            autoDiscount: 0,
-          });
-
-          get().recalculateTotal();
-        }
+        await get().refreshPricing();
       },
 
       // =========================
@@ -140,38 +115,33 @@ export const useCartStore = create<CartState>()(
       // =========================
 
       applyManualCoupon: async (code: string) => {
+        const normalizedCode = code.trim().toUpperCase();
         const { cartItems, autoDiscount } = get();
 
         if (!cartItems.length) return;
 
         const cartTotal = cartItems.reduce((t, i) => t + i.price, 0);
         const courseIds = cartItems.map((i) => i.id);
+        const base = Math.max(cartTotal - autoDiscount, 0);
 
-        // 🔥 IMPORTANT: apply after auto
-        const base = cartTotal - autoDiscount;
+        const res = await couponClientService.applyCoupon({
+          code: normalizedCode,
+          cartTotal: base,
+          courseIds,
+        });
 
-        try {
-          const res = await couponClientService.applyCoupon({
-            code,
-            cartTotal: base,
-            courseIds,
-          });
+        const data = res.data;
 
-          const data = res.data;
-
-          if (!data) throw new Error("Invalid coupon");
-
-          set({
-            manualCoupon: data.code,
-            manualDiscount: data.discount,
-          });
-
-          // 🔥 ALWAYS recalc
-          get().recalculateTotal();
-        } catch (e) {
-          console.log("Manual coupon failed", e);
-          throw e;
+        if (!data) {
+          throw new Error("Invalid coupon");
         }
+
+        set({
+          manualCoupon: data.code,
+          manualDiscount: data.discount,
+        });
+
+        get().recalculateTotal();
       },
 
       // =========================
@@ -184,7 +154,7 @@ export const useCartStore = create<CartState>()(
           manualDiscount: 0,
         });
 
-        get().recalculateTotal();
+        await get().refreshPricing();
       },
 
       // =========================
@@ -204,9 +174,91 @@ export const useCartStore = create<CartState>()(
           finalAmount,
         });
       },
+
+      refreshPricing: async () => {
+        const currentRun = ++latestPricingRun;
+        const { cartItems, manualCoupon } = get();
+
+        if (!cartItems.length) {
+          if (currentRun === latestPricingRun) {
+            set({
+              autoCoupon: null,
+              manualCoupon: null,
+              autoDiscount: 0,
+              manualDiscount: 0,
+              finalAmount: 0,
+            });
+          }
+          return;
+        }
+
+        const cartTotal = cartItems.reduce((t, i) => t + i.price, 0);
+        const courseIds = cartItems.map((i) => i.id);
+
+        let autoCoupon: string | null = null;
+        let autoDiscount = 0;
+
+        try {
+          const res = await couponClientService.autoApplyCoupon({
+            cartTotal,
+            courseIds,
+          });
+
+          const data = res.data;
+          if (data) {
+            autoCoupon = data.code;
+            autoDiscount = data.discount;
+          }
+        } catch (e) {
+          console.log("Auto coupon failed", e);
+        }
+
+        let normalizedManualCoupon = manualCoupon?.trim().toUpperCase() || null;
+        let manualDiscount = 0;
+
+        if (normalizedManualCoupon) {
+          try {
+            const res = await couponClientService.applyCoupon({
+              code: normalizedManualCoupon,
+              cartTotal: Math.max(cartTotal - autoDiscount, 0),
+              courseIds,
+            });
+
+            const data = res.data;
+
+            if (data) {
+              normalizedManualCoupon = data.code;
+              manualDiscount = data.discount;
+            } else {
+              normalizedManualCoupon = null;
+            }
+          } catch (e) {
+            console.log("Manual coupon refresh failed", e);
+            normalizedManualCoupon = null;
+            manualDiscount = 0;
+          }
+        }
+
+        if (currentRun !== latestPricingRun) {
+          return;
+        }
+
+        set({
+          autoCoupon,
+          autoDiscount,
+          manualCoupon: normalizedManualCoupon,
+          manualDiscount,
+        });
+
+        get().recalculateTotal();
+      },
     }),
     {
       name: "cart-storage",
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+        void state?.refreshPricing();
+      },
     },
   ),
 );

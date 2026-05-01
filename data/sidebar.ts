@@ -9,6 +9,9 @@ import {
   TicketPercent,
   ShoppingBag,
   Tags,
+  Mail,
+  ShieldCheck,
+  MessageCircleHeart,
   type LucideIcon,
 } from "lucide-react";
 
@@ -64,18 +67,24 @@ export const sidebarData = {
       url: "/admin/articles",
       icon: FileText,
       requiredPermissions: ["view_article", "create_article", "update_article"],
-      items: [
-        {
-          title: "All Articles",
-          url: "/admin/articles",
-          requiredPermissions: ["view_article"],
-        },
-        {
-          title: "Create Article",
-          url: "/admin/articles/create",
-          requiredPermissions: ["create_article"],
-        },
+    },
+
+    {
+      title: "Email Templates",
+      url: "/admin/email-templates",
+      icon: Mail,
+      requiredPermissions: [
+        "view_email_template",
+        "create_email_template",
+        "update_email_template",
       ],
+    },
+
+    {
+      title: "Moderation",
+      url: "/admin/moderation",
+      icon: ShieldCheck,
+      requiredPermissions: ["view_comment", "view_review", "view_question"],
     },
 
     {
@@ -111,10 +120,29 @@ export const sidebarData = {
     },
 
     {
+      title: "Contact Leads",
+      url: "/admin/contact-leads",
+      icon: MessageCircleHeart,
+      requiredPermissions: ["view_contact_lead"],
+    },
+
+    {
       title: "Settings",
-      url: "/admin/settings/access-control",
+      url: "/admin/settings/site",
       icon: Settings,
       requiredPermissions: ["view_settings", "view_permission", "view_role"],
+      items: [
+        {
+          title: "Site Settings",
+          url: "/admin/settings/site",
+          requiredPermissions: ["view_settings"],
+        },
+        {
+          title: "Roles & Permissions",
+          url: "/admin/settings/access-control",
+          requiredPermissions: ["view_permission", "view_role"],
+        },
+      ],
     },
   ],
 };

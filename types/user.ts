@@ -1,3 +1,4 @@
+import type { Course } from "./course";
 import { FileType } from "./file";
 
 export type Permission = {
@@ -57,6 +58,7 @@ export type User = {
 
   profile: UserProfile;
   facultyProfile: FacultyProfile;
+  taughtCourses?: Course[];
 
   createdAt: string;
   updatedAt: string;

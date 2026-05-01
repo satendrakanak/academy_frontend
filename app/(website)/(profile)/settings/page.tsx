@@ -1,4 +1,3 @@
-import ProfileView from "@/components/profile/profile-view";
 import SettingsView from "@/components/profile/settings/settings-view";
 import { getSession } from "@/lib/auth";
 import { userServerService } from "@/services/users/user.server";

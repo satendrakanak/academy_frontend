@@ -1,16 +1,22 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
+  ExternalLink,
+  LayoutDashboard,
   Loader,
   LogOut,
-  Sparkles,
+  Settings,
+  ShieldCheck,
+  UserRound,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,20 +34,33 @@ import {
 } from "@/components/ui/sidebar";
 import { useSession } from "@/context/session-context";
 import { apiClient } from "@/lib/api/client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import { getErrorMessage } from "@/lib/error-handler";
-import { toast } from "sonner";
+import { getUserAvatarUrl, getUserDisplayName } from "@/lib/user-avatar";
 
-export function NavUser() {
+type NavUserProps = {
+  variant?: "sidebar" | "navbar";
+};
+
+const menuItems = [
+  { href: "/admin", label: "Admin dashboard", icon: LayoutDashboard },
+  { href: "/admin/users", label: "Manage users", icon: UserRound },
+  { href: "/admin/settings/access-control", label: "Roles & permissions", icon: ShieldCheck },
+  { href: "/admin/settings/site", label: "Site settings", icon: Settings },
+  { href: "/", label: "View website", icon: ExternalLink },
+];
+
+export function NavUser({ variant = "sidebar" }: NavUserProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { user } = useSession();
   const { isMobile } = useSidebar();
+
   if (!user) return null;
-  // 🔥 initials fallback
-  const initials =
-    `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+
+  const displayName = getUserDisplayName(user);
+  const avatarUrl = getUserAvatarUrl(user);
+  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -49,97 +68,113 @@ export function NavUser() {
       router.refresh();
       router.push("/auth/sign-in");
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      toast.error(message);
+      toast.error(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
   };
 
+  const trigger =
+    variant === "navbar" ? (
+      <Button
+        variant="ghost"
+        className="h-10 gap-2 rounded-full border border-slate-200 bg-white px-2 pr-3 shadow-sm hover:bg-slate-50"
+      >
+        <UserAvatar avatarUrl={avatarUrl} initials={initials} name={displayName} />
+        <span className="hidden max-w-32 truncate text-sm font-semibold text-slate-800 sm:block">
+          {displayName}
+        </span>
+        <ChevronsUpDown className="size-4 text-slate-400" />
+      </Button>
+    ) : (
+      <SidebarMenuButton
+        size="lg"
+        className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+      >
+        <UserAvatar avatarUrl={avatarUrl} initials={initials} name={displayName} />
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-medium">{displayName}</span>
+          <span className="truncate text-xs">{user.email}</span>
+        </div>
+        <ChevronsUpDown className="ml-auto size-4" />
+      </SidebarMenuButton>
+    );
+
+  const dropdown = (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="min-w-64 rounded-2xl border-slate-200 p-2 shadow-xl"
+        side={variant === "navbar" || isMobile ? "bottom" : "right"}
+        align="end"
+        sideOffset={8}
+      >
+        <DropdownMenuLabel className="p-0 font-normal">
+          <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-3 text-left">
+            <UserAvatar avatarUrl={avatarUrl} initials={initials} name={displayName} />
+            <div className="min-w-0 flex-1 text-sm leading-tight">
+              <span className="block truncate font-semibold text-slate-900">
+                {displayName}
+              </span>
+              <span className="block truncate text-xs text-slate-500">
+                {user.email}
+              </span>
+            </div>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <DropdownMenuItem key={item.href} asChild>
+                <Link href={item.href} className="cursor-pointer gap-2 rounded-lg">
+                  <Icon className="size-4" />
+                  {item.label}
+                </Link>
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={handleLogout}
+          disabled={loading}
+          className="cursor-pointer gap-2 rounded-lg text-red-600 focus:text-red-600"
+        >
+          {loading ? <Loader className="size-4 animate-spin" /> : <LogOut className="size-4" />}
+          {loading ? "Signing out..." : "Sign out"}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  if (variant === "navbar") {
+    return dropdown;
+  }
+
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                {user.avatar ? (
-                  <AvatarImage src={user.avatar.path} alt={user.firstName} />
-                ) : null}
-                <AvatarFallback className="rounded-lg">
-                  {initials || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {user.firstName} {user.lastName}
-                </span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  {user.avatar ? (
-                    <AvatarImage src={user.avatar.path} alt={user.firstName} />
-                  ) : null}
-                  <AvatarFallback className="rounded-lg">
-                    {initials || "U"}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">
-                    {user.firstName} {user.lastName}
-                  </span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
-              {loading ? (
-                <Loader className="animate-spin mr-2 h-4 w-4" />
-              ) : (
-                <LogOut />
-              )}
-              {loading ? "signing out..." : "Sign out"}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
+      <SidebarMenuItem>{dropdown}</SidebarMenuItem>
     </SidebarMenu>
+  );
+}
+
+function UserAvatar({
+  avatarUrl,
+  initials,
+  name,
+}: {
+  avatarUrl?: string;
+  initials: string;
+  name: string;
+}) {
+  return (
+    <Avatar className="h-8 w-8 rounded-xl ring-2 ring-white">
+      {avatarUrl ? <AvatarImage src={avatarUrl} alt={name} /> : null}
+      <AvatarFallback className="rounded-xl bg-red-50 text-sm font-semibold text-red-700">
+        {initials || "U"}
+      </AvatarFallback>
+    </Avatar>
   );
 }

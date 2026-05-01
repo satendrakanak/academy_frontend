@@ -8,6 +8,7 @@ import {
   Loader,
   BookOpen,
   Award,
+  ReceiptText,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -29,16 +30,31 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getErrorMessage } from "@/lib/error-handler";
 import { toast } from "sonner";
+import { getUserAvatarUrl } from "@/lib/user-avatar";
 
 export const WebsiteNavUser = () => {
   const { user } = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <Button
+        asChild
+        variant="ghost"
+        className="h-10 w-10 rounded-full bg-gray-200 p-0 hover:bg-gray-100"
+        aria-label="Sign in"
+      >
+        <Link href="/auth/sign-in">
+          <User className="h-5 w-5 text-slate-700" />
+        </Link>
+      </Button>
+    );
+  }
 
   const initials =
     `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase();
+  const avatarUrl = getUserAvatarUrl(user);
 
   const handleLogout = async () => {
     try {
@@ -66,9 +82,7 @@ export const WebsiteNavUser = () => {
   active:outline-none active:ring-0 active:border-0"
         >
           <Avatar className="h-9 w-9">
-            {user.avatar ? (
-              <AvatarImage src={user.avatar.path} alt={user.firstName} />
-            ) : null}
+            {avatarUrl ? <AvatarImage src={avatarUrl} alt={user.firstName} /> : null}
             <AvatarFallback>{initials || "U"}</AvatarFallback>
           </Avatar>
         </Button>
@@ -82,9 +96,7 @@ export const WebsiteNavUser = () => {
         {/* USER INFO */}
         <div className="flex py-2 gap-x-2">
           <Avatar className="h-9 w-9">
-            {user.avatar ? (
-              <AvatarImage src={user.avatar.path} alt={user.firstName} />
-            ) : null}
+            {avatarUrl ? <AvatarImage src={avatarUrl} alt={user.firstName} /> : null}
             <AvatarFallback>{initials || "U"}</AvatarFallback>
           </Avatar>
 
@@ -130,6 +142,16 @@ export const WebsiteNavUser = () => {
             >
               <BookOpen className="w-4 h-4" />
               My Courses
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href="/orders"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <ReceiptText className="w-4 h-4" />
+              Orders
             </Link>
           </DropdownMenuItem>
 

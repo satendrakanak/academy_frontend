@@ -86,7 +86,8 @@ export const userClientService = {
     ),
 
   getAllFaculties: () =>
-    withAuthRetry(() =>
-      apiClient.get<ApiResponse<User[]>>(`/api/users/all-faculty`),
-    ),
+    apiClient.get<ApiResponse<User[]>>(`/api/users/all-faculty`),
+
+  getFacultyProfile: (id: number) =>
+    apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/${id}`),
 };

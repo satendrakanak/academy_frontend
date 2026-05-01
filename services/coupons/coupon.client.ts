@@ -34,25 +34,19 @@ export const couponClientService = {
     ),
 
   applyCoupon: (data: ApplyCouponPayload) =>
-    withAuthRetry(() =>
-      apiClient.post<ApiResponse<CouponApplyResponse>>(
-        `/api/coupons/apply`,
-        data,
-      ),
+    apiClient.post<ApiResponse<CouponApplyResponse>>(
+      `/api/coupons/apply`,
+      data,
     ),
 
   autoApplyCoupon: (data: AutoApplyCouponPayload) =>
-    withAuthRetry(() =>
-      apiClient.post<ApiResponse<CouponApplyResponse>>(
-        `/api/coupons/auto-apply`,
-        data,
-      ),
+    apiClient.post<ApiResponse<CouponApplyResponse>>(
+      `/api/coupons/auto-apply`,
+      data,
     ),
   autoApplyBulk: (data: { courses: { id: number; price: number }[] }) =>
-    withAuthRetry(() =>
-      apiClient.post<ApiResponse<{ data: CouponMap }>>(
-        `/api/coupons/auto-apply-bulk`,
-        data,
-      ),
+    apiClient.post<ApiResponse<{ data: CouponMap }>>(
+      `/api/coupons/auto-apply-bulk`,
+      data,
     ),
 };

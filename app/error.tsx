@@ -19,7 +19,7 @@ export default function GlobalError({
   const isAuthExpired = error.message === "AUTH_EXPIRED";
 
   return (
-    <div className="h-screen flex items-center justify-center bg-linear-to-br from-red-50 via-white to-red-100 px-4">
+    <div className="flex h-screen items-center justify-center bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_42%,#eef4ff_100%)] px-4">
       <Card
         className="
           w-full max-w-md rounded-2xl shadow-xl border
@@ -58,7 +58,7 @@ export default function GlobalError({
             {isAuthExpired ? (
               <Button
                 variant="outline"
-                onClick={() => (window.location.href = "/login")}
+              onClick={() => (window.location.href = "/auth/sign-in")}
                 className="w-full flex items-center gap-2"
               >
                 <LogIn className="w-4 h-4" />

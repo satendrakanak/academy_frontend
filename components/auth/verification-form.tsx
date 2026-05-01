@@ -12,7 +12,7 @@ import { authService } from "@/services/auth.service";
 export const VerificationForm = () => {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const searchParams = useSearchParams();
 
   const router = useRouter();
@@ -32,16 +32,20 @@ export const VerificationForm = () => {
 
       setSuccess("Email verified successfully!");
       startTransition(() => {
-        router.push("/admin/dashboard?verified=true");
+        router.push("/dashboard?verified=true");
         router.refresh();
       });
-    } catch (err) {
+    } catch {
       setError("Invalid or expired token!");
     }
   }, [token, success, error, router]);
 
   useEffect(() => {
-    onSubmit();
+    const timer = window.setTimeout(() => {
+      void onSubmit();
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [onSubmit]);
 
   return (

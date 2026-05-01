@@ -8,8 +8,6 @@ import { CouponMap } from "@/types/coupon";
 import { useEffect, useState } from "react";
 import { couponClientService } from "@/services/coupons/coupon.client";
 import Link from "next/link";
-import { getErrorMessage } from "@/lib/error-handler";
-import { toast } from "sonner";
 
 interface HeroProps {
   courses: Course[];
@@ -31,53 +29,55 @@ export default function Hero({ courses }: HeroProps) {
         });
 
         setCouponMap(res.data?.data || {});
-      } catch (error: unknown) {
-        toast.error(getErrorMessage(error));
+      } catch {
+        setCouponMap({});
       }
     };
 
     run();
   }, [courses]);
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-blue-600 via-indigo-500 to-red-500 text-white">
-      {/* CONTAINER */}
-      <div className="max-w-7xl mx-auto px-6 pt-20 pb-10 grid md:grid-cols-3 gap-10 items-center">
-        {/* LEFT */}
-        <div className="z-10">
-          <p className="bg-white/20 inline-block px-4 py-1 rounded-full text-sm mb-4">
+    <section className="academy-hero relative overflow-hidden text-white">
+      <div className="academy-hero-grid absolute inset-0 opacity-20" />
+      <div className="academy-hero-light absolute top-0 left-0" />
+
+      <div className="relative z-10 mx-auto max-w-350 px-6 lg:px-12 xl:px-16 py-20 flex items-center min-h-162.5">
+        {/* LEFT CONTENT */}
+        <div className="max-w-130 z-20">
+          <p className="mb-4 inline-flex rounded-full bg-white/20 px-4 py-1 text-sm">
             🏆 The Leader in Online Learning
           </p>
 
-          <h1 className="text-5xl font-bold leading-tight mb-4">
-            Build The Skills <br /> To Drive Your Career
+          <h1 className="text-5xl font-bold leading-tight">
+            Build The Skills <br /> To Drive Your <br />
+            Career
           </h1>
 
-          <p className="text-white/80 mb-6">
-            Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet
-            sint.
+          <p className="mt-5 text-white/80 max-w-md text-sm">
+            Amet minim mollit non deserunt ullamco <br />
+            est sit aliqua dolor do amet sint.
           </p>
 
-          <button className="bg-white text-black px-6 py-3 rounded-md font-semibold">
+          <button className="mt-8 bg-white text-black px-6 py-3 rounded-md font-semibold">
             View Course →
           </button>
         </div>
 
-        {/* GIRL FIXED (NO BG ISSUE, NO SHOE) */}
-
-        <div className="relative flex justify-center items-end ">
-          <div className="relative w-full max-w-sm h-100 md:h-135">
+        {/* GIRL */}
+        <div className="absolute bottom-0 left-[48%] -translate-x-1/2 z-30 hidden md:block">
+          <div className="relative w-130 h-155">
             <Image
               src="/assets/courses/banner-01.webp"
               alt="hero"
               fill
               priority
-              className="object-cover object-bottom scale-110 drop-shadow-2xl"
+              className="object-contain object-bottom"
             />
           </div>
         </div>
 
-        {/* RIGHT SLIDER */}
-        <div className="relative pb-22 z-10">
+        {/* RIGHT CARD */}
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hidden md:block w-105">
           <Swiper
             modules={[Pagination, EffectCards, Autoplay]}
             effect="cards"
@@ -92,8 +92,7 @@ export default function Hero({ courses }: HeroProps) {
               const finalPrice = coupon?.finalAmount ?? Number(course.priceInr);
               return (
                 <SwiperSlide key={index}>
-                  <div className="bg-white rounded-2xl p-5 shadow-xl min-h-85 flex flex-col">
-                    {/* IMAGE */}
+                  <div className="bg-white rounded-2xl p-5 shadow-xl">
                     <div className="relative">
                       <Image
                         alt={course.title}
@@ -157,13 +156,25 @@ export default function Hero({ courses }: HeroProps) {
             })}
           </Swiper>
         </div>
+
+        {/* MOBILE */}
+        <div className="md:hidden w-full mt-10">
+          <div className="relative w-full h-95">
+            <Image
+              src="/assets/courses/banner-01.webp"
+              alt="hero"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
       </div>
 
-      {/* CLEAN WAVE (FIXED HEIGHT) */}
-      <div className="absolute bottom-0 left-0 w-full leading-none">
+      {/* WAVE */}
+      <div className="absolute bottom-0 left-0 w-full z-40">
         <svg
           viewBox="0 0 1440 120"
-          className="w-full h-25"
+          className="w-full h-20"
           preserveAspectRatio="none"
         >
           <path

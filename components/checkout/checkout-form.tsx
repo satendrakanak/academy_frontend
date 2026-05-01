@@ -1,6 +1,5 @@
 "use client";
 
-import * as z from "zod";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -15,14 +14,13 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { checkoutSchema } from "@/schemas/checkout";
 import { Textarea } from "../ui/textarea";
 import { useLocation } from "@/hooks/use-location";
 import { useUserCountry } from "@/context/user-country-context";
 
 export const CheckoutForm = () => {
   const { userCountry } = useUserCountry();
-  const { control, setValue } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
   const {
     countries,
     states,
@@ -31,7 +29,11 @@ export const CheckoutForm = () => {
     selectedState,
     selectCountry,
     selectState,
+    selectCity,
   } = useLocation();
+  const countryValue = watch("country");
+  const stateValue = watch("state");
+  const cityValue = watch("city");
 
   // Set default country from user location
   useEffect(() => {
@@ -42,7 +44,30 @@ export const CheckoutForm = () => {
         setValue("country", country.name);
       }
     }
-  }, [countries, userCountry, selectedCountry]);
+  }, [countries, selectedCountry, setValue, selectCountry, userCountry]);
+
+  useEffect(() => {
+    if (!countryValue || selectedCountry || countries.length === 0) return;
+    const country = countries.find((item) => item.name === countryValue);
+    if (!country) return;
+    selectCountry(country);
+    setValue("country", country.name);
+  }, [countries, countryValue, selectedCountry, selectCountry, setValue]);
+
+  useEffect(() => {
+    if (!stateValue || selectedState || states.length === 0) return;
+    const state = states.find((item) => item.name === stateValue);
+    if (!state) return;
+    selectState(state);
+    setValue("state", state.name);
+  }, [selectedState, selectState, setValue, stateValue, states]);
+
+  useEffect(() => {
+    if (!cityValue || cities.length === 0) return;
+    const city = cities.find((item) => item.name === cityValue);
+    if (!city) return;
+    selectCity(city);
+  }, [cities, cityValue, selectCity]);
 
   return (
     <div>

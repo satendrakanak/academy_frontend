@@ -14,8 +14,10 @@ interface CartItemCardProps {
 
 export const CartItemCard = ({ item, showRemove }: CartItemCardProps) => {
   const removeFromCart = useCartStore((s) => s.removeFromCart);
-  const { discount } = useCartStore();
+  const autoDiscount = useCartStore((s) => s.autoDiscount);
+  const manualDiscount = useCartStore((s) => s.manualDiscount);
   const total = useCartStore((s) => s.totalPrice());
+  const discount = autoDiscount + manualDiscount;
 
   // per item proportional discount
   const itemDiscount =
@@ -60,7 +62,7 @@ export const CartItemCard = ({ item, showRemove }: CartItemCardProps) => {
         {/* Meta Info (Hydration Safe) */}
         <div className="flex items-center gap-3 text-xs text-gray-500 mt-2">
           <span>
-            {item.totalDuration ? item.totalDuration : "--"} total hours
+            {item.totalDuration ? item.totalDuration : "--"} total duration
           </span>
           <span>•</span>
           <span>{item.totalLectures ? item.totalLectures : "--"} lectures</span>

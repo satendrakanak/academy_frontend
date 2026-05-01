@@ -1,6 +1,7 @@
 import { ArticleCard } from "@/components/articles/article-card";
 import Container from "@/components/container";
 import { getErrorMessage } from "@/lib/error-handler";
+import { buildMetadata } from "@/lib/seo";
 import { articleServerService } from "@/services/articles/article.server";
 import { Article } from "@/types/article";
 import Link from "next/link";
@@ -11,6 +12,13 @@ type ArticleCategorySummary = {
   slug: string;
   count: number;
 };
+
+export const metadata = buildMetadata({
+  title: "Articles",
+  description:
+    "Read practical wellness, health, learning, and nutrition articles from Unitus Health Academy.",
+  path: "/articles",
+});
 
 export default async function ArticlesPage({
   searchParams,
@@ -59,7 +67,7 @@ export default async function ArticlesPage({
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
               Articles
             </p>
-            <h1 className="max-w-3xl text-4xl font-bold md:text-6xl">
+            <h1 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
               Read ideas that make the learning journey more practical.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-white/80">

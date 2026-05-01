@@ -12,15 +12,10 @@ interface CourseHeroProps {
 
 export const CourseHero = ({ course }: CourseHeroProps) => {
   return (
-    <section className="relative overflow-hidden py-24 text-white">
+    <section className="relative academy-hero overflow-hidden py-24 text-white">
       {/* 🔥 TOP → BOTTOM GRADIENT (as you wanted) */}
-      <div className="absolute inset-0 bg-linear-to-r from-blue-600 via-indigo-500 to-red-500" />
-
-      {/* ✨ LIGHT GLOSS (subtle shine, not overdone) */}
-      <div className="absolute inset-0 bg-linear-to-b from-white/10 via-transparent to-transparent" />
-
-      {/* ✨ SOFT DEPTH GLOW */}
-      <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-125 h-125 bg-white/10 blur-[120px] rounded-full" />
+      <div className="academy-hero-grid absolute inset-0 opacity-20" />
+      <div className="academy-hero-light absolute top-0 left-0" />
 
       <Container>
         <div className="relative z-10 grid grid-cols-12 gap-8 items-start">
