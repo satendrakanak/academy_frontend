@@ -59,26 +59,41 @@ export function ProfileCover({ coverImage, isOwner }: ProfileCoverProps) {
   };
 
   return (
-    <div className="relative w-full h-48 md:h-64 rounded-2xl overflow-hidden">
-      {/* IMAGE */}
+    <div className="relative h-[220px] w-full overflow-hidden rounded-[34px] border border-white/50 shadow-[0_30px_90px_-45px_rgba(15,23,42,0.45)] md:h-[290px]">
       <Image
         src={preview || "/assets/default-cover.jpg"}
         alt="cover"
-        className="w-full h-full object-cover object-top"
+        className="h-full w-full object-cover object-top"
         width={1200}
         height={500}
       />
 
-      {/* subtle overlay for readability */}
-      <div className="absolute inset-0 bg-black/20" />
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(15,23,42,0.22),rgba(30,41,59,0.08)_38%,rgba(59,130,246,0.18)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px)] bg-[size:42px_42px] opacity-30" />
 
-      {/* CAMERA BUTTON */}
+      <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+        <div className="flex items-end justify-between gap-4">
+          <div className="max-w-xl text-white">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/70">
+              Learner Space
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Your learning dashboard
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-white/78 md:text-base">
+              Track progress, revisit purchases, and keep your profile polished
+              from one clean workspace.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {isOwner && (
         <div className="absolute top-3 right-3 group">
           <button
             onClick={() => inputRef.current?.click()}
             title="Change Cover"
-            className="bg-black/60  text-white p-2 rounded-full cursor-pointer transition"
+            className="cursor-pointer rounded-full border border-white/25 bg-slate-950/45 p-2.5 text-white backdrop-blur transition hover:bg-slate-950/60"
           >
             <Camera size={18} />
           </button>

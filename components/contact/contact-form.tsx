@@ -11,7 +11,7 @@ import { getErrorMessage } from "@/lib/error-handler";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 
 const contactSchema = z.object({
   fullName: z.string().trim().min(3, "Full name is required"),
@@ -85,29 +85,32 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[32px] border border-[var(--brand-100)] bg-white p-6 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.4)] md:p-8"
+      className="rounded-[32px] border border-[var(--brand-100)] bg-white p-6 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.28)] md:p-8"
     >
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
-            Contact form
-          </p>
-          <h3 className="mt-3 text-3xl font-semibold text-slate-950">
-            Tell us what you need.
-          </h3>
-          <p className="mt-3 text-sm leading-7 text-slate-600 md:text-base">
-            Share your question, program interest, or support request and the
-            team will get back to you quickly.
-          </p>
-        </div>
-        <div className="hidden rounded-2xl bg-[var(--brand-50)] p-3 text-[var(--brand-700)] md:block">
-          <Sparkles className="size-5" />
+      <div className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,rgba(248,250,252,0.95),rgba(239,246,255,0.95))] p-5 md:p-6">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+              Contact form
+            </p>
+            <h3 className="mt-3 text-3xl font-semibold text-slate-950">
+              Tell us what you need.
+            </h3>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+              Share your question, program interest, or support request and the
+              team will get back to you quickly.
+            </p>
+          </div>
+          <div className="hidden rounded-2xl bg-white p-3 text-[var(--brand-700)] shadow-sm md:block">
+            <Sparkles className="size-5" />
+          </div>
         </div>
       </div>
 
-      <FieldGroup className="mt-8 gap-4">
-        <div className="grid gap-4 md:grid-cols-2">
+      <FieldGroup className="mt-8 gap-5">
+        <div className="grid gap-5 md:grid-cols-2">
           <Field>
+            <FieldLabel>Full name</FieldLabel>
             <Controller
               name="fullName"
               control={form.control}
@@ -115,7 +118,7 @@ export function ContactForm() {
                 <Input
                   {...field}
                   placeholder="Full name"
-                  className="rounded-2xl px-4 py-3.5"
+                  className="h-14 rounded-2xl px-4 text-base"
                 />
               )}
             />
@@ -123,6 +126,7 @@ export function ContactForm() {
           </Field>
 
           <Field>
+            <FieldLabel>Email address</FieldLabel>
             <Controller
               name="email"
               control={form.control}
@@ -131,7 +135,7 @@ export function ContactForm() {
                   {...field}
                   type="email"
                   placeholder="Email address"
-                  className="rounded-2xl px-4 py-3.5"
+                  className="h-14 rounded-2xl px-4 text-base"
                 />
               )}
             />
@@ -139,6 +143,7 @@ export function ContactForm() {
           </Field>
 
           <Field>
+            <FieldLabel>Phone number</FieldLabel>
             <Controller
               name="phoneNumber"
               control={form.control}
@@ -146,7 +151,7 @@ export function ContactForm() {
                 <Input
                   {...field}
                   placeholder="Phone number"
-                  className="rounded-2xl px-4 py-3.5"
+                  className="h-14 rounded-2xl px-4 text-base"
                 />
               )}
             />
@@ -154,6 +159,7 @@ export function ContactForm() {
           </Field>
 
           <Field>
+            <FieldLabel>Subject</FieldLabel>
             <Controller
               name="subject"
               control={form.control}
@@ -161,7 +167,7 @@ export function ContactForm() {
                 <Input
                   {...field}
                   placeholder="Subject"
-                  className="rounded-2xl px-4 py-3.5"
+                  className="h-14 rounded-2xl px-4 text-base"
                 />
               )}
             />
@@ -170,6 +176,7 @@ export function ContactForm() {
         </div>
 
         <Field>
+          <FieldLabel>Message</FieldLabel>
           <Controller
             name="message"
             control={form.control}
@@ -177,8 +184,8 @@ export function ContactForm() {
               <Textarea
                 {...field}
                 placeholder="Tell us how we can help..."
-                rows={6}
-                className="rounded-2xl px-4 py-3.5"
+                rows={8}
+                className="min-h-48 rounded-2xl px-4 py-4 text-base"
               />
             )}
           />
@@ -186,7 +193,7 @@ export function ContactForm() {
         </Field>
       </FieldGroup>
 
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-slate-500">
           By submitting, you allow the academy team to contact you about your
           enquiry.

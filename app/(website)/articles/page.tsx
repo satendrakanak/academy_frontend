@@ -67,7 +67,7 @@ export default async function ArticlesPage({
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
               Articles
             </p>
-            <h1 className="max-w-3xl text-4xl font-bold md:text-4xl">
+            <h1 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
               Read ideas that make the learning journey more practical.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-white/80">

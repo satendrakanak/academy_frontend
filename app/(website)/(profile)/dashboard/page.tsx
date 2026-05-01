@@ -1,5 +1,4 @@
 import { userServerService } from "@/services/users/user.server";
-import { courseServerService } from "@/services/courses/course.server";
 import { getSession } from "@/lib/auth";
 import { Course } from "@/types/course";
 import DashboardClient from "@/components/profile/dashboard-client";

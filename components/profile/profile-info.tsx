@@ -10,30 +10,46 @@ interface ProfileInfoProps {
 
 export function ProfileInfo({ name, email, stats }: ProfileInfoProps) {
   return (
-    <div className="flex flex-col gap-2">
-      {/* 🔥 NAME */}
-      <h1 className="text-2xl md:text-3xl font-bold text-black drop-shadow-md">
-        {name}
-      </h1>
+    <div className="flex flex-col gap-4">
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+          Learner Profile
+        </p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+          {name}
+        </h1>
+        {email ? (
+          <p className="mt-2 text-sm text-slate-500 md:text-base">{email}</p>
+        ) : null}
+      </div>
 
-      {email && <p className="text-sm text-black drop-shadow-sm">{email}</p>}
-
-      {/* 📊 STATS */}
       {stats && (
-        <div className="flex gap-6 mt-2">
-          <div className="flex flex-col items-center justify-center">
-            <p className=" font-semibold text-lg">{stats.courses || 0}</p>
-            <p className="text-xs ">Courses</p>
+        <div className="flex flex-wrap gap-3">
+          <div className="min-w-[112px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <p className="text-lg font-semibold text-slate-950">
+              {stats.courses || 0}
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
+              Courses
+            </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center">
-            <p className="font-semibold text-lg">{stats.completed || 0}</p>
-            <p className="text-xs ">Completed</p>
+          <div className="min-w-[112px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+            <p className="text-lg font-semibold text-slate-950">
+              {stats.completed || 0}
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-slate-500">
+              Completed
+            </p>
           </div>
 
-          <div className="flex flex-col items-center justify-center">
-            <p className="font-semibold text-lg">{stats.progress || 0}%</p>
-            <p className="text-xs ">Progress</p>
+          <div className="min-w-[112px] rounded-2xl border border-[var(--brand-100)] bg-[var(--brand-50)] px-4 py-3 shadow-sm">
+            <p className="text-lg font-semibold text-slate-950">
+              {stats.progress || 0}%
+            </p>
+            <p className="mt-1 text-xs uppercase tracking-[0.18em] text-[var(--brand-700)]">
+              Progress
+            </p>
           </div>
         </div>
       )}

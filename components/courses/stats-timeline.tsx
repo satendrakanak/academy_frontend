@@ -27,7 +27,7 @@ const stats = [
 
 export default function StatsTimeline() {
   return (
-    <section className="py-24">
+    <section className="py-6">
       <div className="max-w-7xl mx-auto px-6 text-center">
         {/* LABEL */}
         <span className="mb-4 inline-block rounded-full bg-[var(--brand-100)] px-5 py-1 text-xs font-semibold tracking-[0.22em] text-[var(--brand-700)]">

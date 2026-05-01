@@ -150,20 +150,66 @@
 @layer utilities {
   .academy-hero-gradient {
     background-image:
-      radial-gradient(circle at top left, rgba(255, 255, 255, 0.16), transparent 26%),
-      linear-gradient(120deg, #23357f 0%, #2946b6 34%, #3558f4 67%, #e25667 100%);
+      radial-gradient(
+        circle at top left,
+        rgba(255, 255, 255, 0.16),
+        transparent 26%
+      ),
+      linear-gradient(
+        120deg,
+        #23357f 0%,
+        #2946b6 34%,
+        #3558f4 67%,
+        #e25667 100%
+      );
+  }
+
+  /* .academy-hero-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+    background-size: 84px 84px;
+  } */
+
+  .academy-hero {
+    background-image: linear-gradient(
+      120deg,
+      #23357f 0%,
+      #2946b6 35%,
+      #3558f4 70%,
+      #e25667 100%
+    );
   }
 
   .academy-hero-grid {
     background-image:
       linear-gradient(to right, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-    background-size: 84px 84px;
+    background-size: 80px 80px;
+  }
+
+  /* 🔥 PERFECT LIGHT GLOW */
+  .academy-hero-light {
+    width: 520px;
+    height: 420px;
+    background: radial-gradient(
+      circle at top left,
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(255, 255, 255, 0.35) 25%,
+      rgba(255, 255, 255, 0.15) 45%,
+      transparent 70%
+    );
+    filter: blur(20px);
+    opacity: 0.6;
   }
 
   .academy-surface {
     background:
-      radial-gradient(circle at top left, rgba(83, 123, 255, 0.09), transparent 26%),
+      radial-gradient(
+        circle at top left,
+        rgba(83, 123, 255, 0.09),
+        transparent 26%
+      ),
       linear-gradient(180deg, #f8faff 0%, #ffffff 44%, #f1f5ff 100%);
   }
 

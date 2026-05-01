@@ -4,6 +4,7 @@ import Link from "next/link";
 import Container from "@/components/container";
 import { CourseCard } from "@/components/courses/course-card";
 import { FacultyReviewsSection } from "@/components/faculty/faculty-reviews-section";
+import { getSession } from "@/lib/auth";
 import { buildMetadata } from "@/lib/seo";
 import { userServerService } from "@/services/users/user.server";
 
@@ -45,9 +46,27 @@ export default async function FacultyDetailPage({ params }: PageProps) {
   try {
     const response = await userServerService.getFacultyProfile(Number(facultyId));
     const faculty = response.data;
+    const session = await getSession();
     const fullName = [faculty.firstName, faculty.lastName]
       .filter(Boolean)
       .join(" ");
+    const enrolledCourses = session
+      ? (await userServerService.getEnrolledCourses(session.id)).data
+      : [];
+    const enrolledCourseMap = new Map(
+      enrolledCourses.map((course) => [course.id, course]),
+    );
+    const taughtCourses =
+      faculty.taughtCourses?.map((course) => {
+        const enrolledCourse = enrolledCourseMap.get(course.id);
+        if (!enrolledCourse) return course;
+
+        return {
+          ...course,
+          isEnrolled: true,
+          progress: enrolledCourse.progress,
+        };
+      }) || [];
 
     return (
       <div className="min-h-screen academy-surface">
@@ -90,6 +109,12 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                       {faculty.profile.location}
                     </span>
                   ) : null}
+                  {session && taughtCourses.some((course) => course.isEnrolled) ? (
+                    <span className="rounded-full border border-emerald-300/30 bg-emerald-500/15 px-4 py-2 text-sm text-emerald-50">
+                      You are enrolled in {taughtCourses.filter((course) => course.isEnrolled).length} course
+                      {taughtCourses.filter((course) => course.isEnrolled).length > 1 ? "s" : ""} by this faculty
+                    </span>
+                  ) : null}
                 </div>
               </div>
 
@@ -111,7 +136,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
 
         <Container>
           <div className="space-y-12 py-14">
-            {faculty.taughtCourses?.length ? (
+            {taughtCourses.length ? (
               <section className="space-y-6">
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
@@ -129,7 +154,7 @@ export default async function FacultyDetailPage({ params }: PageProps) {
                 </div>
 
                 <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-                  {faculty.taughtCourses.map((course) => (
+                  {taughtCourses.map((course) => (
                     <CourseCard key={course.id} course={course} />
                   ))}
                 </div>

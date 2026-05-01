@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { CourseQaSection } from "@/components/course/sections/course-qa-section";
 import { CourseRatingReviews } from "@/components/course/sections/course-rating-reviews";
 import { slugify } from "@/utils/slugify";
+import { downloadRemoteFile } from "@/lib/download-file";
 
 interface CourseTabsProps {
   course: Course;
@@ -67,21 +68,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
     const course = slugify(nextCertificate.course?.title || "course");
 
     const fileName = `${name}-${course}.pdf`;
-
-    const response = await fetch(fileUrl);
-    const blob = await response.blob();
-
-    const blobUrl = window.URL.createObjectURL(blob);
-
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = fileName;
-
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.URL.revokeObjectURL(blobUrl);
+    await downloadRemoteFile(fileUrl, fileName);
   };
 
   const handleCertificateClick = async () => {

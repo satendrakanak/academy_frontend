@@ -16,7 +16,7 @@ export function CoursesBanner({ totalCourses }: { totalCourses: number }) {
             <div className="mb-4 inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm backdrop-blur-sm">
               {totalCourses}+ curated programs
             </div>
-            <h1 className="text-xl font-bold tracking-[-0.03em] md:text-4xl">
+            <h1 className="text-xl font-bold leading-tight md:text-5xl">
               Learn through structured, career-conscious wellness education.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">

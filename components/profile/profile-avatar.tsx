@@ -40,19 +40,18 @@ export function ProfileAvatar({
   const offset = circumference - (progress / 100) * circumference;
 
   return (
-    <div className="relative w-28 h-28 group cursor-pointer">
-      <Avatar className="w-28 h-28 border-4 border-white shadow-md">
+    <div className="group relative h-32 w-32 cursor-pointer md:h-36 md:w-36">
+      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,#93c5fd,transparent_55%),linear-gradient(135deg,var(--brand-500),var(--brand-700))] opacity-90 blur-[2px]" />
+      <Avatar className="relative h-32 w-32 border-[5px] border-white shadow-[0_24px_50px_-22px_rgba(15,23,42,0.45)] md:h-36 md:w-36">
         <AvatarImage src={preview} />
-        <AvatarFallback className="bg-gray-200 text-gray-700 font-semibold">
+        <AvatarFallback className="bg-slate-200 text-lg font-semibold text-slate-700">
           {getInitials(name)}
         </AvatarFallback>
       </Avatar>
 
-      {/* 🔥 Upload Progress Overlay */}
       {uploading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
-          {/* SVG Circle */}
-          <svg className="w-24 h-24 transform -rotate-90">
+          <svg className="h-28 w-28 -rotate-90 transform md:h-32 md:w-32">
             <circle
               cx="50%"
               cy="50%"
@@ -76,20 +75,16 @@ export function ProfileAvatar({
             />
           </svg>
 
-          {/* % Text */}
           <span className="absolute text-white text-sm font-semibold">
             {progress}%
           </span>
         </div>
       )}
 
-      {/* Hover camera */}
       {!uploading && (
         <div
           onClick={() => inputRef.current?.click()}
-          className="absolute bottom-0 left-0 w-full h-1/2 bg-black/50 
-          flex items-center justify-center opacity-0 
-          group-hover:opacity-100 transition rounded-b-full"
+          className="absolute inset-x-0 bottom-0 flex h-1/2 items-center justify-center rounded-b-full bg-slate-950/55 opacity-0 transition group-hover:opacity-100"
         >
           <Camera size={18} className="text-white" />
         </div>

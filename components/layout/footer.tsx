@@ -25,7 +25,7 @@ export default function Footer() {
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
                 {site.footerCtaEyebrow}
               </p>
-              <h2 className="mt-3 max-w-2xl text-3xl font-bold tracking-[-0.03em] md:text-3xl">
+              <h2 className="mt-3 max-w-2xl text-3xl font-bold leading-tight md:text-5xl">
                 {site.footerCtaHeading}
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 md:text-lg">
@@ -164,7 +164,8 @@ export default function Footer() {
               <span className="font-medium">Email:</span> {site.supportEmail}
             </li>
             <li>
-              <span className="font-medium">Location:</span> {site.supportAddress}
+              <span className="font-medium">Location:</span>{" "}
+              {site.supportAddress}
             </li>
           </ul>
 

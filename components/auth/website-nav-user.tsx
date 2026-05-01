@@ -8,6 +8,7 @@ import {
   Loader,
   BookOpen,
   Award,
+  ReceiptText,
 } from "lucide-react";
 
 import Link from "next/link";
@@ -141,6 +142,16 @@ export const WebsiteNavUser = () => {
             >
               <BookOpen className="w-4 h-4" />
               My Courses
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link
+              href="/orders"
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <ReceiptText className="w-4 h-4" />
+              Orders
             </Link>
           </DropdownMenuItem>
 

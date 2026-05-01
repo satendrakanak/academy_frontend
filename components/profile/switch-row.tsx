@@ -1,24 +1,34 @@
 export function SwitchRow({
   label,
+  description,
   checked,
   onChange,
 }: {
   label: string;
+  description?: string;
   checked?: boolean;
   onChange: (val: boolean) => void;
 }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-700">{label}</span>
+    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+      <div>
+        <span className="text-sm font-medium text-slate-900">{label}</span>
+        {description ? (
+          <p className="mt-1 max-w-xl text-sm leading-6 text-slate-500">
+            {description}
+          </p>
+        ) : null}
+      </div>
 
       <button
+        type="button"
         onClick={() => onChange(!checked)}
-        className={`w-10 h-5 flex items-center rounded-full cursor-pointer p-1 transition ${
+        className={`mt-1 flex h-6 w-11 items-center rounded-full p-1 transition ${
           checked ? "bg-primary" : "bg-gray-300"
         }`}
       >
         <div
-          className={`bg-white w-4 h-4 rounded-full shadow transform cursor-pointer transition ${
+          className={`h-4 w-4 transform rounded-full bg-white shadow transition ${
             checked ? "translate-x-5" : ""
           }`}
         />

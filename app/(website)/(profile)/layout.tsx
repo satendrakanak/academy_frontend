@@ -47,23 +47,16 @@ export default async function ProfileLayout({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Cover */}
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_24%,#f8fafc_100%)]">
       <Container>
-        <div className="pt-6">
+        <div className="pt-6 pb-12">
           <ProfileCover coverImage={user.coverImage?.path} isOwner={isOwner} />
+          <div className="relative z-10 px-2 md:px-6">
+            <ProfileHeader user={user} isOwner={isOwner} stats={stats} />
+            <ProfileMenu isOwner={isOwner} />
+            <div className="py-8">{children}</div>
+          </div>
         </div>
-      </Container>
-
-      <Container>
-        {/* Header */}
-        <ProfileHeader user={user} isOwner={isOwner} stats={stats} />
-
-        {/* Menu */}
-        <ProfileMenu isOwner={isOwner} />
-
-        {/* Content */}
-        <div className="py-6 bg-white">{children}</div>
       </Container>
     </div>
   );

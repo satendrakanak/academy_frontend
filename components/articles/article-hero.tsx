@@ -15,7 +15,9 @@ export function ArticleHero({ article }: { article: Article }) {
             </span>
           )}
 
-          <h1 className="mt-5 text-4xl font-bold md:text-6xl">{article.title}</h1>
+          <h1 className="mt-5 text-4xl font-bold leading-tight md:text-5xl">
+            {article.title}
+          </h1>
           {article.excerpt && (
             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/78">
               {article.excerpt}

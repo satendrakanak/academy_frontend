@@ -80,7 +80,7 @@ export default async function ClientTestimonialsPage({
             <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
               Client Testimonials
             </p>
-            <h1 className="max-w-3xl text-4xl font-bold md:text-4xl">
+            <h1 className="max-w-3xl text-4xl font-bold md:text-5xl leading-tight">
               Stories from learners who trusted the process and saw results.
             </h1>
             <p className="mt-5 max-w-2xl text-lg text-white/80">

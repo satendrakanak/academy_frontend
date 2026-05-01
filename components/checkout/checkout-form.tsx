@@ -1,6 +1,5 @@
 "use client";
 
-import * as z from "zod";
 import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -15,7 +14,6 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { checkoutSchema } from "@/schemas/checkout";
 import { Textarea } from "../ui/textarea";
 import { useLocation } from "@/hooks/use-location";
 import { useUserCountry } from "@/context/user-country-context";
