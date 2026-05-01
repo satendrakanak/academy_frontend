@@ -8,12 +8,15 @@ import { Course } from "@/types/course";
 import { DashboardStats, WeeklyProgress } from "@/types/user";
 import { Order } from "@/types/order";
 import { OrderHistory } from "./order-history";
+import { ExamHistoryRecord } from "@/types/exam";
+import { ExamHistory } from "./exam-history";
 
 interface DashboardClientProps {
   stats: DashboardStats;
   courses: Course[];
   weeklyProgress: WeeklyProgress[];
   orders: Order[];
+  examHistory: ExamHistoryRecord[];
 }
 
 export default function DashboardClient({
@@ -21,6 +24,7 @@ export default function DashboardClient({
   courses,
   weeklyProgress,
   orders,
+  examHistory,
 }: DashboardClientProps) {
   const ProgressChart = dynamic(
     () => import("@/components/profile/progress-chart"),
@@ -28,7 +32,7 @@ export default function DashboardClient({
   );
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard
           title="Active Courses"
           value={stats.courses}
@@ -44,6 +48,21 @@ export default function DashboardClient({
           value={`${stats.progress}%`}
           description="Overall learning momentum across enrolled courses."
           highlight
+        />
+        <StatCard
+          title="Exam Attempts"
+          value={stats.examsTaken}
+          description="Total final exam submissions across your courses."
+        />
+        <StatCard
+          title="Exams Passed"
+          value={stats.examsPassed}
+          description="Final exams you have cleared successfully."
+        />
+        <StatCard
+          title="Certificates"
+          value={stats.certificatesEarned}
+          description="Certificates unlocked after completion milestones."
         />
       </div>
 
@@ -101,6 +120,10 @@ export default function DashboardClient({
           limit={5}
           showViewAll
         />
+      </div>
+
+      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] md:p-6">
+        <ExamHistory records={examHistory} />
       </div>
     </>
   );

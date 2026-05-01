@@ -1,7 +1,13 @@
 import { apiServer } from "@/lib/api/server";
 import { ApiResponse, Paginated } from "@/types/api";
 import { Course } from "@/types/course";
-import { DashboardStats, User, UsersQueryParams, WeeklyProgress } from "@/types/user";
+import {
+  DashboardStats,
+  PublicProfileBundle,
+  User,
+  UsersQueryParams,
+  WeeklyProgress,
+} from "@/types/user";
 
 const buildUsersQuery = (params?: UsersQueryParams) => {
   const searchParams = new URLSearchParams();
@@ -39,4 +45,8 @@ export const userServerService = {
   getFaculties: () => apiServer.get<ApiResponse<User[]>>("/users/all-faculty"),
   getFacultyProfile: (facultyId: number) =>
     apiServer.get<ApiResponse<User>>(`/users/faculty-profile/${facultyId}`),
+  getPublicProfile: (username: string) =>
+    apiServer.get<ApiResponse<PublicProfileBundle | null>>(
+      `/users/public-profile/${username}`,
+    ),
 };

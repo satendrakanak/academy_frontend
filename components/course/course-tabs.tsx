@@ -104,7 +104,7 @@ export const CourseTabs = ({
             : "bg-white shadow-none"
         }`}
       >
-        <div className="flex gap-2 overflow-x-auto px-1 md:px-2">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar px-1 md:px-2">
           {tabs.map((tab) => (
             <button
               key={tab.id}

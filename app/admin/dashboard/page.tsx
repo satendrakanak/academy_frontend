@@ -1,10 +1,12 @@
 import { AdminDashboard } from "@/components/admin/dashboard/admin-dashboard";
 import { VerifiedToast } from "@/components/admin/verified-toast";
+import { courseExamsServerService } from "@/services/course-exams/course-exams.server";
 import { couponServerService } from "@/services/coupons/coupon.server";
 import { courseServerService } from "@/services/courses/course.server";
 import { orderServerService } from "@/services/orders/order.server";
 import { userServerService } from "@/services/users/user.server";
 import { getErrorMessage } from "@/lib/error-handler";
+import { AdminExamOverview } from "@/types/exam";
 import { Coupon } from "@/types/coupon";
 import { Course } from "@/types/course";
 import { Order, OrderStatus } from "@/types/order";
@@ -18,6 +20,7 @@ function buildDashboardData(
   users: User[],
   courses: Course[],
   coupons: Coupon[],
+  examOverview: AdminExamOverview,
 ): AdminDashboardData {
   const paidOrders = orders.filter((order) => order.status === OrderStatus.PAID);
   const enrolledUsers = new Set(
@@ -113,6 +116,10 @@ function buildDashboardData(
       ),
       totalDiscountGiven,
       averageOrderValue: paidOrders.length ? totalRevenue / paidOrders.length : 0,
+      totalExamAttempts: examOverview.totalAttempts,
+      passedExamAttempts: examOverview.passedAttempts,
+      certificatesIssued: examOverview.certificatesIssued,
+      averageExamScore: examOverview.averageScore,
     },
     revenueTrend: Array.from(monthMap.values()),
     orderStatusDistribution: Object.entries(orderStatuses).map(([name, value]) => ({
@@ -154,6 +161,12 @@ function buildDashboardData(
         status: order.status,
         createdAt: order.createdAt,
       })),
+    examOverview: {
+      uniqueLearners: examOverview.uniqueLearners,
+      passRate: examOverview.passRate,
+      recentAttempts: examOverview.recentAttempts,
+      topCourses: examOverview.topCourses,
+    },
   };
 }
 
@@ -162,25 +175,49 @@ export default async function DashboardPage() {
   let users: User[] = [];
   let courses: Course[] = [];
   let coupons: Coupon[] = [];
+  let examOverview: AdminExamOverview = {
+    totalAttempts: 0,
+    uniqueLearners: 0,
+    passedAttempts: 0,
+    certificatesIssued: 0,
+    averageScore: 0,
+    passRate: 0,
+    recentAttempts: [],
+    topCourses: [],
+  };
 
   try {
-    const [ordersResponse, usersResponse, coursesResponse, couponsResponse] =
+    const [
+      ordersResponse,
+      usersResponse,
+      coursesResponse,
+      couponsResponse,
+      examsResponse,
+    ] =
       await Promise.all([
         orderServerService.getAll(),
         userServerService.getAll(),
         courseServerService.getAllCourses(),
         couponServerService.getAll(),
+        courseExamsServerService.getAdminOverview(),
       ]);
 
     orders = ordersResponse.data || [];
     users = usersResponse.data.data || [];
     courses = coursesResponse.data.data || [];
     coupons = couponsResponse.data.data || [];
+    examOverview = examsResponse.data;
   } catch (error: unknown) {
     throw new Error(getErrorMessage(error));
   }
 
-  const dashboardData = buildDashboardData(orders, users, courses, coupons);
+  const dashboardData = buildDashboardData(
+    orders,
+    users,
+    courses,
+    coupons,
+    examOverview,
+  );
 
   return (
     <div className="space-y-6">

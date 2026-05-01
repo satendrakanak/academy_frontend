@@ -119,19 +119,6 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
         >
           Overview
         </button>
-        {hasPublishedExam ? (
-          <button
-            type="button"
-            onClick={() => setActiveTab("exam")}
-            className={`pb-2 text-sm cursor-pointer font-bold ${
-              activeTab === "exam"
-                ? "border-b-2 border-primary text-primary"
-                : "text-gray-800"
-            }`}
-          >
-            Exam
-          </button>
-        ) : null}
         <button
           type="button"
           onClick={() => setActiveTab("qa")}
@@ -154,6 +141,19 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
         >
           Reviews
         </button>
+        {hasPublishedExam ? (
+          <button
+            type="button"
+            onClick={() => setActiveTab("exam")}
+            className={`pb-2 text-sm cursor-pointer font-bold ${
+              activeTab === "exam"
+                ? "border-b-2 border-primary text-primary"
+                : "text-gray-800"
+            }`}
+          >
+            Final Exams
+          </button>
+        ) : null}
       </div>
 
       {/* 🔥 CONTENT */}

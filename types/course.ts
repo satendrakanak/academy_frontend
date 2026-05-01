@@ -84,6 +84,9 @@ export type CourseExamLearnerPayload = {
   attemptsRemaining: number | null;
   canAttempt: boolean;
   isPassed: boolean;
+  isUnlocked: boolean;
+  unlockProgress: number;
+  unlockMessage: string;
 };
 
 export type CreateCoursePayload = {
