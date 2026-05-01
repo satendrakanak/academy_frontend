@@ -38,12 +38,11 @@ export default async function CourseIdPage({
           <BasicInfoForm course={course} />
           <CourseDescription course={course} />
           <CourseDetailsForm course={course} />
-          <CourseFaqsForm course={course} />
-          <CourseExamForm course={course} />
           <ChaptersForm course={course} />
-
           <RequirementsForm course={course} />
           <MetaForm course={course} />
+          <CourseFaqsForm course={course} />
+          <CourseExamForm course={course} />
         </div>
 
         <div className="col-span-1">

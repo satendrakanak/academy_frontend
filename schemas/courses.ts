@@ -103,17 +103,31 @@ const courseExamQuestionSchema = z
   .object({
     id: z.string().trim().min(1),
     prompt: z.string().trim().min(3, "Question must be at least 3 characters"),
-    type: z.enum(["single", "multiple", "true_false"]),
+    type: z.enum([
+      "single",
+      "multiple",
+      "true_false",
+      "short_text",
+      "drag_drop",
+    ]),
     points: z.coerce.number().min(1, "Points must be at least 1"),
     explanation: z.string().optional(),
+    acceptedAnswers: z.array(z.string().trim().min(1)).optional().default([]),
     options: z
       .array(courseExamOptionSchema)
-      .min(2, "At least 2 options are required"),
+      .default([]),
   })
   .superRefine((question, ctx) => {
     const correctOptions = question.options.filter((option) => option.isCorrect);
 
     if (question.type === "single" || question.type === "true_false") {
+      if (question.options.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "At least 2 options are required",
+          path: ["options"],
+        });
+      }
       if (correctOptions.length !== 1) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -128,6 +142,34 @@ const courseExamQuestionSchema = z
         code: z.ZodIssueCode.custom,
         message: "Select at least one correct option",
         path: ["options"],
+      });
+    }
+
+    if (question.type === "multiple" && question.options.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least 2 options are required",
+        path: ["options"],
+      });
+    }
+
+    if (question.type === "drag_drop" && question.options.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Add at least 2 items for drag and drop",
+        path: ["options"],
+      });
+    }
+
+    if (
+      question.type === "short_text" &&
+      (!question.acceptedAnswers?.length ||
+        !question.acceptedAnswers.some((answer) => answer.trim()))
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Add at least one accepted answer",
+        path: ["acceptedAnswers"],
       });
     }
   });

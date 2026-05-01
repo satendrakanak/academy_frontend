@@ -16,9 +16,11 @@ export function CourseExamSection({ course }: CourseExamSectionProps) {
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<string, string[]>
   >({});
+  const [answerTexts, setAnswerTexts] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [draggedOptionId, setDraggedOptionId] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
@@ -97,15 +99,41 @@ export function CourseExamSection({ course }: CourseExamSectionProps) {
     });
   };
 
+  useEffect(() => {
+    setSelectedAnswers((prev) => {
+      const next = { ...prev };
+      let changed = false;
+
+      for (const question of questions) {
+        if (question.type === "drag_drop" && !next[question.id]?.length) {
+          next[question.id] = shuffleArray(question.options.map((option) => option.id));
+          changed = true;
+        }
+      }
+
+      return changed ? next : prev;
+    });
+  }, [questions]);
+
   const handleSubmit = useCallback(async (force = false) => {
     if (!payload) return;
 
     const answers = questions.map((question) => ({
       questionId: question.id,
       selectedOptionIds: selectedAnswers[question.id] ?? [],
+      answerText: answerTexts[question.id]?.trim() || undefined,
     }));
 
-    const unanswered = answers.filter((answer) => !answer.selectedOptionIds.length);
+    const unanswered = answers.filter((answer) => {
+      const question = questions.find((item) => item.id === answer.questionId);
+      if (!question) return false;
+
+      if (question.type === "short_text") {
+        return !answer.answerText;
+      }
+
+      return !answer.selectedOptionIds.length;
+    });
     if (unanswered.length && !force) {
       toast.error("Please answer every question before submitting the exam.");
       return;
@@ -145,6 +173,7 @@ export function CourseExamSection({ course }: CourseExamSectionProps) {
       );
       setTimeRemaining(null);
       setSelectedAnswers({});
+      setAnswerTexts({});
       toast.success(
         latestAttempt?.passed
           ? "Excellent. You cleared the exam."
@@ -155,7 +184,7 @@ export function CourseExamSection({ course }: CourseExamSectionProps) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [course.id, payload, questions, selectedAnswers]);
+  }, [answerTexts, course.id, payload, questions, selectedAnswers]);
 
   useEffect(() => {
     if (timeRemaining === 0 && payload?.canAttempt && !isSubmitting) {
@@ -270,37 +299,89 @@ export function CourseExamSection({ course }: CourseExamSectionProps) {
                   </div>
 
                   <div className="mt-4 grid gap-3">
-                    {question.options.map((option) => {
-                      const checked = selected.includes(option.id);
+                    {question.type === "short_text" ? (
+                      <textarea
+                        value={answerTexts[question.id] ?? ""}
+                        onChange={(event) =>
+                          setAnswerTexts((prev) => ({
+                            ...prev,
+                            [question.id]: event.target.value,
+                          }))
+                        }
+                        className="min-h-28 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none ring-0 transition focus:border-[var(--brand-300)]"
+                        placeholder="Write your answer in one short line or sentence."
+                      />
+                    ) : question.type === "drag_drop" ? (
+                      <div className="space-y-3">
+                        {(selectedAnswers[question.id] ?? []).map((optionId, orderIndex) => {
+                          const option = question.options.find((item) => item.id === optionId);
+                          if (!option) return null;
 
-                      return (
-                        <label
-                          key={option.id}
-                          className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition ${
-                            checked
-                              ? "border-[var(--brand-300)] bg-[var(--brand-50)]/70"
-                              : "border-slate-200 bg-white"
-                          }`}
-                        >
-                          <input
-                            type={question.type === "multiple" ? "checkbox" : "radio"}
-                            name={question.id}
-                            checked={checked}
-                            onChange={() =>
-                              handleOptionToggle(
-                                question.id,
-                                option.id,
-                                question.type,
-                              )
-                            }
-                            className="mt-0.5 size-4 accent-[var(--brand-600)]"
-                          />
-                          <span className="text-sm leading-6 text-slate-700">
-                            {option.text}
-                          </span>
-                        </label>
-                      );
-                    })}
+                          return (
+                            <div
+                              key={option.id}
+                              draggable
+                              onDragStart={() => setDraggedOptionId(option.id)}
+                              onDragEnd={() => setDraggedOptionId(null)}
+                              onDragOver={(event) => event.preventDefault()}
+                              onDrop={() =>
+                                setSelectedAnswers((prev) => ({
+                                  ...prev,
+                                  [question.id]: reorderItems(
+                                    prev[question.id] ?? [],
+                                    draggedOptionId,
+                                    option.id,
+                                  ),
+                                }))
+                              }
+                              className="flex cursor-move items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3"
+                            >
+                              <div className="flex size-8 items-center justify-center rounded-full bg-[var(--brand-50)] text-xs font-semibold text-[var(--brand-700)]">
+                                {orderIndex + 1}
+                              </div>
+                              <span className="text-sm leading-6 text-slate-700">
+                                {option.text}
+                              </span>
+                            </div>
+                          );
+                        })}
+                        <p className="text-xs text-slate-500">
+                          Drag items into the correct order.
+                        </p>
+                      </div>
+                    ) : (
+                      question.options.map((option) => {
+                        const checked = selected.includes(option.id);
+
+                        return (
+                          <label
+                            key={option.id}
+                            className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition ${
+                              checked
+                                ? "border-[var(--brand-300)] bg-[var(--brand-50)]/70"
+                                : "border-slate-200 bg-white"
+                            }`}
+                          >
+                            <input
+                              type={question.type === "multiple" ? "checkbox" : "radio"}
+                              name={question.id}
+                              checked={checked}
+                              onChange={() =>
+                                handleOptionToggle(
+                                  question.id,
+                                  option.id,
+                                  question.type,
+                                )
+                              }
+                              className="mt-0.5 size-4 accent-[var(--brand-600)]"
+                            />
+                            <span className="text-sm leading-6 text-slate-700">
+                              {option.text}
+                            </span>
+                          </label>
+                        );
+                      })
+                    )}
                   </div>
                 </div>
               );
@@ -340,6 +421,35 @@ function formatSeconds(totalSeconds: number) {
   const seconds = totalSeconds % 60;
 
   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function shuffleArray(items: string[]) {
+  const copy = [...items];
+
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+
+  return copy;
+}
+
+function reorderItems(items: string[], sourceId: string | null, targetId: string) {
+  if (!sourceId || sourceId === targetId) {
+    return items;
+  }
+
+  const next = [...items];
+  const sourceIndex = next.indexOf(sourceId);
+  const targetIndex = next.indexOf(targetId);
+
+  if (sourceIndex === -1 || targetIndex === -1) {
+    return items;
+  }
+
+  const [moved] = next.splice(sourceIndex, 1);
+  next.splice(targetIndex, 0, moved);
+  return next;
 }
 
 function AttemptSummaryCard({ attempt }: { attempt: CourseExamAttempt }) {
