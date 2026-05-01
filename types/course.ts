@@ -10,6 +10,79 @@ export type CourseFaqItem = {
   answer: string;
 };
 
+export type CourseExamQuestionOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+};
+
+export type CourseExamQuestion = {
+  id: string;
+  prompt: string;
+  type: "single" | "multiple" | "true_false";
+  points: number;
+  explanation?: string;
+  options: CourseExamQuestionOption[];
+};
+
+export type CourseExam = {
+  title: string;
+  description?: string;
+  instructions?: string;
+  passingPercentage: number;
+  maxAttempts: number;
+  timeLimitMinutes?: number | null;
+  showResultImmediately: boolean;
+  isPublished: boolean;
+  questions: CourseExamQuestion[];
+};
+
+export type CourseExamAttemptQuestionResult = {
+  questionId: string;
+  prompt: string;
+  selectedOptionIds: string[];
+  correctOptionIds: string[];
+  isCorrect: boolean;
+  earnedPoints: number;
+  totalPoints: number;
+  explanation?: string;
+};
+
+export type CourseExamAttempt = {
+  id: number;
+  attemptNumber: number;
+  score: number;
+  maxScore: number;
+  percentage: number;
+  passed: boolean;
+  submittedAt: string | null;
+  createdAt: string;
+  questionResults: CourseExamAttemptQuestionResult[];
+};
+
+export type CourseExamLearnerPayload = {
+  exam: Omit<CourseExam, "questions"> & {
+    questions: Array<{
+      id: string;
+      prompt: string;
+      type: "single" | "multiple" | "true_false";
+      points: number;
+      explanation?: string;
+      options: Array<{
+        id: string;
+        text: string;
+      }>;
+    }>;
+  };
+  attempts: CourseExamAttempt[];
+  latestAttempt: CourseExamAttempt | null;
+  passedAttempt: CourseExamAttempt | null;
+  attemptsUsed: number;
+  attemptsRemaining: number | null;
+  canAttempt: boolean;
+  isPassed: boolean;
+};
+
 export type CreateCoursePayload = {
   title: string;
   slug?: string;
@@ -44,6 +117,7 @@ export type CreateCoursePayload = {
 
   disclaimer?: string;
   faqs?: CourseFaqItem[];
+  exam?: CourseExam | null;
 
   metaTitle?: string;
   metaSlug?: string;
@@ -83,6 +157,7 @@ export type Course = {
   eligibilityRequirements: string | null;
   disclaimer: string | null;
   faqs?: CourseFaqItem[];
+  exam?: CourseExam | null;
   metaTitle: string | null;
   metaSlug: string | null;
   metaDescription: string | null;

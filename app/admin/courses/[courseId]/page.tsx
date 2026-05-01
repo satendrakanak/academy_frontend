@@ -5,6 +5,7 @@ import { CourseDetailsForm } from "@/components/admin/courses/course-details-for
 import { RequirementsForm } from "@/components/admin/courses/requirements-form";
 import { MetaForm } from "@/components/admin/courses/meta-form";
 import { CourseFaqsForm } from "@/components/admin/courses/course-faqs-form";
+import { CourseExamForm } from "@/components/admin/courses/course-exam-form";
 import { courseServerService } from "@/services/courses/course.server";
 import ChaptersForm from "@/components/admin/courses/chapters-form";
 import { Course } from "@/types/course";
@@ -38,6 +39,7 @@ export default async function CourseIdPage({
           <CourseDescription course={course} />
           <CourseDetailsForm course={course} />
           <CourseFaqsForm course={course} />
+          <CourseExamForm course={course} />
           <ChaptersForm course={course} />
 
           <RequirementsForm course={course} />
