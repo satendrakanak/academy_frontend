@@ -35,6 +35,12 @@ const STATUS_FLOW: Record<OrderStatus, OrderStatus[]> = {
     OrderStatus.PAID,
     OrderStatus.FAILED,
   ],
+  [OrderStatus.REFUND_REQUESTED]: [],
+  [OrderStatus.REFUND_APPROVED]: [],
+  [OrderStatus.REFUND_PROCESSING]: [],
+  [OrderStatus.REFUND_REJECTED]: [],
+  [OrderStatus.REFUND_FAILED]: [],
+  [OrderStatus.REFUNDED]: [],
 };
 
 export const OrderStatusManager = ({ order }: Props) => {
@@ -69,7 +75,7 @@ export const OrderStatusManager = ({ order }: Props) => {
 
       setStatus(selectedStatus);
       toast.success(`Order marked as ${selectedStatus}`);
-    } catch (error) {
+    } catch {
       toast.error("Failed to update status");
     } finally {
       setLoading(false);
@@ -84,6 +90,15 @@ export const OrderStatusManager = ({ order }: Props) => {
         return "text-red-600";
       case OrderStatus.CANCELLED:
         return "text-gray-500";
+      case OrderStatus.REFUND_REQUESTED:
+      case OrderStatus.REFUND_APPROVED:
+      case OrderStatus.REFUND_PROCESSING:
+        return "text-violet-600";
+      case OrderStatus.REFUND_REJECTED:
+      case OrderStatus.REFUND_FAILED:
+        return "text-orange-600";
+      case OrderStatus.REFUNDED:
+        return "text-sky-600";
       default:
         return "text-yellow-600";
     }

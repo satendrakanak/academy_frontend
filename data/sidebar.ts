@@ -8,6 +8,7 @@ import {
   MessageSquare,
   TicketPercent,
   ShoppingBag,
+  HandCoins,
   Tags,
   Mail,
   ShieldCheck,
@@ -59,6 +60,13 @@ export const sidebarData = {
       title: "Orders",
       url: "/admin/orders",
       icon: ShoppingBag,
+      requiredPermissions: ["view_order", "update_order"],
+    },
+
+    {
+      title: "Refunds",
+      url: "/admin/refunds",
+      icon: HandCoins,
       requiredPermissions: ["view_order", "update_order"],
     },
 

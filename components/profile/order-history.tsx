@@ -1,12 +1,26 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BadgeAlert, CircleCheckBig, RotateCcw } from "lucide-react";
+import {
+  BadgeAlert,
+  CircleCheckBig,
+  FileClock,
+  HandCoins,
+  RotateCcw,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Order, OrderStatus } from "@/types/order";
+import {
+  Order,
+  OrderStatus,
+  RefundRequest,
+  RefundRequestStatus,
+} from "@/types/order";
 import { Course } from "@/types/course";
 import { CourseProgressBar } from "@/components/courses/course-progress-bar";
+import { RefundRequestDialog } from "./refunds/refund-request-dialog";
+import { RefundTimeline } from "@/components/refunds/refund-timeline";
 
 interface OrderHistoryProps {
   orders: Order[];
@@ -21,9 +35,23 @@ export function OrderHistory({
   limit,
   showViewAll = false,
 }: OrderHistoryProps) {
+  const [refundDialogOrderId, setRefundDialogOrderId] = useState<number | null>(
+    null,
+  );
   const visibleOrders = typeof limit === "number" ? orders.slice(0, limit) : orders;
   const enrolledCourseMap = new Map(
     enrolledCourses.map((course) => [course.id, course]),
+  );
+
+  const latestRefundMap = useMemo(
+    () =>
+      new Map(
+        visibleOrders.map((order) => [
+          order.id,
+          getLatestRefundRequest(order.refundRequests || []),
+        ]),
+      ),
+    [visibleOrders],
   );
 
   return (
@@ -66,6 +94,15 @@ export function OrderHistory({
             const canRetry =
               order.status === OrderStatus.CANCELLED ||
               order.status === OrderStatus.FAILED;
+            const latestRefundRequest = latestRefundMap.get(order.id) || null;
+            const canRequestRefund =
+              [OrderStatus.PAID, OrderStatus.REFUND_FAILED].includes(
+                order.status,
+              ) &&
+              (!latestRefundRequest ||
+                [RefundRequestStatus.REJECTED, RefundRequestStatus.FAILED].includes(
+                  latestRefundRequest.status,
+                ));
             const primaryItem = order.items[0];
             const enrolledCourse = primaryItem?.course
               ? enrolledCourseMap.get(primaryItem.course.id)
@@ -95,6 +132,17 @@ export function OrderHistory({
                                 ? "bg-rose-50 text-rose-700"
                                 : order.status === OrderStatus.CANCELLED
                                   ? "bg-amber-50 text-amber-700"
+                                  : order.status === OrderStatus.REFUNDED
+                                    ? "bg-sky-50 text-sky-700"
+                                    : order.status ===
+                                          OrderStatus.REFUND_REQUESTED ||
+                                        order.status === OrderStatus.REFUND_APPROVED ||
+                                        order.status === OrderStatus.REFUND_PROCESSING
+                                      ? "bg-violet-50 text-violet-700"
+                                      : order.status ===
+                                            OrderStatus.REFUND_REJECTED ||
+                                          order.status === OrderStatus.REFUND_FAILED
+                                        ? "bg-orange-50 text-orange-700"
                                   : "bg-slate-100 text-slate-700"
                           }`}
                         >
@@ -225,15 +273,57 @@ export function OrderHistory({
                             Retry payment
                           </Link>
                         ) : null}
+
+                        {canRequestRefund ? (
+                          <button
+                            type="button"
+                            onClick={() => setRefundDialogOrderId(order.id)}
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]"
+                          >
+                            <HandCoins className="size-4" />
+                            Request refund
+                          </button>
+                        ) : null}
+
+                        {latestRefundRequest ? (
+                          <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
+                            <FileClock className="size-4" />
+                            Refund {latestRefundRequest.status.replaceAll("_", " ")}
+                          </span>
+                        ) : null}
                       </div>
                     </div>
                   </div>
+
+                  {latestRefundRequest ? (
+                    <RefundTimeline
+                      refundRequest={latestRefundRequest}
+                      title="Refund activity"
+                    />
+                  ) : null}
                 </CardContent>
               </Card>
             );
           })}
         </div>
       )}
+
+      <RefundRequestDialog
+        open={refundDialogOrderId !== null}
+        onOpenChange={(open) => {
+          if (!open) setRefundDialogOrderId(null);
+        }}
+        orderId={refundDialogOrderId || 0}
+      />
     </div>
   );
+}
+
+function getLatestRefundRequest(refundRequests: RefundRequest[]) {
+  return refundRequests
+    .slice()
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )[0];
 }
