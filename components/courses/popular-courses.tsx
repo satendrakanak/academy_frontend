@@ -7,7 +7,7 @@ interface PopularCoursesProps {
 
 export default function PopularCourses({ courses }: PopularCoursesProps) {
   return (
-    <section className="bg-[linear-gradient(180deg,#ffffff_0%,var(--brand-50)_100%)] py-22">
+    <section className="bg-[linear-gradient(180deg,#ffffff_0%,var(--brand-50)_100%)] py-16">
       <div className="max-w-7xl mx-auto px-6">
         {/* HEADER */}
         <div className="text-center mb-12">

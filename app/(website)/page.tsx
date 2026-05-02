@@ -64,11 +64,13 @@ export default async function Home() {
     <div>
       <Hero courses={courses} />
       <StatsTimeline />
-      <PopularCourses courses={courses} />
-      <FeaturedTestimonialsSection testimonials={testimonials} />
       <WhyJoinOurCourses />
-      <Faculty faculties={faculties} />
+      <PopularCourses courses={courses} />
       <HowItWorks />
+      <FeaturedTestimonialsSection testimonials={testimonials} />
+
+      <Faculty faculties={faculties} />
+
       <ArticlesSection articles={articles} />
     </div>
   );

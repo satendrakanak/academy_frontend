@@ -29,9 +29,9 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   const [verificationOpen, setVerificationOpen] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState("");
   const [maskedVerificationEmail, setMaskedVerificationEmail] = useState("");
-  const [pendingGuestData, setPendingGuestData] = useState<
-    z.infer<typeof checkoutSchema> | null
-  >(null);
+  const [pendingGuestData, setPendingGuestData] = useState<z.infer<
+    typeof checkoutSchema
+  > | null>(null);
   const [isGuestVerifying, setIsGuestVerifying] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -40,9 +40,7 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
 
   const { initiatePayment, retryPayment } = usePayment();
 
-  const {
-    cartItems,
-  } = useCartStore();
+  const { cartItems } = useCartStore();
 
   const { user, isLoading } = useSession();
   const checkoutForm = useCheckoutForm(user);
@@ -185,7 +183,7 @@ const CheckoutClient = ({ gateways }: CheckoutClientProps) => {
   }
 
   return (
-      <FormProvider {...checkoutForm}>
+    <FormProvider {...checkoutForm}>
       <div>
         <form onSubmit={handleSubmit(handlePaymentSubmit)}>
           <div className="min-h-screen lg:grid lg:grid-cols-3">

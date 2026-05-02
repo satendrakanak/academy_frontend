@@ -102,6 +102,7 @@ const defaultEmailSettings: EmailSettings = {
   secure: false,
   smtpUser: "",
   smtpPassword: "",
+  hasPassword: false,
   fromName: "Unitus Academy",
   fromEmail: "info@academy.com",
   replyToEmail: "",
@@ -264,8 +265,15 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const payload = { ...emailForm };
-        delete payload.hasPassword;
+        const { hasPassword, smtpPassword, ...rest } = emailForm;
+
+        const payload = {
+          ...rest,
+          ...(smtpPassword?.trim()
+            ? { smtpPassword: smtpPassword.trim() }
+            : {}),
+        };
+
         const response =
           await settingsClientService.upsertEmailSettings(payload);
         setEmailForm({
@@ -743,11 +751,15 @@ export function SiteSettingsDashboard({
                     }
                   />
                 </Field>
+
                 <Field label="SMTP password">
                   <Input
                     type="password"
-                    placeholder="Enter SMTP password"
-                    value={emailForm.smtpPassword}
+                    disabled={!emailForm.hasPassword}
+                    placeholder={
+                      emailForm.hasPassword ? "********" : "Enter SMTP password"
+                    }
+                    value={emailForm.smtpPassword || ""}
                     onChange={(event) =>
                       updateEmailField("smtpPassword", event.target.value)
                     }

@@ -24,7 +24,9 @@ const buildUsersQuery = (params?: UsersQueryParams) => {
 
 export const userServerService = {
   getAll: (params?: UsersQueryParams) =>
-    apiServer.get<ApiResponse<Paginated<User>>>(`/users${buildUsersQuery(params)}`),
+    apiServer.get<ApiResponse<Paginated<User>>>(
+      `/users${buildUsersQuery(params)}`,
+    ),
   getById: (userId: number) =>
     apiServer.get<ApiResponse<User>>(`/users/${userId}`),
   getEnrolledCourses: (userId: number) =>

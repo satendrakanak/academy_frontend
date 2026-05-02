@@ -29,6 +29,9 @@ interface OrderHistoryProps {
   showViewAll?: boolean;
 }
 
+const REFUND_WINDOW_DAYS = 7;
+const MAX_REFUND_PROGRESS = 20;
+
 export function OrderHistory({
   orders,
   enrolledCourses = [],
@@ -38,7 +41,8 @@ export function OrderHistory({
   const [refundDialogOrderId, setRefundDialogOrderId] = useState<number | null>(
     null,
   );
-  const visibleOrders = typeof limit === "number" ? orders.slice(0, limit) : orders;
+  const visibleOrders =
+    typeof limit === "number" ? orders.slice(0, limit) : orders;
   const enrolledCourseMap = new Map(
     enrolledCourses.map((course) => [course.id, course]),
   );
@@ -95,28 +99,48 @@ export function OrderHistory({
               order.status === OrderStatus.CANCELLED ||
               order.status === OrderStatus.FAILED;
             const latestRefundRequest = latestRefundMap.get(order.id) || null;
-            const canRequestRefund =
-              [OrderStatus.PAID, OrderStatus.REFUND_FAILED].includes(
-                order.status,
-              ) &&
-              (!latestRefundRequest ||
-                [RefundRequestStatus.REJECTED, RefundRequestStatus.FAILED].includes(
-                  latestRefundRequest.status,
-                ));
+
             const primaryItem = order.items[0];
             const enrolledCourse = primaryItem?.course
               ? enrolledCourseMap.get(primaryItem.course.id)
               : null;
+            const courseProgress = enrolledCourse?.progress?.progress || 0;
+
+            const refundEligibleTill = new Date(order.createdAt);
+            refundEligibleTill.setDate(
+              refundEligibleTill.getDate() + REFUND_WINDOW_DAYS,
+            );
+
+            const isWithinRefundWindow = new Date() <= refundEligibleTill;
+
+            const isProgressAllowedForRefund =
+              courseProgress <= MAX_REFUND_PROGRESS;
+
+            const canRequestRefund =
+              [OrderStatus.PAID, OrderStatus.REFUND_FAILED].includes(
+                order.status,
+              ) &&
+              isWithinRefundWindow &&
+              isProgressAllowedForRefund &&
+              (!latestRefundRequest ||
+                [
+                  RefundRequestStatus.REJECTED,
+                  RefundRequestStatus.FAILED,
+                ].includes(latestRefundRequest.status));
             const course = primaryItem?.course
               ? {
                   ...primaryItem.course,
                   isEnrolled: Boolean(enrolledCourse?.isEnrolled),
-                  progress: enrolledCourse?.progress || primaryItem.course.progress,
+                  progress:
+                    enrolledCourse?.progress || primaryItem.course.progress,
                 }
               : null;
 
             return (
-              <Card key={order.id} className="overflow-hidden rounded-3xl border-slate-200">
+              <Card
+                key={order.id}
+                className="overflow-hidden rounded-3xl border-slate-200"
+              >
                 <CardContent className="space-y-5 p-5 md:p-6">
                   <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div>
@@ -136,14 +160,17 @@ export function OrderHistory({
                                     ? "bg-sky-50 text-sky-700"
                                     : order.status ===
                                           OrderStatus.REFUND_REQUESTED ||
-                                        order.status === OrderStatus.REFUND_APPROVED ||
-                                        order.status === OrderStatus.REFUND_PROCESSING
+                                        order.status ===
+                                          OrderStatus.REFUND_APPROVED ||
+                                        order.status ===
+                                          OrderStatus.REFUND_PROCESSING
                                       ? "bg-violet-50 text-violet-700"
                                       : order.status ===
                                             OrderStatus.REFUND_REJECTED ||
-                                          order.status === OrderStatus.REFUND_FAILED
+                                          order.status ===
+                                            OrderStatus.REFUND_FAILED
                                         ? "bg-orange-50 text-orange-700"
-                                  : "bg-slate-100 text-slate-700"
+                                        : "bg-slate-100 text-slate-700"
                           }`}
                         >
                           {order.status}
@@ -162,7 +189,8 @@ export function OrderHistory({
                     <div className="text-left md:text-right">
                       <p className="text-sm text-slate-500">Total paid</p>
                       <p className="text-xl font-semibold text-slate-950">
-                        INR {Number(order.totalAmount || 0).toLocaleString("en-IN")}
+                        INR{" "}
+                        {Number(order.totalAmount || 0).toLocaleString("en-IN")}
                       </p>
                     </div>
                   </div>
@@ -188,7 +216,7 @@ export function OrderHistory({
                               <div className="min-w-0">
                                 <Link
                                   href={`/course/${course.slug}`}
-                                  className="line-clamp-2 text-lg font-semibold text-slate-900 hover:text-[var(--brand-700)]"
+                                  className="line-clamp-2 text-lg font-semibold text-slate-900 hover:text-(--brand-700)"
                                 >
                                   {course.title}
                                 </Link>
@@ -198,7 +226,10 @@ export function OrderHistory({
                                 </p>
                               </div>
                               <p className="shrink-0 text-sm font-semibold text-slate-700">
-                                INR {Number(primaryItem.price || 0).toLocaleString("en-IN")}
+                                INR{" "}
+                                {Number(primaryItem.price || 0).toLocaleString(
+                                  "en-IN",
+                                )}
                               </p>
                             </div>
 
@@ -267,28 +298,64 @@ export function OrderHistory({
                         {canRetry ? (
                           <Link
                             href={`/checkout?retryOrderId=${order.id}`}
-                            className="inline-flex items-center gap-2 rounded-full bg-[var(--brand-600)] px-4 py-2 text-sm font-medium text-white transition hover:bg-[var(--brand-700)]"
+                            className="inline-flex items-center gap-2 rounded-full bg-(--brand-600) px-4 py-2 text-sm font-medium text-white transition hover:bg-(--brand-700)"
                           >
                             <RotateCcw className="size-4" />
                             Retry payment
                           </Link>
                         ) : null}
-
-                        {canRequestRefund ? (
-                          <button
-                            type="button"
-                            onClick={() => setRefundDialogOrderId(order.id)}
-                            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-[var(--brand-300)] hover:text-[var(--brand-700)]"
-                          >
-                            <HandCoins className="size-4" />
-                            Request refund
-                          </button>
-                        ) : null}
+                        <div className="flex flex-col items-start gap-1">
+                          {canRequestRefund ? (
+                            <button
+                              type="button"
+                              onClick={() => setRefundDialogOrderId(order.id)}
+                              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-(--brand-300) hover:text-(--brand-700) cursor-pointer"
+                            >
+                              <HandCoins className="size-4" />
+                              Request refund
+                            </button>
+                          ) : null}
+                          {[
+                            OrderStatus.PAID,
+                            OrderStatus.REFUND_FAILED,
+                          ].includes(order.status) ? (
+                            <p
+                              className={`w-full text-xs ${
+                                canRequestRefund
+                                  ? "text-emerald-600"
+                                  : "text-slate-500"
+                              }`}
+                            >
+                              {canRequestRefund
+                                ? `Refund eligible till ${refundEligibleTill.toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                      day: "numeric",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )}.`
+                                : !isWithinRefundWindow
+                                  ? `Refund window closed on ${refundEligibleTill.toLocaleDateString(
+                                      "en-IN",
+                                      {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                      },
+                                    )}.`
+                                  : !isProgressAllowedForRefund
+                                    ? `Refund unavailable because course progress is above ${MAX_REFUND_PROGRESS}%.`
+                                    : "Refund request is not available for this order."}
+                            </p>
+                          ) : null}
+                        </div>
 
                         {latestRefundRequest ? (
                           <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
                             <FileClock className="size-4" />
-                            Refund {latestRefundRequest.status.replaceAll("_", " ")}
+                            Refund{" "}
+                            {latestRefundRequest.status.replaceAll("_", " ")}
                           </span>
                         ) : null}
                       </div>

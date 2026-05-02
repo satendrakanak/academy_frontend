@@ -41,9 +41,9 @@ export default function Hero({ courses }: HeroProps) {
       <div className="academy-hero-grid absolute inset-0 opacity-20" />
       <div className="academy-hero-light absolute top-0 left-0" />
 
-      <div className="relative z-10 mx-auto max-w-350 px-6 lg:px-12 xl:px-16 py-20 flex items-center min-h-162.5">
+      <div className="relative z-10 mx-auto max-w-350 px-6 lg:px-12 xl:px-16 pt-12 lg:py-20 flex flex-col lg:flex-row lg:items-center min-h-190 lg:min-h-162.5">
         {/* LEFT CONTENT */}
-        <div className="max-w-130 z-20">
+        <div className="max-w-130 z-20 text-center lg:text-left">
           <p className="mb-4 inline-flex rounded-full bg-white/20 px-4 py-1 text-sm">
             🏆 The Leader in Online Learning
           </p>
@@ -58,13 +58,15 @@ export default function Hero({ courses }: HeroProps) {
             est sit aliqua dolor do amet sint.
           </p>
 
-          <button className="mt-8 bg-white text-black px-6 py-3 rounded-md font-semibold">
-            View Course →
-          </button>
+          <Link href="/courses">
+            <button className="mt-8 bg-white text-black px-6 py-3 rounded-md font-semibold cursor-pointer">
+              View Course →
+            </button>
+          </Link>
         </div>
 
         {/* GIRL */}
-        <div className="absolute bottom-0 left-[48%] -translate-x-1/2 z-30 hidden md:block">
+        <div className="absolute bottom-0 left-[48%] -translate-x-1/2 z-30 hidden lg:block">
           <div className="relative w-130 h-155">
             <Image
               src="/assets/courses/banner-01.webp"
@@ -77,7 +79,7 @@ export default function Hero({ courses }: HeroProps) {
         </div>
 
         {/* RIGHT CARD */}
-        <div className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hidden md:block w-105">
+        <div className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hidden lg:block w-105">
           <Swiper
             modules={[Pagination, EffectCards, Autoplay]}
             effect="cards"
@@ -103,7 +105,7 @@ export default function Hero({ courses }: HeroProps) {
                       />
 
                       {discount > 0 && (
-                        <span className="absolute top-2 right-2 bg-purple-600 text-white text-xs px-2 py-1 rounded-full">
+                        <span className="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded-full">
                           -
                           {Math.round(
                             (discount / Number(course.priceInr)) * 100,
@@ -158,20 +160,108 @@ export default function Hero({ courses }: HeroProps) {
         </div>
 
         {/* MOBILE */}
-        <div className="md:hidden w-full mt-10">
-          <div className="relative w-full h-95">
+
+        <div className="lg:hidden relative w-full flex flex-col items-center mt-8 pb-0">
+          {/* MOBILE COURSE CARD */}
+          <div className="relative z-40 w-full max-w-85">
+            <Swiper
+              modules={[Pagination, Autoplay]}
+              loop={courses.length > 1}
+              autoplay={{ delay: 3000 }}
+              pagination={{ clickable: true }}
+              className="pb-8"
+            >
+              {courses.map((course, index) => {
+                const coupon = couponMap[course.id];
+
+                const discount = coupon?.discount ?? 0;
+                const finalPrice =
+                  coupon?.finalAmount ?? Number(course.priceInr);
+
+                return (
+                  <SwiperSlide key={index}>
+                    <div className="bg-white rounded-xl p-3 shadow-xl text-left">
+                      <div className="relative">
+                        <Image
+                          alt={course.title}
+                          src={course.image?.path || "/placeholder.jpg"}
+                          className="w-full h-36 object-cover rounded-lg"
+                          width={950}
+                          height={600}
+                        />
+
+                        {discount > 0 && (
+                          <span className="absolute top-2 right-2 bg-purple-600 text-white text-[10px] px-2 py-1 rounded-full">
+                            -
+                            {Math.round(
+                              (discount / Number(course.priceInr)) * 100,
+                            )}
+                            %
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-3">
+                        <h3 className="font-semibold text-sm text-black line-clamp-2">
+                          {course.title}
+                        </h3>
+
+                        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                          {course.shortDescription}
+                        </p>
+
+                        <div className="text-yellow-500 text-xs mt-2">
+                          ⭐⭐⭐⭐⭐ <span className="text-gray-400">(15)</span>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-2">
+                          <div className="flex items-center gap-2">
+                            <p className="text-primary font-bold text-sm">
+                              ₹
+                              {new Intl.NumberFormat("en-IN").format(
+                                finalPrice,
+                              )}
+                            </p>
+
+                            {discount > 0 && (
+                              <span className="text-xs text-gray-400 line-through">
+                                ₹
+                                {new Intl.NumberFormat("en-IN").format(
+                                  Number(course.priceInr),
+                                )}
+                              </span>
+                            )}
+                          </div>
+
+                          <Link href={`/course/${course.slug}`}>
+                            <span className="text-xs text-primary whitespace-nowrap">
+                              Learn →
+                            </span>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                );
+              })}
+            </Swiper>
+          </div>
+
+          {/* MOBILE GIRL - BOTTOM STICK */}
+          <div className="relative z-20 w-full h-82.5 mt-2">
             <Image
               src="/assets/courses/banner-01.webp"
               alt="hero"
               fill
-              className="object-contain"
+              priority
+              className="object-contain object-bottom"
             />
           </div>
         </div>
       </div>
 
       {/* WAVE */}
-      <div className="absolute bottom-0 left-0 w-full z-40">
+      <div className="absolute bottom-0 left-0 w-full z-40 hidden lg:block">
         <svg
           viewBox="0 0 1440 120"
           className="w-full h-20"
