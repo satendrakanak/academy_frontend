@@ -30,7 +30,7 @@ export function RefundsDashboard({
         cell: ({ row }) => (
           <button
             type="button"
-            className="font-semibold text-[var(--brand-700)] hover:underline"
+            className="font-semibold text-[var(--brand-700)] hover:underline dark:text-[var(--brand-200)]"
             onClick={() => setSelectedRefund(row.original)}
           >
             #{row.original.id}
@@ -44,10 +44,10 @@ export function RefundsDashboard({
           const item = order?.items?.[0];
           return (
             <div className="min-w-0">
-              <p className="font-medium text-slate-900">
+              <p className="font-medium text-slate-900 dark:text-white">
                 {order ? `#${order.id}` : "Order unavailable"}
               </p>
-              <p className="line-clamp-2 text-xs text-slate-500">
+              <p className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
                 {item?.course?.title || "Course order"}
               </p>
             </div>
@@ -58,10 +58,10 @@ export function RefundsDashboard({
         header: "Customer",
         cell: ({ row }) => (
           <div className="min-w-0">
-            <p className="font-medium text-slate-900">
+            <p className="font-medium text-slate-900 dark:text-white">
               {row.original.requester?.firstName} {row.original.requester?.lastName}
             </p>
-            <p className="text-xs text-slate-500">{row.original.requester?.email}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">{row.original.requester?.email}</p>
           </div>
         ),
       },
@@ -69,11 +69,11 @@ export function RefundsDashboard({
         header: "Amount",
         cell: ({ row }) => (
           <div className="text-sm">
-            <p className="font-semibold text-slate-900">
+            <p className="font-semibold text-slate-900 dark:text-white">
               {currencyFormatter.format(Number(row.original.requestedAmount || 0))}
             </p>
             {row.original.approvedAmount ? (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Approved:{" "}
                 {currencyFormatter.format(Number(row.original.approvedAmount || 0))}
               </p>
@@ -92,7 +92,7 @@ export function RefundsDashboard({
         accessorKey: "createdAt",
         header: "Created",
         cell: ({ row }) => (
-          <div className="text-sm text-slate-600">
+          <div className="text-sm text-slate-600 dark:text-slate-300">
             {new Date(row.original.createdAt).toLocaleString("en-IN", {
               day: "numeric",
               month: "short",

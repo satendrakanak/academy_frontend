@@ -56,7 +56,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
 
       return (
         <Link href={`/admin/orders/${order.id}`}>
-          <span className="font-semibold text-blue-600 hover:underline cursor-pointer">
+          <span className="cursor-pointer font-semibold text-[var(--brand-700)] hover:underline dark:text-[var(--brand-200)]">
             #{order.id}
           </span>
         </Link>
@@ -75,7 +75,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
           <span className="font-medium">
             {user?.firstName} {user?.lastName}
           </span>
-          <span className="text-xs text-gray-500">{user?.email}</span>
+          <span className="text-xs text-gray-500 dark:text-slate-400">{user?.email}</span>
         </div>
       );
     },
@@ -91,10 +91,10 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
         <div className="flex flex-col text-sm">
           <span className="font-semibold">₹{order.totalAmount}</span>
 
-          <span className="text-xs text-gray-500">Sub: ₹{order.subTotal}</span>
+          <span className="text-xs text-gray-500 dark:text-slate-400">Sub: ₹{order.subTotal}</span>
 
           {order.discount > 0 && (
-            <span className="text-xs text-red-500">-₹{order.discount}</span>
+            <span className="text-xs text-red-500 dark:text-rose-300">-₹{order.discount}</span>
           )}
         </div>
       );
@@ -126,7 +126,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
       return (
         <div className="text-sm">
           <p>{date.toLocaleDateString("en-GB")}</p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-slate-400">
             {date.toLocaleTimeString("en-IN")}
           </p>
         </div>

@@ -1,9 +1,7 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { Order } from "@/types/order";
 import { formatDate } from "@/utils/formate-date";
-import { format } from "date-fns";
 
 interface Props {
   order: Order;
@@ -11,19 +9,19 @@ interface Props {
 
 export const OrderQuickInfo = ({ order }: Props) => {
   return (
-    <div className="rounded-lg border bg-white">
-      <div className="px-4 py-3 border-b">
-        <h3 className="text-sm font-medium">Order Info</h3>
+    <div className="rounded-lg border border-slate-200 bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+        <h3 className="text-sm font-medium text-slate-950 dark:text-white">Order Info</h3>
       </div>
       <div className="p-3 space-y-3">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Order ID</span>
+            <span className="text-xs text-gray-500 dark:text-slate-400">Order ID</span>
             <span className="font-medium">#{order.id}</span>
           </div>
 
           <div className="flex justify-between text-xs">
-            <span className="text-gray-500 ">Order At</span>
+              <span className="text-gray-500 dark:text-slate-400">Order At</span>
             <span className="text-xs font-medium">
               {formatDate(order.createdAt)}
             </span>
@@ -31,7 +29,7 @@ export const OrderQuickInfo = ({ order }: Props) => {
 
           {order.paidAt && (
             <div className="flex justify-between text-xs">
-              <span className="text-gray-500 ">Paid At</span>
+              <span className="text-gray-500 dark:text-slate-400">Paid At</span>
               <span className="text-xs font-medium">
                 {formatDate(order.paidAt)}
               </span>
@@ -39,7 +37,7 @@ export const OrderQuickInfo = ({ order }: Props) => {
           )}
 
           <div className="flex justify-between">
-            <span className="text-gray-500 text-xs">Payment Method</span>
+            <span className="text-xs text-gray-500 dark:text-slate-400">Payment Method</span>
             <span className="uppercase text-xs font-medium">
               {order.paymentMethod}
             </span>
@@ -47,7 +45,7 @@ export const OrderQuickInfo = ({ order }: Props) => {
 
           {order.currency && (
             <div className="flex justify-between text-xs">
-              <span className="text-gray-500 text-xs font-medium">
+              <span className="text-xs font-medium text-gray-500 dark:text-slate-400">
                 Currency
               </span>
               <span>{order.currency}</span>

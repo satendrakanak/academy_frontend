@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { SubmitButton } from "@/components/submit-button";
@@ -48,6 +48,8 @@ export const CouponValidityForm = ({ coupon }: Props) => {
   });
 
   const { isValid, isDirty, isSubmitting, errors } = form.formState;
+  const validFrom = useWatch({ control: form.control, name: "validFrom" });
+  const validTill = useWatch({ control: form.control, name: "validTill" });
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
@@ -64,11 +66,11 @@ export const CouponValidityForm = ({ coupon }: Props) => {
   };
 
   return (
-    <Card>
+    <Card className="dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold">Validity</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Validity</h3>
           <p className="text-sm text-muted-foreground">
             Select date & time range
           </p>
@@ -79,8 +81,8 @@ export const CouponValidityForm = ({ coupon }: Props) => {
             <Field data-invalid={!!errors.validTill}>
               <DateRangeTimePicker
                 value={{
-                  from: form.watch("validFrom"),
-                  to: form.watch("validTill"),
+                  from: validFrom,
+                  to: validTill,
                 }}
                 onChange={({ from, to }) => {
                   form.setValue("validFrom", from, {

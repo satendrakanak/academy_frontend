@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 import { tagClientService } from "@/services/tags/tag.client";
 import { Tag } from "@/types/tag";
@@ -15,7 +15,7 @@ interface TagsFormProps {
 }
 
 export function TagsForm({ course }: TagsFormProps) {
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>(course.tags || []);
   const [newTag, setNewTag] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestedTags, setSuggestedTags] = useState<Tag[]>([]);
@@ -26,9 +26,16 @@ export function TagsForm({ course }: TagsFormProps) {
   // 🔥 important: prevent duplicate API calls
   const lastSavedRef = useRef<string>("");
 
-  useEffect(() => {
-    setTags(course.tags || []);
-  }, [course]);
+  const courseTagIds = useMemo(
+    () => (course.tags || []).map((tag) => tag.id).sort().join(","),
+    [course.tags],
+  );
+  const tagsChangedLocally = useMemo(
+    () => tags.map((tag) => tag.id).sort().join(",") !== courseTagIds,
+    [courseTagIds, tags],
+  );
+
+  const displayedTags = tagsChangedLocally ? tags : (course.tags ?? []);
 
   // load suggestions (later search API laga sakta hai)
   const loadSuggestedTags = async () => {
@@ -63,10 +70,10 @@ export function TagsForm({ course }: TagsFormProps) {
 
   // remove tag
   const removeTag = async (tagId: number) => {
-    const previous = tags;
+    const previous = displayedTags;
 
     // 🔥 optimistic update
-    const updated = tags.filter((t) => t.id !== tagId);
+    const updated = displayedTags.filter((t) => t.id !== tagId);
     setTags(updated);
 
     try {
@@ -120,13 +127,15 @@ export function TagsForm({ course }: TagsFormProps) {
   };
 
   return (
-    <div className="rounded-lg border bg-white">
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       {/* Header */}
-      <div className="px-4 py-3 border-b">
-        <h3 className="text-sm font-medium">Tags</h3>
+      <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white">
+          Tags
+        </h3>
       </div>
 
-      <div className="p-4 space-y-3">
+      <div className="space-y-3 p-4">
         {/* Input */}
         <div className="relative">
           <input
@@ -139,13 +148,13 @@ export function TagsForm({ course }: TagsFormProps) {
               }
             }}
             placeholder="Add tag"
-            className="w-full border rounded-md px-2 pr-8 py-1 text-sm outline-none"
+            className="w-full rounded-xl border px-3 py-2 pr-9 text-sm outline-none dark:border-white/10 dark:bg-white/8 dark:text-slate-100"
           />
 
           {newTag.trim() && (
             <button
               onClick={handleAddTagsFromInput}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-[var(--brand-700)] dark:hover:text-[var(--brand-200)]"
             >
               <Check size={16} />
             </button>
@@ -158,10 +167,10 @@ export function TagsForm({ course }: TagsFormProps) {
 
         {/* Selected tags */}
         <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
+          {displayedTags.map((tag) => (
             <span
               key={tag.id}
-              className="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded-md"
+              className="flex items-center gap-1 rounded-xl bg-gray-100 px-2.5 py-1.5 text-xs dark:bg-white/10 dark:text-slate-100"
             >
               {tag.name}
               <button
@@ -181,23 +190,23 @@ export function TagsForm({ course }: TagsFormProps) {
               setShowSuggestions((prev) => !prev);
               loadSuggestedTags();
             }}
-            className="text-xs text-primary hover:underline cursor-pointer"
+            className="cursor-pointer text-xs text-[var(--brand-700)] hover:underline dark:text-[var(--brand-200)]"
           >
             Choose from the most used tags
           </button>
 
           {showSuggestions && (
-            <div className="border rounded-md p-2 space-y-2">
+            <div className="space-y-2 rounded-xl border border-slate-200 p-3 dark:border-white/10 dark:bg-white/4">
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search tags..."
-                className="w-full border px-2 py-1 text-sm rounded"
+                className="w-full rounded-lg border px-3 py-2 text-sm dark:border-white/10 dark:bg-white/8 dark:text-slate-100"
               />
 
               <div className="max-h-40 overflow-y-auto space-y-1">
                 {suggestedTags.map((tag) => {
-                  const isSelected = tags.some((t) => t.id === tag.id);
+                const isSelected = displayedTags.some((t) => t.id === tag.id);
 
                   return (
                     <div
@@ -205,14 +214,14 @@ export function TagsForm({ course }: TagsFormProps) {
                       onClick={() => {
                         if (isSelected) return;
 
-                        const updated = [...tags, tag];
+                        const updated = [...displayedTags, tag];
                         setTags(updated);
                         saveTags(updated);
                       }}
-                      className={`text-sm px-2 py-1 rounded cursor-pointer ${
+                      className={`cursor-pointer rounded-lg px-2 py-1.5 text-sm ${
                         isSelected
-                          ? "bg-gray-200 text-muted-foreground"
-                          : "hover:bg-gray-100"
+                          ? "bg-gray-200 text-muted-foreground dark:bg-white/10 dark:text-slate-400"
+                          : "hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-white/8"
                       }`}
                     >
                       {tag.name}

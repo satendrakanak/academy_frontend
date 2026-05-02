@@ -31,7 +31,7 @@ export function TopCoursesCard({
   const topCourses = data.slice(0, 5);
 
   return (
-    <Card className="border-[var(--brand-100)] bg-white">
+    <Card className="border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardHeader className="flex flex-row items-start justify-between gap-4">
         <div>
           <CardTitle>Top Selling Courses</CardTitle>
@@ -86,13 +86,13 @@ export function TopCoursesCard({
           {topCourses.map((course, index) => (
             <div
               key={`${course.id}-${course.slug || course.title}-${index}`}
-              className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3 transition hover:border-[var(--brand-200)] hover:bg-[var(--brand-50)]/35"
+              className="flex items-center justify-between rounded-2xl border border-slate-100 px-4 py-3 transition hover:border-[var(--brand-200)] hover:bg-[var(--brand-50)]/35 dark:border-white/10 dark:hover:bg-white/6"
             >
               <div className="min-w-0">
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   #{index + 1} {course.title}
                 </p>
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                   {course.sales} sales
                 </p>
               </div>

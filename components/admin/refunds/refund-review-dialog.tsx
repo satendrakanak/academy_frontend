@@ -126,7 +126,7 @@ export function RefundReviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl!">
+      <DialogContent className="max-w-4xl! dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-slate-100">
         <DialogHeader>
           <DialogTitle>Review refund request #{refundRequest.id}</DialogTitle>
           <DialogDescription>
@@ -137,11 +137,11 @@ export function RefundReviewDialog({
         </DialogHeader>
 
         <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50/70 p-5">
+          <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/6">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500">Current status</p>
-                <p className="mt-1 text-lg font-semibold text-slate-950">
+                <p className="text-sm text-slate-500 dark:text-slate-400">Current status</p>
+                <p className="mt-1 text-lg font-semibold text-slate-950 dark:text-white">
                   Refund request
                 </p>
               </div>
@@ -159,17 +159,17 @@ export function RefundReviewDialog({
               />
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-4">
-              <p className="text-sm font-semibold text-slate-900">Reason</p>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">Reason</p>
+              <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 {refundRequest.reason}
               </p>
               {refundRequest.customerNote ? (
                 <>
-                  <p className="mt-4 text-sm font-semibold text-slate-900">
+                  <p className="mt-4 text-sm font-semibold text-slate-900 dark:text-white">
                     Customer note
                   </p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                     {refundRequest.customerNote}
                   </p>
                 </>
@@ -178,7 +178,7 @@ export function RefundReviewDialog({
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-3xl border border-slate-200 bg-white p-5">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-white/8">
               {!order ? (
                 <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
                   Linked order is missing for this refund request. You can
@@ -189,7 +189,7 @@ export function RefundReviewDialog({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-900">
+                  <label className="text-sm font-medium text-slate-900 dark:text-slate-100">
                     Approved amount
                   </label>
                   <Input
@@ -199,11 +199,11 @@ export function RefundReviewDialog({
                     className="h-11 rounded-2xl"
                   />
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
+                  <p className="text-xs uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                     Order total
                   </p>
-                  <p className="mt-2 text-lg font-semibold text-slate-950">
+                  <p className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
                     INR{" "}
                     {Number(order?.totalAmount || 0).toLocaleString("en-IN")}
                   </p>
@@ -211,7 +211,7 @@ export function RefundReviewDialog({
               </div>
 
               <div className="mt-4 space-y-2">
-                <label className="text-sm font-medium text-slate-900">
+                <label className="text-sm font-medium text-slate-900 dark:text-slate-100">
                   Admin note
                 </label>
                 <Textarea

@@ -35,22 +35,22 @@ export default function ProgressChart({ weeklyProgress }: ProgressChartProps) {
   const chartMax = Math.max(100, Math.ceil(highestValue / 10) * 10);
 
   return (
-    <div className="h-full rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-4 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.24)]">
+    <div className="h-full rounded-[28px] border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)] p-4 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.24)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(16,25,44,0.98))] dark:shadow-[0_32px_80px_-42px_rgba(0,0,0,0.64)]">
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
             Weekly Progress
           </p>
-          <h4 className="mt-2 text-lg font-semibold text-slate-950">
+          <h4 className="mt-2 text-lg font-semibold text-slate-950 dark:text-white">
             Your learning rhythm
           </h4>
         </div>
 
-        <div className="rounded-2xl bg-[var(--brand-50)] px-3 py-2 text-right">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)]">
+        <div className="rounded-2xl bg-[var(--brand-50)] px-3 py-2 text-right dark:bg-white/8">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
             Peak
           </p>
-          <p className="text-lg font-semibold text-slate-950">{highestValue}%</p>
+          <p className="text-lg font-semibold text-slate-950 dark:text-white">{highestValue}%</p>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export default function ProgressChart({ weeklyProgress }: ProgressChartProps) {
 
             <CartesianGrid
               vertical={false}
-              stroke="#E2E8F0"
+              stroke="rgba(148,163,184,0.28)"
               strokeDasharray="4 4"
             />
 
@@ -75,7 +75,7 @@ export default function ProgressChart({ weeklyProgress }: ProgressChartProps) {
               dataKey="day"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 12, fill: "#64748B", fontWeight: 500 }}
+              tick={{ fontSize: 12, fill: hasProgress ? "#94A3B8" : "#64748B", fontWeight: 500 }}
             />
 
             <YAxis
@@ -88,12 +88,13 @@ export default function ProgressChart({ weeklyProgress }: ProgressChartProps) {
             />
 
             <Tooltip
-              cursor={{ stroke: "#CBD5E1", strokeDasharray: "4 4" }}
+              cursor={{ stroke: "#64748B", strokeDasharray: "4 4" }}
               contentStyle={{
                 borderRadius: 18,
-                border: "1px solid #E2E8F0",
+                border: "1px solid rgba(148,163,184,0.2)",
                 boxShadow: "0 20px 45px -28px rgba(15,23,42,0.35)",
-                background: "#FFFFFF",
+                background: "rgba(11,18,32,0.96)",
+                color: "#F8FAFC",
               }}
               formatter={(value: number) => [`${value}%`, "Progress"]}
               labelFormatter={(label) => `${label}`}
@@ -123,7 +124,7 @@ export default function ProgressChart({ weeklyProgress }: ProgressChartProps) {
       </div>
 
       {!hasProgress ? (
-        <p className="mt-4 text-sm text-slate-500">
+        <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
           Start watching lessons this week and your progress trend will appear here.
         </p>
       ) : null}

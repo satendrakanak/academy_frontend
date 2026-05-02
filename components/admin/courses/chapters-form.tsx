@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Chapter } from "@/types/chapter";
 import ChaptersList from "./chapters/chapters-list";
@@ -17,13 +17,8 @@ interface ChaptersFormProps {
 }
 
 export default function ChaptersForm({ course }: ChaptersFormProps) {
-  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [chapters, setChapters] = useState<Chapter[]>(course.chapters ?? []);
   const [activeId, setActiveId] = useState<number | null>(null);
-  useEffect(() => {
-    if (course?.chapters) {
-      setChapters(course.chapters);
-    }
-  }, [course]);
 
   const addChapter = () => {
     const newChapter: Chapter = {
@@ -113,7 +108,7 @@ export default function ChaptersForm({ course }: ChaptersFormProps) {
 
   return (
     <>
-      <div className="rounded-2xl border p-4 bg-white shadow-sm grid grid-cols-3 gap-4">
+      <div className="grid gap-4 rounded-2xl border bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <ChaptersList
           chapters={chapters}
           activeId={activeId}

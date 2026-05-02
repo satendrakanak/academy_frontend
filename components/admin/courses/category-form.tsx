@@ -99,15 +99,17 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
   };
 
   return (
-    <div className="rounded-lg border bg-white">
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       {/* Header */}
-      <div className="px-4 py-3 border-b">
-        <h3 className="text-sm font-medium">Categories</h3>
+      <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white">
+          Categories
+        </h3>
       </div>
 
-      <div className="p-3 space-y-3">
+      <div className="space-y-3 p-4">
         {/* Gray Panel (no shadow, clean) */}
-        <div className="max-h-50 overflow-y-auto ">
+        <div className="max-h-52 overflow-y-auto rounded-xl border border-slate-100 bg-slate-50/70 p-3 dark:border-white/10 dark:bg-white/4">
           <div className="space-y-2">
             {categories.map((cat) => {
               const isChecked = selected.includes(cat.id);
@@ -115,7 +117,7 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
               return (
                 <label
                   key={cat.id}
-                  className="flex items-center gap-3 text-sm cursor-pointer"
+                  className="flex cursor-pointer items-center gap-3 text-sm text-slate-700 dark:text-slate-200"
                 >
                   <input
                     type="checkbox"
@@ -136,7 +138,7 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
             <button
               type="button"
               onClick={() => setShowInput(true)}
-              className="flex items-center gap-1 text-sm text-primary hover:underline cursor-pointer"
+              className="flex cursor-pointer items-center gap-1 text-sm text-[var(--brand-700)] hover:underline dark:text-[var(--brand-200)]"
             >
               <Plus size={14} />
               Add New Category
@@ -154,14 +156,14 @@ export const CategoryForm = ({ course }: CategoryFormProps) => {
                   }
                 }}
                 placeholder="New category"
-                className="w-full border rounded-md px-2 pr-8 py-1 text-sm outline-none bg-white"
+                className="w-full rounded-xl border bg-white px-3 py-2 pr-9 text-sm outline-none dark:border-white/10 dark:bg-white/8 dark:text-slate-100"
               />
 
               {/* Icon inside input */}
               {newCategory.trim() && (
                 <button
                   onClick={handleAddCategory}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-muted-foreground hover:text-[var(--brand-700)] dark:hover:text-[var(--brand-200)]"
                 >
                   <Check size={16} />
                 </button>

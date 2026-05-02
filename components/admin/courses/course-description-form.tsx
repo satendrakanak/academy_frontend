@@ -42,8 +42,8 @@ export const CourseDescription = ({ course }: CourseDescriptionProps) => {
   };
 
   return (
-    <Card className="rounded-2xl border bg-white shadow-sm">
-      <CardContent className="p-6 space-y-6">
+    <Card className="rounded-2xl border bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <CardContent className="space-y-6 p-5 sm:p-6">
         {/* Header */}
         <div>
           <h3 className="text-lg font-semibold">Course Description</h3>

@@ -90,7 +90,9 @@ export function ContactLeadsDashboard({
             <p className="font-semibold text-slate-950">
               {row.original.fullName}
             </p>
-            <p className="text-xs text-slate-500">{row.original.email}</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              {row.original.email}
+            </p>
           </div>
         ),
       },
@@ -107,7 +109,7 @@ export function ContactLeadsDashboard({
             <p className="font-medium text-slate-900">
               {row.original.subject || "General enquiry"}
             </p>
-            <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-500">
+            <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-500 dark:text-slate-400">
               {row.original.message}
             </p>
           </div>
@@ -210,17 +212,17 @@ export function ContactLeadsDashboard({
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[30px] border border-[var(--brand-100)] bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.16),transparent_32%),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef4ff_100%)] p-6 shadow-[0_28px_70px_-42px_rgba(15,23,42,0.4)] md:p-8">
+      <section className="overflow-hidden rounded-[30px] border border-[var(--brand-100)] bg-[radial-gradient(circle_at_top_left,rgba(201,79,63,0.14),transparent_32%),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef4ff_100%)] p-6 shadow-[0_28px_70px_-42px_rgba(15,23,42,0.4)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] md:p-8">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl space-y-3">
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               Contact Leads
             </span>
             <div className="space-y-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
                 Enquiries, intent, and follow-up in one place
               </h1>
-              <p className="max-w-2xl text-sm leading-6 text-slate-600 md:text-base">
+              <p className="max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 md:text-base">
                 Review incoming enquiries, filter by date or status, and export
                 the full lead list for your follow-up workflow.
               </p>
@@ -229,7 +231,7 @@ export function ContactLeadsDashboard({
 
           <Button
             variant="outline"
-            className="rounded-2xl bg-white/80"
+            className="rounded-2xl bg-white/80 dark:border-white/10 dark:bg-white/8"
             onClick={exportLeads}
           >
             <Download className="size-4" />
@@ -245,7 +247,7 @@ export function ContactLeadsDashboard({
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
+      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="grid gap-4 xl:grid-cols-[1fr_180px_180px_180px_auto]">
           <Input
             value={search}
@@ -292,7 +294,7 @@ export function ContactLeadsDashboard({
           </Button>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100">
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100 dark:border-white/10">
           {filteredLeads.length ? (
             <>
               <DataTableContent
@@ -300,16 +302,16 @@ export function ContactLeadsDashboard({
                 data={filteredLeads}
                 getRowId={(row) => row.id}
               />
-              <div className="border-t border-slate-100 py-4">
+              <div className="border-t border-slate-100 py-4 dark:border-white/10">
                 <DataTablePagination table={table} />
               </div>
             </>
           ) : (
             <div className="px-6 py-16 text-center">
-              <p className="text-base font-semibold text-slate-950">
+              <p className="text-base font-semibold text-slate-950 dark:text-white">
                 No leads match the current filters
               </p>
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Try changing the date range, status, or search text.
               </p>
             </div>
@@ -330,14 +332,14 @@ function StatCard({
   value: string | number;
 }) {
   return (
-    <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm">
+    <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-300">
           {label}
         </p>
         <Icon className="size-4 text-[var(--brand-700)]" />
       </div>
-      <p className="mt-3 text-2xl font-semibold text-slate-950">{value}</p>
+      <p className="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">{value}</p>
     </div>
   );
 }

@@ -3,11 +3,15 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/context/session-context";
 import { getSession } from "@/lib/auth";
-import { Toaster } from "sonner";
 import { headers } from "next/headers";
 import { buildMetadata, siteConfig } from "@/lib/seo";
 import { settingsServerService } from "@/services/settings/settings.server";
 import { SiteSettingsProvider } from "@/context/site-settings-context";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { FloatingThemeToggle } from "@/components/theme/floating-theme-toggle";
+import { ScrollProgressButton } from "@/components/ui/scroll-progress-button";
+import { RouteProgressBar } from "@/components/ui/route-progress-bar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -69,19 +73,28 @@ export default async function RootLayout({
       socialProviders: [],
     };
   return (
-    <html lang="en" className={`${inter.className}  h-full antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${inter.className} h-full antialiased`}
+    >
       <head>
         {publicSettings.site.faviconUrl ? (
           <link rel="icon" href={publicSettings.site.faviconUrl} />
         ) : null}
       </head>
-      <body className="min-h-full flex flex-col">
-        <SiteSettingsProvider value={publicSettings}>
-          <SessionProvider session={session} hasSession={hasSession}>
-            <Toaster />
-            {children}
-          </SessionProvider>
-        </SiteSettingsProvider>
+      <body className="min-h-full bg-background text-foreground">
+        <ThemeProvider>
+          <SiteSettingsProvider value={publicSettings}>
+            <SessionProvider session={session} hasSession={hasSession}>
+              <RouteProgressBar />
+              <Toaster richColors />
+              <FloatingThemeToggle />
+              <ScrollProgressButton />
+              {children}
+            </SessionProvider>
+          </SiteSettingsProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

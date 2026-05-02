@@ -48,7 +48,9 @@ export const ChapterAccordionItem = ({
     <AccordionItem
       value={String(chapter.id)}
       className={`w-full rounded-lg transition-all ${
-        isActive ? "border shadow-sm bg-background" : "border border-border"
+        isActive
+          ? "border border-[var(--brand-200)] bg-background shadow-sm dark:border-white/15 dark:bg-white/6"
+          : "border border-border dark:border-white/10 dark:bg-white/4"
       }`}
     >
       <AccordionTrigger
@@ -56,11 +58,11 @@ export const ChapterAccordionItem = ({
     ${
       chapter.isPublished
         ? isActive
-          ? "bg-green-100"
-          : "bg-green-50"
+          ? "bg-green-100 dark:bg-emerald-500/16"
+          : "bg-green-50 dark:bg-emerald-500/10"
         : isActive
-          ? "bg-primary/10"
-          : "hover:bg-muted"
+          ? "bg-primary/10 dark:bg-white/8"
+          : "hover:bg-muted dark:hover:bg-white/8"
     }`}
       >
         {/* LEFT */}
@@ -71,7 +73,7 @@ export const ChapterAccordionItem = ({
               {...dragHandle.attributes}
               {...dragHandle.listeners}
               onClick={(e) => e.stopPropagation()}
-              className="cursor-grab text-muted-foreground text-sm"
+              className="cursor-grab text-sm text-muted-foreground dark:text-slate-400"
             >
               ☰
             </span>
@@ -83,7 +85,7 @@ export const ChapterAccordionItem = ({
               e.stopPropagation();
               setActiveId(chapter.id);
             }}
-            className="truncate font-medium"
+            className="truncate font-medium text-slate-900 dark:text-slate-100"
           >
             {chapter.title || `Untitled ${index + 1}`}
           </span>
@@ -98,7 +100,7 @@ export const ChapterAccordionItem = ({
           <div
             role="button"
             onClick={() => onEdit(chapter)}
-            className="p-1 rounded hover:bg-muted cursor-pointer"
+            className="cursor-pointer rounded p-1 hover:bg-muted dark:hover:bg-white/8"
             title="Edit Chapter"
           >
             <Pencil className="size-3" />
@@ -109,7 +111,7 @@ export const ChapterAccordionItem = ({
             <div
               role="button"
               onClick={() => onTooglePublish(chapter.id, false)}
-              className="p-1 rounded hover:bg-red-50 text-red-600 cursor-pointer"
+              className="cursor-pointer rounded p-1 text-red-600 hover:bg-red-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
               title="Unpublish"
             >
               <RotateCcw className="size-3" />
@@ -139,10 +141,10 @@ export const ChapterAccordionItem = ({
                     }
                   }}
                   className={cn(
-                    "p-1 rounded text-green-600",
+                    "rounded p-1 text-green-600 dark:text-emerald-300",
                     disabled
                       ? "opacity-40 cursor-not-allowed"
-                      : "hover:bg-green-50 cursor-pointer",
+                      : "cursor-pointer hover:bg-green-50 dark:hover:bg-emerald-500/10",
                   )}
                   title={disabled ? "Cannot publish yet" : "Publish"}
                 >
@@ -154,7 +156,7 @@ export const ChapterAccordionItem = ({
                 <div
                   role="button"
                   onClick={() => onDelete?.(chapter.id)}
-                  className="p-1 rounded hover:bg-red-50 text-red-500 cursor-pointer"
+                  className="cursor-pointer rounded p-1 text-red-500 hover:bg-red-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
                   title="Delete Chapter"
                 >
                   <Trash2 className="size-3" />
@@ -167,7 +169,7 @@ export const ChapterAccordionItem = ({
 
       {/* CONTENT */}
       <AccordionContent className="w-full overflow-auto!">
-        <div className="pt-3 pb-4 px-3 bg-muted/30 rounded-b-md min-h-50 max-h-[60vh] overflow-y-auto">
+        <div className="min-h-50 max-h-[60vh] overflow-y-auto rounded-b-md bg-muted/30 px-3 pt-3 pb-4 dark:bg-white/3">
           <LectureForm chapter={chapter} />
         </div>
       </AccordionContent>

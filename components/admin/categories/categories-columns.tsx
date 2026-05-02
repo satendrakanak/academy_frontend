@@ -56,8 +56,10 @@ export const getCategoriesColumns = (
             className="h-11 w-11 rounded-2xl object-cover"
           />
           <div className="min-w-0">
-            <p className="truncate font-semibold text-slate-900">{category.name}</p>
-            <p className="truncate text-xs text-slate-500">
+            <p className="truncate font-semibold text-slate-900 dark:text-white">
+              {category.name}
+            </p>
+            <p className="truncate text-xs text-slate-500 dark:text-slate-400">
               {category.description || "No description added yet."}
             </p>
           </div>
@@ -78,7 +80,9 @@ export const getCategoriesColumns = (
     accessorKey: "slug",
     header: "Slug",
     cell: ({ row }) => (
-      <span className="font-medium text-slate-700">{row.original.slug}</span>
+      <span className="font-medium text-slate-700 dark:text-slate-300">
+        {row.original.slug}
+      </span>
     ),
   },
   {

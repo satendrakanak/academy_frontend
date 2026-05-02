@@ -13,20 +13,21 @@ export const FeaturedTestimonialsSection = ({
   if (!testimonials.length) return null;
 
   return (
-    <section className="relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_color-mix(in_oklab,var(--brand-100)_60%,white)_0%,_transparent_30%),linear-gradient(180deg,var(--brand-50)_0%,#ffffff_48%,color-mix(in_oklab,var(--brand-50)_70%,white)_100%)] py-24">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--brand-200)_35%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--brand-200)_35%,transparent)_1px,transparent_1px)] bg-[size:72px_72px]" />
+    <section className="academy-section relative overflow-hidden bg-[radial-gradient(circle_at_top_left,_color-mix(in_oklab,var(--brand-100)_60%,white)_0%,_transparent_30%),linear-gradient(180deg,var(--brand-50)_0%,#ffffff_48%,color-mix(in_oklab,var(--brand-50)_70%,white)_100%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(58,84,169,0.18)_0%,transparent_28%),linear-gradient(180deg,#0b1220_0%,#10192d_100%)]">
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,color-mix(in_oklab,var(--brand-200)_22%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--brand-200)_22%,transparent)_1px,transparent_1px)] bg-[size:72px_72px] dark:hidden" />
+      <div className="absolute inset-0 hidden dark:block dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.045),transparent_42%)]" />
 
       <Container>
         <div className="relative z-10">
           <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)]">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
                 Client Testimonials
               </p>
-              <h2 className="text-3xl font-bold text-slate-900 md:text-5xl">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white md:text-5xl">
                 Real transformations, not generic praise.
               </h2>
-              <p className="mt-4 text-base leading-7 text-slate-600 md:text-lg">
+              <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300 md:text-lg">
                 Explore a mix of written stories and video experiences from
                 learners who trusted Unitus with their growth.
               </p>
@@ -35,7 +36,7 @@ export const FeaturedTestimonialsSection = ({
             <Button
               asChild
               variant="outline"
-              className="h-12 rounded-full border-[var(--brand-200)] bg-white/80 px-6 text-[var(--brand-800)] hover:bg-[var(--brand-50)]"
+              className="h-12 rounded-full border-[var(--brand-200)] bg-white/80 px-6 text-[var(--brand-800)] hover:bg-[var(--brand-50)] dark:bg-white/10 dark:text-white dark:hover:bg-white/16"
             >
               <Link href="/client-testimonials">View All Testimonials</Link>
             </Button>

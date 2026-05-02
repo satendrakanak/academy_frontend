@@ -221,44 +221,44 @@ export function UsersDashboard({
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[30px] border border-[var(--brand-100)] bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.16),transparent_32%),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef4ff_100%)] p-6 shadow-[0_28px_70px_-42px_rgba(15,23,42,0.4)] md:p-8">
+      <section className="overflow-hidden rounded-[30px] border border-[var(--brand-100)] bg-[radial-gradient(circle_at_top_left,rgba(201,79,63,0.14),transparent_32%),linear-gradient(135deg,#ffffff_0%,#f8fbff_48%,#eef4ff_100%)] p-6 shadow-[0_28px_70px_-42px_rgba(15,23,42,0.4)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] md:p-8">
         <div className="flex flex-col gap-6 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl space-y-3">
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               User Management
             </span>
             <div className="space-y-2">
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
                 Complete learner and admin control
               </h1>
-              <p className="max-w-2xl text-sm leading-6 text-slate-600 md:text-base">
+              <p className="max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 md:text-base">
                 Search, filter, import, export, and manage user profiles from one polished dashboard.
               </p>
             </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-300">
                 Total Users
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">
+              <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
                 {paginatedUsers.meta.totalItems}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-300">
                 Current Page
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">
+              <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
                 {paginatedUsers.meta.currentPage}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-300">
                 Per Page
               </p>
-              <p className="mt-2 text-2xl font-semibold text-slate-950">
+              <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
                 {paginatedUsers.meta.itemsPerPage}
               </p>
             </div>
@@ -266,8 +266,8 @@ export function UsersDashboard({
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-[var(--brand-100)] bg-white p-4 shadow-[0_18px_50px_-36px_rgba(15,23,42,0.28)] md:p-5">
-        <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 xl:flex-row xl:items-center xl:justify-between">
+      <section className="rounded-[28px] border border-[var(--brand-100)] bg-white p-4 shadow-[0_18px_50px_-36px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] dark:shadow-[0_32px_80px_-42px_rgba(0,0,0,0.64)] md:p-5">
+        <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 dark:border-white/10 xl:flex-row xl:items-center xl:justify-between">
           <form
             className="flex flex-1 flex-col gap-3 sm:flex-row"
             onSubmit={(event) => {
@@ -361,7 +361,7 @@ export function UsersDashboard({
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100">
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100 dark:border-white/10">
           <DataTableContent
             table={table}
             data={paginatedUsers.data}
@@ -376,12 +376,12 @@ export function UsersDashboard({
         onOpenChange={setIsCreateOpen}
         direction="right"
       >
-        <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white sm:max-w-[620px]">
-          <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left">
-            <DrawerTitle className="text-2xl font-semibold text-slate-950">
+        <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] sm:max-w-[620px]">
+          <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left dark:border-white/10">
+            <DrawerTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
               Create user
             </DrawerTitle>
-            <DrawerDescription className="text-sm text-slate-500">
+            <DrawerDescription className="text-sm text-slate-500 dark:text-slate-300">
               Add a new user with a simplified setup. Username and password will be generated automatically.
             </DrawerDescription>
           </DrawerHeader>

@@ -5,7 +5,6 @@ import { useState } from "react";
 import type { DraggableAttributes } from "@dnd-kit/core";
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { ChapterAccordionItem } from "./chapter-accordion-item";
-import { Accordion } from "@/components/ui/accordion";
 import ChapterDrawer from "./chapter-drawer";
 
 interface ChapterAccordionProps {
@@ -49,20 +48,18 @@ export default function ChapterAccordion({
 
   return (
     <>
-      <Accordion type="single" collapsible className="w-full space-y-2">
-        <ChapterAccordionItem
-          chapter={chapter}
-          index={index}
-          activeId={activeId}
-          setActiveId={setActiveId}
-          onTooglePublish={onTooglePublish}
-          isPublishedView={isPublishedView}
-          isTemp={isTemp}
-          onDelete={onDelete}
-          dragHandle={dragHandle}
-          onEdit={handleEdit}
-        />
-      </Accordion>
+      <ChapterAccordionItem
+        chapter={chapter}
+        index={index}
+        activeId={activeId}
+        setActiveId={setActiveId}
+        onTooglePublish={onTooglePublish}
+        isPublishedView={isPublishedView}
+        isTemp={isTemp}
+        onDelete={onDelete}
+        dragHandle={dragHandle}
+        onEdit={handleEdit}
+      />
       <ChapterDrawer
         courseId={courseId}
         open={open}

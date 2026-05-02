@@ -50,10 +50,10 @@ export const CouponDiscountForm = ({ coupon }: CouponDiscountFormProps) => {
   };
 
   return (
-    <Card>
+    <Card className="dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-5">
         <div>
-          <h3 className="text-lg font-semibold">Discount Settings</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Discount Settings</h3>
           <p className="text-sm text-muted-foreground">
             Configure discount value and limits
           </p>

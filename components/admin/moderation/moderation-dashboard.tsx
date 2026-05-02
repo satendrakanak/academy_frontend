@@ -227,16 +227,16 @@ export function ModerationDashboard() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[30px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
+      <section className="rounded-[30px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               Moderation
             </span>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-950">
+            <h1 className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
               Content approval dashboard
             </h1>
-            <p className="mt-2 max-w-2xl text-sm text-slate-600">
+            <p className="mt-2 max-w-2xl text-sm text-slate-600 dark:text-slate-300">
               Review course ratings, article comments, and course Q&A before
               anything appears publicly.
             </p>
@@ -257,7 +257,7 @@ export function ModerationDashboard() {
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
+      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="mb-5 flex flex-wrap gap-2">
           {tabs.map((tab) => (
             <button
@@ -267,7 +267,7 @@ export function ModerationDashboard() {
               className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
                 activeTab === tab.id
                   ? "bg-[var(--brand-600)] text-white"
-                  : "bg-slate-100 text-slate-600 hover:bg-[var(--brand-50)]"
+                  : "bg-slate-100 text-slate-600 hover:bg-[var(--brand-50)] dark:bg-white/8 dark:text-slate-300 dark:hover:bg-white/12"
               }`}
             >
               {tab.label} ({tab.count})
@@ -504,9 +504,9 @@ function ModerationEditDialog({
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm">
-      <p className="text-sm font-medium text-slate-500">{label}</p>
-      <p className="mt-2 text-3xl font-semibold text-slate-950">{value}</p>
+    <div className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm dark:border-white/10 dark:bg-white/8">
+      <p className="text-sm font-medium text-slate-500 dark:text-slate-300">{label}</p>
+      <p className="mt-2 text-3xl font-semibold text-slate-950 dark:text-white">{value}</p>
     </div>
   );
 }
@@ -537,10 +537,10 @@ function ModerationCard({
   const name = getUserDisplayName(user);
 
   return (
-    <article className="rounded-3xl border border-slate-100 bg-slate-50/70 p-4">
+    <article className="rounded-3xl border border-slate-100 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-3">
-          <Avatar className="h-11 w-11 border border-white">
+          <Avatar className="h-11 w-11 border border-white dark:border-white/10">
             <AvatarImage src={getUserAvatarUrl(user)} alt={name} />
             <AvatarFallback className="bg-[var(--brand-50)] text-[var(--brand-700)]">
               {name.charAt(0) || "U"}
@@ -548,10 +548,12 @@ function ModerationCard({
           </Avatar>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white text-[var(--brand-700)]">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-white text-[var(--brand-700)] dark:bg-white/10 dark:text-[var(--brand-200)]">
                 {icon}
               </span>
-              <h3 className="font-semibold text-slate-950">{title}</h3>
+              <h3 className="font-semibold text-slate-950 dark:text-white">
+                {title}
+              </h3>
               <span
                 className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
                   isPublished
@@ -562,10 +564,10 @@ function ModerationCard({
                 {isPublished ? "Published" : "Pending"}
               </span>
             </div>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
               {meta} by {name}
             </p>
-            <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-600">
+            <p className="mt-3 max-w-4xl text-sm leading-6 text-slate-600 dark:text-slate-300">
               {body}
             </p>
           </div>

@@ -86,20 +86,20 @@ export function BulkUsersImportDialog({
           width: "min(1100px, calc(100vw - 2rem))",
           maxWidth: "min(1100px, calc(100vw - 2rem))",
         }}
-        className="!grid !w-[min(1100px,calc(100vw-2rem))] !max-w-[min(1100px,calc(100vw-2rem))] max-h-[min(760px,calc(100vh-3rem))] overflow-hidden rounded-[28px] border-[var(--brand-100)] bg-white p-0 shadow-[0_32px_100px_-50px_rgba(15,23,42,0.5)]"
+        className="!grid !w-[min(1100px,calc(100vw-2rem))] !max-w-[min(1100px,calc(100vw-2rem))] max-h-[min(760px,calc(100vh-3rem))] overflow-hidden rounded-[28px] border-[var(--brand-100)] bg-white p-0 shadow-[0_32px_100px_-50px_rgba(15,23,42,0.5)] dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]"
       >
-        <DialogHeader className="border-b border-slate-100 bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] px-8 py-6">
-          <DialogTitle className="text-xl font-semibold text-slate-950">
+        <DialogHeader className="border-b border-slate-100 bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] px-8 py-6 dark:border-white/10 dark:bg-[linear-gradient(135deg,rgba(17,27,46,0.98)_0%,rgba(23,34,55,0.98)_55%,rgba(33,46,72,0.98)_100%)]">
+          <DialogTitle className="text-xl font-semibold text-slate-950 dark:text-white">
             Import users from Excel
           </DialogTitle>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-300">
             Upload `.xlsx`, `.xls`, or `.csv` files. Username, student role, and the default password are assigned automatically.
           </p>
         </DialogHeader>
 
         <div className="space-y-6 overflow-hidden px-8 py-6">
           <div className="flex flex-wrap items-center gap-3">
-            <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[var(--brand-200)] bg-[var(--brand-50)]/40 px-5 py-4 text-sm text-slate-600 transition hover:border-[var(--brand-300)]">
+            <label className="flex min-h-14 cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-[var(--brand-200)] bg-[var(--brand-50)]/40 px-5 py-4 text-sm text-slate-600 transition hover:border-[var(--brand-300)] dark:border-white/15 dark:bg-white/6 dark:text-slate-200">
               <UploadCloud className="size-5 text-[var(--brand-600)]" />
               <span>{file ? file.name : "Choose spreadsheet"}</span>
               <input
@@ -122,56 +122,56 @@ export function BulkUsersImportDialog({
             </Button>
           </div>
 
-          <div className="rounded-[24px] border border-slate-100 bg-slate-50/70 p-5">
-            <p className="text-sm font-semibold text-slate-900">
+          <div className="rounded-[24px] border border-slate-100 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/4">
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">
               Import preview
             </p>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
               Required columns: `firstName`, `email`. Optional: `lastName`, `phoneNumber`.
             </p>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                   Username
                 </p>
-                <p className="mt-1 text-sm font-medium text-slate-900">
+                <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                   Auto-generated
                 </p>
               </div>
-              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                   Password
                 </p>
-                <p className="mt-1 text-sm font-medium text-slate-900">
+                <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                   Temp@1234
                 </p>
               </div>
-              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <div className="rounded-2xl border border-white bg-white px-4 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                   Role
                 </p>
-                <p className="mt-1 text-sm font-medium text-slate-900">
+                <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                   student
                 </p>
               </div>
             </div>
 
-            <ScrollArea className="mt-4 h-[320px] rounded-2xl border border-slate-100 bg-white">
+            <ScrollArea className="mt-4 h-[320px] rounded-2xl border border-slate-100 bg-white dark:border-white/10 dark:bg-white/8">
               <div className="min-w-[760px]">
-                <div className="grid grid-cols-[1.3fr_1.35fr_1fr_1.1fr_0.9fr] gap-4 border-b border-slate-100 px-5 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                <div className="grid grid-cols-[1.3fr_1.35fr_1fr_1.1fr_0.9fr] gap-4 border-b border-slate-100 px-5 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500 dark:border-white/10 dark:text-slate-400">
                   <span>Name</span>
                   <span>Email</span>
                   <span>Phone</span>
                   <span>Username</span>
                   <span>Password</span>
                 </div>
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-slate-100 dark:divide-white/10">
                   {previewRows.length ? (
                     previewRows.map((row, index) => (
                       <div
                         key={`${row.email}-${index}`}
-                        className="grid grid-cols-[1.3fr_1.35fr_1fr_1.1fr_0.9fr] gap-4 px-5 py-4 text-sm text-slate-700"
+                        className="grid grid-cols-[1.3fr_1.35fr_1fr_1.1fr_0.9fr] gap-4 px-5 py-4 text-sm text-slate-700 dark:text-slate-200"
                       >
                         <span>{`${row.firstName} ${row.lastName ?? ""}`}</span>
                         <span>{row.email}</span>
@@ -181,7 +181,7 @@ export function BulkUsersImportDialog({
                       </div>
                     ))
                   ) : (
-                    <div className="px-4 py-20 text-center text-sm text-slate-400">
+                    <div className="px-4 py-20 text-center text-sm text-slate-400 dark:text-slate-500">
                       {isParsing
                         ? "Parsing your spreadsheet..."
                         : "Upload a file to preview rows before importing."}
@@ -193,7 +193,7 @@ export function BulkUsersImportDialog({
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-white px-8 py-5">
+        <div className="flex items-center justify-end gap-3 border-t border-slate-100 bg-white px-8 py-5 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}

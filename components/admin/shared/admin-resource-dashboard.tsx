@@ -101,24 +101,24 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[28px] border border-(--brand-100) bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
+      <section className="rounded-[28px] border border-(--brand-100) bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] dark:shadow-[0_32px_80px_-42px_rgba(0,0,0,0.64)]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex rounded-full border border-(--brand-200) bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-(--brand-700)">
+            <span className="inline-flex rounded-full border border-(--brand-200) bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-(--brand-700) dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               {eyebrow}
             </span>
             <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
                 {title}
               </h1>
-              <p className="mt-2 text-sm text-slate-600">{description}</p>
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{description}</p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Button
               variant="outline"
-              className="rounded-2xl"
+              className="rounded-2xl dark:border-white/10 dark:bg-white/8 dark:text-slate-100 dark:hover:bg-white/10"
               onClick={() =>
                 exportRowsToWorkbook(filteredData, exportFileName, mapExportRow)
               }
@@ -135,15 +135,15 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm"
+              className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm dark:border-white/10 dark:bg-white/6"
             >
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-500">
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-300">
                   {stat.label}
                 </p>
                 <stat.icon className="size-5 text-(--brand-600)" />
               </div>
-              <p className="mt-3 text-3xl font-semibold text-slate-950">
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
                 {stat.value}
               </p>
             </div>
@@ -151,10 +151,10 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
+      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))] dark:shadow-[0_32px_80px_-42px_rgba(0,0,0,0.64)]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full max-w-md">
-            <Search className="absolute left-3 top-3.5 size-4 text-slate-400" />
+            <Search className="absolute left-3 top-3.5 size-4 text-slate-400 dark:text-slate-500" />
             <Input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
@@ -166,7 +166,7 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
           <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="outline"
-              className="rounded-2xl"
+              className="rounded-2xl dark:border-white/10 dark:bg-white/8 dark:text-slate-100 dark:hover:bg-white/10"
               disabled={!selectedRows.length}
               onClick={() =>
                 exportRowsToWorkbook(
@@ -183,7 +183,7 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100">
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100 dark:border-white/10">
           {filteredData.length ? (
             <>
               <DataTableContent
@@ -191,16 +191,16 @@ export function AdminResourceDashboard<TData extends { id: number | string }>({
                 data={filteredData}
                 getRowId={(row) => row.id}
               />
-              <div className="border-t border-slate-100 py-4">
+              <div className="border-t border-slate-100 py-4 dark:border-white/10">
                 <DataTablePagination table={table} />
               </div>
             </>
           ) : (
             <div className="px-6 py-16 text-center">
-              <p className="text-base font-semibold text-slate-950">
+              <p className="text-base font-semibold text-slate-950 dark:text-white">
                 {emptyTitle}
               </p>
-              <p className="mt-1 text-sm text-slate-500">{emptyDescription}</p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{emptyDescription}</p>
             </div>
           )}
         </div>

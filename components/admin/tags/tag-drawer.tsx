@@ -22,12 +22,12 @@ interface TagDrawerProps {
 export function TagDrawer({ open, onOpenChange, tag }: TagDrawerProps) {
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white sm:max-w-[640px]">
-        <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left">
-          <DrawerTitle className="text-2xl font-semibold text-slate-950">
+      <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] sm:max-w-[640px]">
+        <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left dark:border-white/10">
+          <DrawerTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
             {tag ? "Edit tag" : "Create tag"}
           </DrawerTitle>
-          <DrawerDescription className="text-sm text-slate-500">
+          <DrawerDescription className="text-sm text-slate-500 dark:text-slate-300">
             Manage shared tags used across courses and articles.
           </DrawerDescription>
         </DrawerHeader>
@@ -38,7 +38,7 @@ export function TagDrawer({ open, onOpenChange, tag }: TagDrawerProps) {
           </div>
         </ScrollArea>
 
-        <DrawerFooter className="border-t border-slate-100 bg-white px-6 py-4">
+        <DrawerFooter className="border-t border-slate-100 bg-white px-6 py-4 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Close
           </Button>

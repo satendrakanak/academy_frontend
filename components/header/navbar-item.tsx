@@ -5,15 +5,6 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-
 interface NavbarItemProps {
   item: {
     label: string;
@@ -33,69 +24,17 @@ const NavbarItem = ({ item }: NavbarItemProps) => {
     pathname === item.href || pathname?.startsWith(`${item.href}/`);
 
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        {item.hasChild ? (
-          <NavigationMenuItem>
-            <NavigationMenuTrigger className="bg-transparent">
-              <Link
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-x-2 text-sm font-bold pl-6 transition-all hover:text-webprimary ",
-                  isActive && "text-webprimary font-bold hover:text-webtertiary"
-                )}
-              >
-                {item.label}
-              </Link>
-            </NavigationMenuTrigger>
-            {item.hasChild && (
-              <NavigationMenuContent>
-                <NavigationMenuLink>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                    {item.children &&
-                      item?.children.map((subitem) => (
-                        <ListItem
-                          key={subitem.href}
-                          label={subitem.label}
-                          href={subitem.href}
-                        />
-                      ))}
-                  </ul>
-                </NavigationMenuLink>
-              </NavigationMenuContent>
-            )}
-          </NavigationMenuItem>
-        ) : (
-          <NavigationMenuItem>
-            <Link
-              href={item.href}
-              className={cn(
-                "flex items-center gap-x-2 text-sm font-bold pl-6 transition-all hover:text-webprimary",
-                isActive && "text-webprimary font-bold hover:text-webtertiary"
-              )}
-            >
-              {item.label}
-            </Link>
-          </NavigationMenuItem>
-        )}
-      </NavigationMenuList>
-    </NavigationMenu>
+    <Link
+      href={item.href}
+      className={cn(
+        "relative inline-flex items-center rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:text-[var(--brand-600)] dark:text-slate-200 dark:hover:text-white xl:px-4",
+        isActive &&
+          "bg-[color-mix(in_oklab,var(--brand-50)_78%,white)] text-[var(--brand-700)] shadow-[0_10px_30px_-18px_rgba(37,99,235,0.45)] dark:bg-white/10 dark:text-white",
+      )}
+    >
+      {item.label}
+    </Link>
   );
 };
 
 export default NavbarItem;
-
-const ListItem = ({ label, href }: { label: string; href: string }) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          href={href}
-          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition"
-        >
-          <div className="text-sm font-bold leading-none">{label}</div>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  );
-};

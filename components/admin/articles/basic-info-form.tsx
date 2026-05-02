@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SubmitButton } from "@/components/submit-button";
@@ -35,8 +35,8 @@ export const BasicInfoForm = ({ article }: BasicInfoFormProps) => {
 
   const { isValid, isSubmitting } = form.formState;
 
-  const title = form.watch("title");
-  const slug = form.watch("slug");
+  const title = useWatch({ control: form.control, name: "title" }) ?? "";
+  const slug = useWatch({ control: form.control, name: "slug" }) ?? "";
 
   const onSubmit = async (data: z.infer<typeof courseSchema>) => {
     try {
@@ -50,11 +50,11 @@ export const BasicInfoForm = ({ article }: BasicInfoFormProps) => {
   };
 
   return (
-    <Card className="rounded-2xl bg-white shadow-sm">
+    <Card className="rounded-2xl bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold">Basic Info</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Basic Info</h3>
           <p className="text-sm text-muted-foreground">
             Update your article basic information
           </p>

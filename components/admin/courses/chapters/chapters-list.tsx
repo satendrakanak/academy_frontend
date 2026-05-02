@@ -49,9 +49,9 @@ export default function ChaptersList({
   const sensors = useSensors(useSensor(PointerSensor));
 
   return (
-    <div className="col-span-1 border rounded-xl p-3 space-y-2">
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold text-sm">Chapters</h3>
+    <div className="space-y-3 rounded-xl border border-slate-200 bg-white/70 p-3 dark:border-white/10 dark:bg-white/4">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="text-sm font-semibold text-slate-950 dark:text-white">Chapters</h3>
         <Button size="sm" onClick={addChapter}>
           + Add
         </Button>

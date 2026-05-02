@@ -10,17 +10,17 @@ interface OrderCardProps {
 
 export const OrderCard = ({ order }: OrderCardProps) => {
   return (
-    <Card className="rounded-2xl shadow-sm hover:shadow-md transition">
+    <Card className="rounded-2xl shadow-sm transition hover:shadow-md dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-6">
         {/* 🔥 ITEMS */}
         <div className="space-y-4">
           {order.items.map((item) => (
             <div
               key={item.id}
-              className="flex items-center gap-4 border-b pb-4 last:border-0"
+              className="flex items-center gap-4 border-b border-slate-100 pb-4 last:border-0 dark:border-white/10"
             >
               {/* 🔹 IMAGE */}
-              <div className="relative w-20 h-16 rounded-md overflow-hidden bg-gray-100">
+              <div className="relative h-16 w-20 overflow-hidden rounded-md bg-gray-100 dark:bg-white/8">
                 {item.course?.image?.path ? (
                   <Image
                     src={item.course.image.path}
@@ -29,7 +29,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-xs text-gray-400">
+                  <div className="flex h-full items-center justify-center text-xs text-gray-400 dark:text-slate-500">
                     No Image
                   </div>
                 )}
@@ -40,7 +40,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
                 <p className="font-medium text-sm line-clamp-2">
                   {item.course?.title}
                 </p>
-                <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400">Qty: {item.quantity}</p>
               </div>
 
               {/* 🔹 PRICE */}
@@ -48,17 +48,17 @@ export const OrderCard = ({ order }: OrderCardProps) => {
                 <p className="text-sm font-semibold">
                   ₹{item.price * item.quantity}
                 </p>
-                <p className="text-xs text-gray-500">₹{item.price} each</p>
+                <p className="text-xs text-gray-500 dark:text-slate-400">₹{item.price} each</p>
               </div>
             </div>
           ))}
         </div>
 
         {/* 🔥 PRICING SUMMARY */}
-        <div className="space-y-3 text-sm bg-gray-50 rounded-xl p-4">
+        <div className="space-y-3 rounded-xl bg-gray-50 p-4 text-sm dark:bg-white/6">
           {/* Subtotal */}
           <div className="flex justify-between">
-            <span className="text-gray-600">Subtotal</span>
+            <span className="text-gray-600 dark:text-slate-300">Subtotal</span>
             <span>₹{order.subTotal}</span>
           </div>
 
@@ -93,7 +93,7 @@ export const OrderCard = ({ order }: OrderCardProps) => {
           )}
 
           {/* TOTAL */}
-          <div className="flex justify-between font-semibold text-base border-t pt-2">
+          <div className="flex justify-between border-t border-slate-200 pt-2 text-base font-semibold dark:border-white/10">
             <span>Total</span>
             <span>₹{order.totalAmount}</span>
           </div>

@@ -15,20 +15,20 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
 
   return (
     <section className="academy-surface py-24">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="mx-auto max-w-7xl px-6">
         <div className="mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="mb-1 text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-600)]">
+            <p className="mb-1 text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-600)] dark:text-[var(--brand-300)]">
               Latest Articles
             </p>
-            <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white md:text-4xl">
               Insights, essays, and practical guidance from our team.
             </h2>
           </div>
 
           <Link
             href="/articles"
-            className="inline-flex items-center rounded-full border border-[var(--brand-200)] bg-white px-5 py-3 text-sm font-semibold text-[var(--brand-700)] transition hover:bg-[var(--brand-50)]"
+            className="inline-flex items-center rounded-full border border-[var(--brand-200)] bg-white px-5 py-3 text-sm font-semibold text-[var(--brand-700)] transition hover:bg-[var(--brand-50)] dark:bg-white/10 dark:text-[var(--brand-200)] dark:hover:bg-white/16"
           >
             Explore All Articles
           </Link>

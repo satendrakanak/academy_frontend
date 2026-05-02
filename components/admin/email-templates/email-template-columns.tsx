@@ -46,10 +46,10 @@ export function getEmailTemplateColumns(
       header: "Template",
       cell: ({ row }) => (
         <div>
-          <p className="font-semibold text-slate-950">
+          <p className="font-semibold text-slate-950 dark:text-white">
             {row.original.templateName}
           </p>
-          <p className="mt-1 line-clamp-1 text-xs text-slate-500">
+          <p className="mt-1 line-clamp-1 text-xs text-slate-500 dark:text-slate-400">
             {row.original.subject}
           </p>
         </div>
@@ -59,7 +59,7 @@ export function getEmailTemplateColumns(
       accessorKey: "subject",
       header: "Subject",
       cell: ({ row }) => (
-        <span className="line-clamp-2 text-sm text-slate-600">
+        <span className="line-clamp-2 text-sm text-slate-600 dark:text-slate-300">
           {row.original.subject}
         </span>
       ),
@@ -68,7 +68,7 @@ export function getEmailTemplateColumns(
       accessorKey: "updatedAt",
       header: "Updated",
       cell: ({ row }) => (
-        <span className="text-sm text-slate-500">
+        <span className="text-sm text-slate-500 dark:text-slate-400">
           {format(new Date(row.original.updatedAt), "dd MMM yyyy")}
         </span>
       ),

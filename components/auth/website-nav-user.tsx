@@ -43,11 +43,11 @@ export const WebsiteNavUser = () => {
       <Button
         asChild
         variant="ghost"
-        className="h-10 w-10 rounded-full bg-gray-200 p-0 hover:bg-gray-100"
+        className="h-10 w-10 rounded-full border border-border/70 bg-background/90 p-0 shadow-sm backdrop-blur-sm hover:bg-muted/80"
         aria-label="Sign in"
       >
         <Link href="/auth/sign-in">
-          <User className="h-5 w-5 text-slate-700" />
+          <User className="h-5 w-5 text-foreground/80" />
         </Link>
       </Button>
     );
@@ -78,7 +78,7 @@ export const WebsiteNavUser = () => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/70 bg-background/90 shadow-sm backdrop-blur-sm
   outline-none ring-0 border-0 focus:outline-none focus:ring-0 focus:border-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:border-0
   active:outline-none active:ring-0 active:border-0"
         >

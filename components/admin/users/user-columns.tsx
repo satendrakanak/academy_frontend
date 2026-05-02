@@ -57,7 +57,7 @@ export const getUserColumns = (
           </Link>
 
           <Link href={`/admin/users/${user.id}`}>
-            <span className="font-medium hover:underline">
+            <span className="font-medium hover:underline dark:text-slate-100">
               {user.firstName} {user.lastName}
             </span>
           </Link>
@@ -70,7 +70,7 @@ export const getUserColumns = (
     accessorKey: "username",
     header: "Username",
     cell: ({ row }) => (
-      <span className="font-medium text-slate-700">
+      <span className="font-medium text-slate-700 dark:text-slate-300">
         {row.original.username || "Auto-generated"}
       </span>
     ),
@@ -83,7 +83,9 @@ export const getUserColumns = (
     cell: ({ row }) => {
       return (
         <div className="flex gap-1 flex-wrap">
-          <span className="font-medium">{row.original.email}</span>
+          <span className="font-medium dark:text-slate-100">
+            {row.original.email}
+          </span>
         </div>
       );
     },
@@ -96,7 +98,9 @@ export const getUserColumns = (
     cell: ({ row }) => {
       return (
         <div className="flex gap-1 flex-wrap">
-          <span className="font-medium">{row.original.phoneNumber}</span>
+          <span className="font-medium dark:text-slate-100">
+            {row.original.phoneNumber}
+          </span>
         </div>
       );
     },

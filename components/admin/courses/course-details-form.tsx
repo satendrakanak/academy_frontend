@@ -8,9 +8,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
-import { Input } from "@base-ui/react";
 import { SubmitButton } from "@/components/submit-button";
 import { getErrorMessage } from "@/lib/error-handler";
+import { Input } from "@/components/ui/input";
 
 interface CourseDetailsFormProps {
   course: Course;
@@ -56,11 +56,13 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
   };
 
   return (
-    <div className="rounded-xl border bg-white p-5 space-y-4">
-      <h3 className="text-sm font-semibold">Course Details</h3>
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+        Course Details
+      </h3>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           {/* Duration */}
           <Controller
             name="duration"
@@ -69,7 +71,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Duration"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -82,7 +84,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Mode"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -95,7 +97,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Experience Level"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -108,7 +110,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Language"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -121,7 +123,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Certificate"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -134,7 +136,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Exams"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -147,7 +149,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Study Material"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />
@@ -160,7 +162,7 @@ export const CourseDetailsForm = ({ course }: CourseDetailsFormProps) => {
               <Input
                 {...field}
                 placeholder="Additional Book"
-                className="h-9 w-full border rounded-md px-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="h-11 w-full rounded-xl px-3 text-sm"
               />
             )}
           />

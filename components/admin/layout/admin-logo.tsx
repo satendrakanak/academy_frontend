@@ -18,7 +18,7 @@ export function AdminLogo() {
   const adminName = site.adminPanelName || "U";
 
   return (
-    <SidebarMenu className="bg-white">
+    <SidebarMenu className="bg-transparent">
       <SidebarMenuItem>
         <SidebarMenuButton
           asChild
@@ -54,7 +54,7 @@ export function AdminLogo() {
             {/* Text */}
             {!isCollapsed && (
               <div className="flex flex-col text-left leading-tight">
-                <span className="max-w-[150px] truncate font-semibold text-lg tracking-tight">
+                <span className="max-w-[150px] truncate text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
                   {adminName}
                 </span>
                 <span className="text-xs text-muted-foreground">

@@ -12,7 +12,9 @@ export default function WebsiteLayout({ children }: { children: ReactNode }) {
       <Header />
       <MobileMenu />
 
-      <main className="pt-26 md:pt-25 lg:pt-25 h-full">{children}</main>
+      <main className="h-full flex-1 pb-20 pt-26 md:pb-0 md:pt-25 lg:pt-25">
+        {children}
+      </main>
 
       {/* 🔥 Razorpay Script */}
       <Script

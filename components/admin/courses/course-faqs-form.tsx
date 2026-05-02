@@ -59,16 +59,16 @@ export function CourseFaqsForm({ course }: CourseFaqsFormProps) {
   };
 
   return (
-    <div className="space-y-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_50px_-40px_rgba(15,23,42,0.22)]">
+    <div className="space-y-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_50px_-40px_rgba(15,23,42,0.22)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
             Course FAQs
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-950">
+          <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
             Add learner-ready answers
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-300">
             FAQs appear on the public course page after testimonials. Use short,
             direct questions and practical answers.
           </p>
@@ -91,17 +91,17 @@ export function CourseFaqsForm({ course }: CourseFaqsFormProps) {
             fields.map((field, index) => (
               <div
                 key={field.id}
-                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5"
+                className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/4"
               >
                 <div className="mb-4 flex items-center justify-between gap-3">
-                  <h4 className="text-sm font-semibold text-slate-900">
+                  <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
                     FAQ {index + 1}
                   </h4>
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon-sm"
-                    className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                    className="text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-200"
                     onClick={() => remove(index)}
                   >
                     <Trash2 className="size-4" />
@@ -137,8 +137,8 @@ export function CourseFaqsForm({ course }: CourseFaqsFormProps) {
               </div>
             ))
           ) : (
-            <div className="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-8 text-center">
-              <p className="text-sm text-slate-500">
+            <div className="rounded-[24px] border border-dashed border-slate-200 bg-slate-50 p-8 text-center dark:border-white/10 dark:bg-white/4">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 No FAQs added yet. Start with the most common learner questions.
               </p>
             </div>

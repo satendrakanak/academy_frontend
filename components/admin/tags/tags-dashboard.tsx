@@ -112,17 +112,17 @@ export function TagsDashboard({ tags }: { tags: Tag[] }) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
+      <section className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               Shared Metadata
             </span>
             <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
                 Tags dashboard
               </h1>
-              <p className="mt-2 text-sm text-slate-600">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Manage reusable tags used across course discovery and article publishing.
               </p>
             </div>
@@ -160,18 +160,18 @@ export function TagsDashboard({ tags }: { tags: Tag[] }) {
             { label: "With Description", value: describedTags, icon: Sparkles },
             { label: "Shared Scope", value: "2 modules", icon: Upload },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm">
+            <div key={stat.label} className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm dark:border-white/10 dark:bg-white/8">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-300">{stat.label}</p>
                 <stat.icon className="size-5 text-[var(--brand-600)]" />
               </div>
-              <p className="mt-3 text-3xl font-semibold text-slate-950">{stat.value}</p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">{stat.value}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
+      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full max-w-md">
             <Search className="absolute left-3 top-3.5 size-4 text-slate-400" />
@@ -205,13 +205,13 @@ export function TagsDashboard({ tags }: { tags: Tag[] }) {
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100">
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100 dark:border-white/10">
           <DataTableContent
             table={table}
             data={filteredTags}
             getRowId={(row) => row.id}
           />
-          <div className="border-t border-slate-100 py-4">
+          <div className="border-t border-slate-100 py-4 dark:border-white/10">
             <DataTablePagination table={table} />
           </div>
         </div>

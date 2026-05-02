@@ -138,16 +138,16 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
   };
 
   return (
-    <div className="space-y-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_50px_-40px_rgba(15,23,42,0.22)]">
+    <div className="space-y-5 rounded-[28px] border border-slate-200 bg-white p-6 shadow-[0_24px_50px_-40px_rgba(15,23,42,0.22)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
             Final Exam
           </p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-950">
+          <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
             Build the assessment learners must clear
           </h3>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-300">
             Create a Moodle-style final assessment with a pass percentage,
             attempt limit, timing, and question-level scoring. Certificates
             unlock only after the learner passes this exam.
@@ -167,7 +167,7 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
           <Button
             type="button"
             variant="ghost"
-            className="rounded-2xl text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+            className="rounded-2xl text-rose-600 hover:bg-rose-50 hover:text-rose-700 dark:text-rose-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-200"
             onClick={() =>
               form.reset({
                 exam: {
@@ -189,7 +189,7 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
           <Button
             type="button"
             variant="ghost"
-            className="rounded-2xl text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+            className="rounded-2xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-300 dark:hover:bg-white/8 dark:hover:text-white"
             onClick={async () => {
               try {
                 await courseClientService.update(course.id, { exam: null });
@@ -207,7 +207,7 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)]">
-          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/4">
             <FieldGroup className="gap-4">
               <Field>
                 <FieldLabel>Exam title</FieldLabel>
@@ -243,7 +243,7 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
             </FieldGroup>
           </div>
 
-          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+          <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field>
                 <FieldLabel>Passing %</FieldLabel>
@@ -282,12 +282,12 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
             </div>
 
             <div className="mt-5 space-y-3">
-              <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3">
+              <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-white/8">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
                     Show result immediately
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Learner sees score and pass status right after submission.
                   </p>
                 </div>
@@ -301,12 +301,12 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                 />
               </label>
 
-              <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3">
+              <label className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-white/10 dark:bg-white/8">
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
                     Publish this exam
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Published exams become mandatory for certificate eligibility.
                   </p>
                 </div>
@@ -376,13 +376,13 @@ function QuestionEditor({
   });
 
   return (
-    <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5">
+    <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-5 dark:border-white/10 dark:bg-white/4">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
-          <h4 className="text-sm font-semibold text-slate-900">
+          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
             Question {questionIndex + 1}
           </h4>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Add prompt, marks, and correct option selection.
           </p>
         </div>
@@ -465,14 +465,14 @@ function QuestionEditor({
         {optionsArray.fields.map((optionField, optionIndex) => (
           <div
             key={optionField.id}
-            className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 md:grid-cols-[auto_minmax(0,1fr)_auto]"
+            className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8 md:grid-cols-[auto_minmax(0,1fr)_auto]"
           >
             <div className="flex items-center gap-2 pt-1">
               {questionType === "drag_drop" ? (
                 <>
                   <button
                     type="button"
-                    className="rounded-xl border border-slate-200 p-2 text-slate-500"
+                    className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
                     onClick={() =>
                       optionIndex > 0 &&
                       optionsArray.move(optionIndex, optionIndex - 1)
@@ -482,7 +482,7 @@ function QuestionEditor({
                   </button>
                   <button
                     type="button"
-                    className="rounded-xl border border-slate-200 p-2 text-slate-500"
+                    className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
                     onClick={() =>
                       optionIndex < optionsArray.fields.length - 1 &&
                       optionsArray.move(optionIndex, optionIndex + 1)
@@ -500,7 +500,7 @@ function QuestionEditor({
                     )}
                     className="size-4 accent-[var(--brand-600)]"
                   />
-                  <span className="text-xs font-medium text-slate-500">
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
                     Correct
                   </span>
                 </label>
@@ -516,7 +516,7 @@ function QuestionEditor({
                 placeholder={`Option ${optionIndex + 1}`}
               />
               {questionType === "drag_drop" ? (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   The current top-to-bottom order is treated as the correct
                   answer sequence.
                 </p>
@@ -575,10 +575,12 @@ function ShortAnswerEditor({
   });
 
   return (
-    <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4">
+    <div className="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8">
       <div>
-        <p className="text-sm font-semibold text-slate-900">Accepted answers</p>
-        <p className="mt-1 text-xs text-slate-500">
+        <p className="text-sm font-semibold text-slate-900 dark:text-white">
+          Accepted answers
+        </p>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
           Add all valid written answers a learner can type.
         </p>
       </div>

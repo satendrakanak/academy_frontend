@@ -50,8 +50,10 @@ export const RequirementsForm = ({ course }: RequirementsFormProps) => {
   };
 
   return (
-    <div className="rounded-xl border bg-white p-5 space-y-4">
-      <h3 className="text-sm font-semibold">Requirements</h3>
+    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+        Requirements
+      </h3>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {/* Technology */}

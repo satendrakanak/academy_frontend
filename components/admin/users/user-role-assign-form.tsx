@@ -68,10 +68,10 @@ export function UserRoleAssignForm({ user }: UserRoleAssignFormProps) {
 
   return (
     <>
-      <div className="rounded-xl border bg-white">
+      <div className="rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         {/* Header */}
-        <div className="px-4 py-3 border-b flex items-center justify-between">
-          <h3 className="text-sm font-semibold">User Roles</h3>
+        <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 dark:border-white/10">
+          <h3 className="text-sm font-semibold text-slate-950 dark:text-white">User Roles</h3>
 
           <Button
             size="sm"
@@ -105,11 +105,11 @@ export function UserRoleAssignForm({ user }: UserRoleAssignFormProps) {
               return (
                 <label
                   key={role.id}
-                  className={`flex items-center justify-between px-3 py-2 rounded-md cursor-pointer transition border
+                  className={`flex items-center justify-between rounded-md border px-3 py-2 transition
                     ${
                       isChecked
-                        ? "bg-primary/10 border-primary/30"
-                        : "border-transparent hover:bg-gray-50"
+                        ? "border-primary/30 bg-primary/10 dark:border-[var(--brand-300)]/40 dark:bg-[color:rgba(128,32,46,0.18)]"
+                        : "border-transparent hover:bg-gray-50 dark:hover:bg-white/6"
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -120,7 +120,7 @@ export function UserRoleAssignForm({ user }: UserRoleAssignFormProps) {
                       onChange={() => toggleRole(role.id)}
                       className="h-4 w-4 accent-primary cursor-pointer"
                     />
-                    <span className="text-sm font-medium flex items-center gap-1">
+                    <span className="flex items-center gap-1 text-sm font-medium text-slate-900 dark:text-slate-100">
                       {role.name.toUpperCase()}
                       {role.id === studentRole?.id && (
                         <span className="text-xs text-muted-foreground">

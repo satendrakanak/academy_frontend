@@ -23,7 +23,7 @@ export function OrderStatusCard({
   data: AdminStatusPoint[];
 }) {
   return (
-    <Card className="border-[var(--brand-100)] bg-white">
+    <Card className="border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardHeader>
         <CardTitle>Order Status Split</CardTitle>
         <CardDescription>
@@ -56,18 +56,18 @@ export function OrderStatusCard({
           {data.map((item) => (
             <div
               key={item.name}
-              className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3"
+              className="flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3 dark:bg-white/6"
             >
               <div className="flex items-center gap-3">
                 <span
                   className="size-3 rounded-full"
                   style={{ backgroundColor: item.fill }}
                 />
-                <span className="text-sm font-medium text-slate-700">
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
                   {item.name}
                 </span>
               </div>
-              <span className="text-sm text-slate-500">{item.value}</span>
+              <span className="text-sm text-slate-500 dark:text-slate-300">{item.value}</span>
             </div>
           ))}
         </div>

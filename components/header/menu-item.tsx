@@ -38,9 +38,9 @@ const MenuItem = ({ label, href, subItems }: MenuItemProps) => {
         <div>
           <div
             className={cn(
-              "flex items-center gap-x-2 py-3 text-sm font-[500] pl-6 transition-all text-webprimary hover:bg-sky-500/10 hover:text-sky-700 border-b border-slate-200",
+              "flex items-center gap-x-2 rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[var(--brand-50)] hover:text-[var(--brand-700)] dark:text-slate-200 dark:hover:bg-white/6 dark:hover:text-white",
               isActive &&
-                "bg-webprimary text-white hover:bg-webtertary hover:text-white"
+                "bg-[var(--brand-600)] text-white shadow-[0_16px_30px_-20px_rgba(37,99,235,0.7)] hover:bg-[var(--brand-600)] hover:text-white"
             )}
             onClick={subItems ? handleSubMenuToggle : undefined}
           >
@@ -61,9 +61,9 @@ const MenuItem = ({ label, href, subItems }: MenuItemProps) => {
                     <Link
                       href={item.href}
                       className={cn(
-                        "flex items-center gap-x-2 py-3 text-sm font-[500] pl-6 transition-all text-webprimary hover:bg-sky-500/10 hover:text-sky-700 border-b border-slate-200",
+                        "mt-1 flex items-center gap-x-2 rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[var(--brand-50)] hover:text-[var(--brand-700)] dark:text-slate-200 dark:hover:bg-white/6 dark:hover:text-white",
                         isActive &&
-                          "bg-webprimary text-white hover:bg-webtertary hover:text-white"
+                          "bg-[var(--brand-600)] text-white shadow-[0_16px_30px_-20px_rgba(37,99,235,0.7)] hover:bg-[var(--brand-600)] hover:text-white"
                       )}
                     >
                       {item.label}
@@ -80,9 +80,9 @@ const MenuItem = ({ label, href, subItems }: MenuItemProps) => {
             <Link
               href={href}
               className={cn(
-                "flex items-center py-3 gap-x-2 text-sm font-[500] pl-6 transition-all text-webprimary hover:bg-webprimary/10 hover:text-webprimary border-b border-slate-200",
+                "flex items-center gap-x-2 rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-[var(--brand-50)] hover:text-[var(--brand-700)] dark:text-slate-200 dark:hover:bg-white/6 dark:hover:text-white",
                 isActive &&
-                  "bg-webprimary text-white hover:bg-webtertary hover:text-white"
+                  "bg-[var(--brand-600)] text-white shadow-[0_16px_30px_-20px_rgba(37,99,235,0.7)] hover:bg-[var(--brand-600)] hover:text-white"
               )}
             >
               {label}

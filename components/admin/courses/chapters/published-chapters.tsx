@@ -1,5 +1,4 @@
 import { Chapter } from "@/types/chapter";
-import ChapterDrawer from "./chapter-drawer";
 import {
   DndContext,
   closestCenter,
@@ -11,7 +10,6 @@ import {
 import {
   SortableContext,
   verticalListSortingStrategy,
-  arrayMove,
 } from "@dnd-kit/sortable";
 import { SortableItem } from "../../sortable-item";
 import type { DragEndEvent, DraggableAttributes } from "@dnd-kit/core";
@@ -46,13 +44,13 @@ export default function PublishedList({
   const sensors = useSensors(useSensor(PointerSensor));
 
   return (
-    <div className="col-span-2 border rounded-xl p-4 space-y-3">
-      <h3 className="font-semibold text-sm">Published Chapters</h3>
+    <div className="space-y-3 rounded-xl border border-slate-200 bg-white/70 p-4 dark:border-white/10 dark:bg-white/4">
+      <h3 className="text-sm font-semibold text-slate-950 dark:text-white">Published Chapters</h3>
 
       {chapters.length === 0 && (
-        <p className="text-xs text-muted-foreground">No published chapters</p>
+        <p className="text-xs text-muted-foreground dark:text-slate-400">No published chapters</p>
       )}
-      <div className="space-y-1">
+      <div className="space-y-2">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -62,8 +60,10 @@ export default function PublishedList({
             items={chapters.filter((c) => c.isPublished).map((c) => c.id)}
             strategy={verticalListSortingStrategy}
           >
-            {chapters.map((chapter, index) => (
-              <SortableItem key={chapter.id} id={chapter.id}>
+            {chapters
+              .filter((chapter) => chapter.isPublished)
+              .map((chapter, index) => (
+                <SortableItem key={chapter.id} id={chapter.id}>
                 {({ attributes, listeners }: SortableRenderProps) => (
                   <ChapterAccordion
                     chapter={chapter}
@@ -80,8 +80,8 @@ export default function PublishedList({
                     }}
                   />
                 )}
-              </SortableItem>
-            ))}
+                </SortableItem>
+              ))}
           </SortableContext>
         </DndContext>
       </div>

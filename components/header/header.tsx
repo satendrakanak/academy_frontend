@@ -26,22 +26,24 @@ export const Header = ({ isHomePage }: HeaderProps) => {
 
   const headerClass = isHomePage
     ? scrolled
-      ? "bg-white/80 backdrop-blur-md shadow-md border-b border-[#e0cfc1]"
+      ? "border-b border-border/70 bg-background/86 shadow-[0_16px_44px_-30px_rgba(15,23,42,0.32)] backdrop-blur-xl"
       : "bg-transparent"
-    : "bg-white/90 backdrop-blur-md shadow-sm border-b border-[#e0cfc1]";
+    : "border-b border-border/70 bg-background/90 shadow-[0_16px_44px_-30px_rgba(15,23,42,0.26)] backdrop-blur-xl";
 
   return (
     <header
       className={cn(
-        "fixed left-0 w-full z-50 transition-all duration-300",
+        "fixed left-0 z-50 w-full transition-all duration-300",
         scrolled ? "top-0" : "top-15 md:top-10",
         headerClass,
       )}
     >
-      <div>
+      <div className="relative">
+        {!scrolled ? (
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-full bg-[linear-gradient(180deg,rgba(255,255,255,0.14),transparent)] dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.05),transparent)]" />
+        ) : null}
         <Container>
-          {/* 🔥 SINGLE ROW CLEAN LAYOUT */}
-          <div className="flex items-center justify-between">
+          <div className="flex min-h-18 items-center justify-between gap-4">
             {/* LEFT */}
             <div className="flex items-center gap-3">
               <div className="md:hidden">
@@ -56,7 +58,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
             </div>
 
             {/* RIGHT */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <CartIcon />
 
               <WebsiteNavUser />
@@ -64,7 +66,7 @@ export const Header = ({ isHomePage }: HeaderProps) => {
           </div>
 
           {/* Tablet Navbar */}
-          <div className="hidden md:flex lg:hidden justify-center border-t border-[#e0cfc1] mt-3 pt-2">
+          <div className="mt-1 hidden justify-center border-t border-border/70 pt-3 md:flex lg:hidden">
             <Navbar />
           </div>
         </Container>

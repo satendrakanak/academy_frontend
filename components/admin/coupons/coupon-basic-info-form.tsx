@@ -42,11 +42,11 @@ export const CouponBasicInfoForm = ({ coupon }: CouponBasicInfoFormProps) => {
   };
 
   return (
-    <Card className="rounded-2xl border bg-white shadow-sm">
+    <Card className="rounded-2xl border bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h3 className="text-lg font-semibold">Basic Info</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Basic Info</h3>
           <p className="text-sm text-muted-foreground">
             Update your coupon basic information
           </p>

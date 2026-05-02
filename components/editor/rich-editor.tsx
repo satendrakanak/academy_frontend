@@ -80,7 +80,7 @@ const EmailImage = Node.create({
 });
 
 const toolbarButton =
-  "inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-[var(--brand-300)] hover:bg-[var(--brand-50)] data-[active=true]:border-[var(--brand-500)] data-[active=true]:bg-[var(--brand-50)] data-[active=true]:text-[var(--brand-700)]";
+  "inline-flex h-9 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 transition hover:border-[var(--brand-300)] hover:bg-[var(--brand-50)] data-[active=true]:border-[var(--brand-500)] data-[active=true]:bg-[var(--brand-50)] data-[active=true]:text-[var(--brand-700)] dark:border-white/10 dark:bg-white/6 dark:text-slate-200 dark:hover:border-white/20 dark:hover:bg-white/10 dark:data-[active=true]:border-[var(--brand-400)] dark:data-[active=true]:bg-[color:rgba(128,32,46,0.18)] dark:data-[active=true]:text-white";
 
 interface Props {
   value: string;
@@ -166,8 +166,8 @@ export default function RichEditor({ value, onChange }: Props) {
   };
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-      <div className="flex flex-wrap gap-2 border-b border-slate-100 bg-slate-50/80 p-3">
+    <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:shadow-[0_24px_60px_-36px_rgba(0,0,0,0.56)]">
+      <div className="flex flex-wrap gap-2 border-b border-slate-100 bg-slate-50/80 p-3 dark:border-white/10 dark:bg-white/4">
         <button
           type="button"
           data-active={editor.isActive("paragraph")}
@@ -274,7 +274,7 @@ export default function RichEditor({ value, onChange }: Props) {
 
       <EditorContent
         editor={editor}
-        className="min-h-[320px] p-5 outline-none focus:outline-none [&_.ProseMirror]:min-h-[320px] [&_.ProseMirror]:outline-none [&_.ProseMirror_a]:text-[var(--brand-700)] [&_.ProseMirror_a]:underline [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-semibold [&_.ProseMirror_ul]:ml-5 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ol]:ml-5 [&_.ProseMirror_ol]:list-decimal"
+        className="min-h-[320px] p-5 text-slate-800 outline-none focus:outline-none dark:text-slate-100 [&_.ProseMirror]:min-h-[320px] [&_.ProseMirror]:outline-none [&_.ProseMirror_a]:text-[var(--brand-700)] dark:[&_.ProseMirror_a]:text-[var(--brand-200)] [&_.ProseMirror_a]:underline [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-semibold [&_.ProseMirror_p]:text-slate-700 dark:[&_.ProseMirror_p]:text-slate-200 [&_.ProseMirror_strong]:text-slate-950 dark:[&_.ProseMirror_strong]:text-white [&_.ProseMirror_ul]:ml-5 [&_.ProseMirror_ul]:list-disc [&_.ProseMirror_ol]:ml-5 [&_.ProseMirror_ol]:list-decimal"
       />
 
       <MediaModal

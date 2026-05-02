@@ -15,7 +15,7 @@ interface FeaturedVideoFormProps {
 export const FeaturedVideoForm = ({ course }: FeaturedVideoFormProps) => {
   const [selectedVideo, setSelectedVideo] = useState<FileType | null>(null);
   const router = useRouter();
-  const handleVideoUpload = async (file: FileType, alt: string) => {
+  const handleVideoUpload = async (file: FileType) => {
     try {
       await courseClientService.update(course.id, {
         videoId: file.id,
@@ -30,13 +30,13 @@ export const FeaturedVideoForm = ({ course }: FeaturedVideoFormProps) => {
     }
   };
   return (
-    <div className="rounded-2xl border p-4 bg-white shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <FileUpload
         label="Featured Video"
         previewType="video"
         value={selectedVideo || course.video}
         onUpload={handleVideoUpload}
-        className="h-40 aspect-square"
+        className="aspect-square h-40"
       />
     </div>
   );

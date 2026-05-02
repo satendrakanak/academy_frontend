@@ -44,29 +44,29 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(180deg,#ffffff_0%,var(--brand-50)_40%,#ffffff_100%)] py-24">
+    <section className="academy-section bg-[linear-gradient(180deg,transparent_0%,var(--brand-50)_40%,transparent_100%)] dark:bg-transparent">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(16,32,72,0.08),transparent_26%)]" />
 
       <div className="relative mx-auto max-w-7xl px-6">
         <div className="grid gap-10 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
           <div className="xl:sticky xl:top-28">
-            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-[var(--brand-700)]">
+            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
               How It Works
             </p>
-            <h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+            <h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-5xl">
               A guided path from curiosity to certification.
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600">
+            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-300">
               We keep the process straightforward, but the learning experience
               rich. From choosing a course to earning your certificate, every
               step is designed to feel organized, credible, and practical.
             </p>
 
-            <div className="mt-8 rounded-[28px] border border-[var(--brand-100)] bg-white/90 p-6 shadow-[0_30px_80px_-48px_rgba(15,23,42,0.32)] backdrop-blur">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
+            <div className="academy-card mt-8 p-6">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
                 Learner Promise
               </p>
-              <p className="mt-3 text-sm leading-7 text-slate-600">
+              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
                 Clear onboarding, structured lessons, practical outcomes, and a
                 completion flow that feels professional from start to finish.
               </p>
@@ -83,7 +83,7 @@ export default function HowItWorks() {
                     <div className="absolute left-8 top-20 hidden h-[calc(100%-2rem)] w-px bg-[linear-gradient(180deg,var(--brand-200),transparent)] md:block" />
                   ) : null}
 
-                  <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.24)] transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_34px_80px_-42px_rgba(15,23,42,0.3)] md:p-7">
+                  <div className="academy-card p-6 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_34px_80px_-42px_rgba(15,23,42,0.3)] md:p-7">
                     <div className="flex flex-col gap-6 md:flex-row md:items-start">
                       <div className="flex items-center gap-4 md:block">
                         <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-[linear-gradient(135deg,var(--brand-50),#ffffff)] text-[var(--brand-700)] shadow-inner ring-1 ring-[var(--brand-100)]">
@@ -94,10 +94,10 @@ export default function HowItWorks() {
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                           <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
+                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
                               {step.eyebrow}
                             </p>
-                            <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+                            <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
                               {step.title}
                             </h3>
                           </div>
@@ -107,7 +107,7 @@ export default function HowItWorks() {
                           </div>
                         </div>
 
-                        <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+                        <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-base">
                           {step.desc}
                         </p>
                       </div>

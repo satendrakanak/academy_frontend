@@ -8,20 +8,20 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
   if (!faculties?.length) return null;
 
   return (
-    <section className="bg-white py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="academy-section bg-transparent">
+      <div className="mx-auto max-w-7xl px-6">
         {/* HEADER */}
         <div className="mb-16 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="text-center lg:text-left">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-600)]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-[var(--brand-600)] dark:text-[var(--brand-300)]">
               Our Experts
             </p>
 
-            <h2 className="text-4xl font-bold text-gray-900">
+            <h2 className="text-4xl font-semibold text-slate-900 dark:text-white">
               Meet the faculty shaping thoughtful practitioners.
             </h2>
 
-            <p className="mt-3 max-w-2xl text-gray-500">
+            <p className="mt-3 max-w-2xl text-slate-500 dark:text-slate-300">
               Learn from specialists who combine academic depth, industry
               practice, and mentorship that actually guides students forward.
             </p>
@@ -29,18 +29,22 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
 
           <Link
             href="/our-faculty"
-            className="inline-flex items-center justify-center rounded-full border border-[var(--brand-200)] bg-[var(--brand-50)] px-5 py-3 text-sm font-semibold text-[var(--brand-700)] transition hover:bg-[var(--brand-100)]"
+            className="inline-flex items-center justify-center rounded-full border border-[var(--brand-200)] bg-[var(--brand-50)] px-5 py-3 text-sm font-semibold text-[var(--brand-700)] transition hover:bg-[var(--brand-100)] dark:bg-white/8 dark:text-[var(--brand-200)] dark:hover:bg-white/14"
           >
             View All Faculty
           </Link>
         </div>
 
         {/* GRID */}
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {faculties.slice(0, 4).map((item) => (
-            <div key={item.id} className="group">
+            <Link
+              href={`/our-faculty/${item.id}`}
+              key={item.id}
+              className="academy-card academy-hover-lift group block overflow-hidden p-4"
+            >
               {/* IMAGE */}
-              <div className="relative mb-4 h-72 w-full overflow-hidden rounded-[28px] border border-[var(--brand-100)] bg-[var(--brand-50)]">
+              <div className="relative mb-4 h-72 w-full overflow-hidden rounded-[24px] border border-[var(--brand-100)] bg-[var(--brand-50)] dark:bg-white/6">
                 <Image
                   src={item.avatar?.path || "/assets/default.png"}
                   alt={`${item.firstName} ${item.lastName || ""}`}
@@ -53,7 +57,7 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
               </div>
 
               {/* NAME */}
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                 {item.firstName} {item.lastName || ""}
               </h3>
 
@@ -62,12 +66,12 @@ export default function Faculty({ faculties }: { faculties: User[] }) {
                 {item.facultyProfile?.designation || "Faculty Mentor"}
               </p>
 
-              <p className="mt-2 line-clamp-3 text-sm text-gray-500">
+              <p className="mt-2 line-clamp-3 text-sm text-slate-500 dark:text-slate-300">
                 {item.profile?.bio ||
                   item.facultyProfile?.expertise ||
                   "Guiding learners with practical insight and subject depth."}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

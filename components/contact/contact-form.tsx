@@ -85,23 +85,23 @@ export function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[32px] border border-[var(--brand-100)] bg-white p-6 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.28)] md:p-8"
+      className="rounded-[32px] border border-[var(--brand-100)] bg-white p-6 shadow-[0_24px_60px_-40px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(15,23,40,0.98))] dark:shadow-[0_32px_80px_-42px_rgba(0,0,0,0.62)] md:p-8"
     >
-      <div className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,rgba(248,250,252,0.95),rgba(239,246,255,0.95))] p-5 md:p-6">
+      <div className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,rgba(248,250,252,0.95),rgba(239,246,255,0.95))] p-5 dark:border-white/10 dark:bg-[linear-gradient(135deg,rgba(23,35,62,0.96),rgba(16,25,44,0.92))] md:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Contact form
             </p>
-            <h3 className="mt-3 text-3xl font-semibold text-slate-950">
+            <h3 className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">
               Tell us what you need.
             </h3>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 md:text-base">
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-base">
               Share your question, program interest, or support request and the
               team will get back to you quickly.
             </p>
           </div>
-          <div className="hidden rounded-2xl bg-white p-3 text-[var(--brand-700)] shadow-sm md:block">
+          <div className="hidden rounded-2xl bg-white p-3 text-[var(--brand-700)] shadow-sm dark:bg-white/10 dark:text-[var(--brand-200)] md:block">
             <Sparkles className="size-5" />
           </div>
         </div>
@@ -194,7 +194,7 @@ export function ContactForm() {
       </FieldGroup>
 
       <div className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           By submitting, you allow the academy team to contact you about your
           enquiry.
         </p>

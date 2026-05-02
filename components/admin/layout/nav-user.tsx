@@ -78,13 +78,13 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
     variant === "navbar" ? (
       <Button
         variant="ghost"
-        className="h-10 gap-2 rounded-full border border-slate-200 bg-white px-2 pr-3 shadow-sm hover:bg-slate-50"
+        className="h-10 gap-2 rounded-full border border-border/70 bg-background/90 px-2 pr-3 shadow-sm backdrop-blur-sm hover:bg-muted/80"
       >
         <UserAvatar avatarUrl={avatarUrl} initials={initials} name={displayName} />
-        <span className="hidden max-w-32 truncate text-sm font-semibold text-slate-800 sm:block">
+        <span className="hidden max-w-32 truncate text-sm font-semibold text-slate-800 dark:text-slate-100 sm:block">
           {displayName}
         </span>
-        <ChevronsUpDown className="size-4 text-slate-400" />
+        <ChevronsUpDown className="size-4 text-slate-400 dark:text-slate-500" />
       </Button>
     ) : (
       <SidebarMenuButton
@@ -104,19 +104,19 @@ export function NavUser({ variant = "sidebar" }: NavUserProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent
-        className="min-w-64 rounded-2xl border-slate-200 p-2 shadow-xl"
+        className="min-w-64 rounded-2xl border-border/70 p-2 shadow-xl"
         side={variant === "navbar" || isMobile ? "bottom" : "right"}
         align="end"
         sideOffset={8}
       >
         <DropdownMenuLabel className="p-0 font-normal">
-          <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-3 text-left">
+          <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-3 py-3 text-left dark:bg-white/6">
             <UserAvatar avatarUrl={avatarUrl} initials={initials} name={displayName} />
             <div className="min-w-0 flex-1 text-sm leading-tight">
-              <span className="block truncate font-semibold text-slate-900">
+              <span className="block truncate font-semibold text-slate-900 dark:text-white">
                 {displayName}
               </span>
-              <span className="block truncate text-xs text-slate-500">
+              <span className="block truncate text-xs text-slate-500 dark:text-slate-300">
                 {user.email}
               </span>
             </div>
@@ -170,9 +170,9 @@ function UserAvatar({
   name: string;
 }) {
   return (
-    <Avatar className="h-8 w-8 rounded-xl ring-2 ring-white">
+    <Avatar className="h-8 w-8 rounded-xl ring-2 ring-white dark:ring-white/10">
       {avatarUrl ? <AvatarImage src={avatarUrl} alt={name} /> : null}
-      <AvatarFallback className="rounded-xl bg-red-50 text-sm font-semibold text-red-700">
+      <AvatarFallback className="rounded-xl bg-red-50 text-sm font-semibold text-red-700 dark:bg-red-500/20 dark:text-red-100">
         {initials || "U"}
       </AvatarFallback>
     </Avatar>

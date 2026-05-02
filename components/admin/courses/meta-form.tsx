@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { courseClientService } from "@/services/courses/course.client";
 import { Course } from "@/types/course";
-import { Input } from "@base-ui/react";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/submit-button";
 import { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
     if (!manualSlug) {
       form.setValue("metaSlug", slugify(title));
     }
-  }, [title]);
+  }, [form, manualSlug, title]);
 
   // 🔥 progress color logic
   const getColor = (len: number, max: number) => {
@@ -95,7 +95,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
   };
 
   return (
-    <div className="rounded-xl border bg-white p-5 space-y-4">
+    <div className="space-y-4 rounded-xl border bg-white p-5 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <h3 className="text-sm font-semibold">Meta (SEO)</h3>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -109,7 +109,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
                 {...field}
                 maxLength={MAX_TITLE}
                 placeholder="Meta Title"
-                className="h-9 w-full border rounded-md px-2 text-sm"
+                className="h-11 w-full rounded-md px-3 text-sm"
               />
               <Progress value={title.length} max={MAX_TITLE} />
             </div>
@@ -126,7 +126,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
                 {...field}
                 maxLength={MAX_SLUG}
                 placeholder="Meta Slug"
-                className="h-9 w-full border rounded-md px-2 text-sm"
+                className="h-11 w-full rounded-md px-3 text-sm"
                 onChange={(e) => {
                   setManualSlug(true);
                   field.onChange(e.target.value);
@@ -147,7 +147,7 @@ export const MetaForm = ({ course }: MetaFormProps) => {
                 {...field}
                 maxLength={MAX_DESC}
                 placeholder="Meta Description"
-                className="min-h-24 w-full border rounded-md p-2 text-sm"
+                className="min-h-28 w-full rounded-md p-3 text-sm"
               />
               <Progress value={desc.length} max={MAX_DESC} />
             </div>

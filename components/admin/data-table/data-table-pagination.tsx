@@ -20,13 +20,13 @@ import {
 export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
   return (
     <div className="flex items-center justify-between px-4">
-      <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
+      <div className="hidden flex-1 text-sm text-muted-foreground dark:text-slate-400 lg:flex">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
       <div className="flex w-full items-center gap-8 lg:w-fit">
         <div className="hidden items-center gap-2 lg:flex">
-          <Label htmlFor="rows-per-page" className="text-sm font-medium">
+          <Label htmlFor="rows-per-page" className="text-sm font-medium dark:text-slate-200">
             Rows per page
           </Label>
           <Select
@@ -47,7 +47,7 @@ export function DataTablePagination<TData>({ table }: { table: Table<TData> }) {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex w-fit items-center justify-center text-sm font-medium">
+        <div className="flex w-fit items-center justify-center text-sm font-medium dark:text-slate-200">
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {table.getPageCount()}
         </div>

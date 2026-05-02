@@ -46,8 +46,10 @@ export const getTagsColumns = (
           onClick={() => onEdit(tag)}
           className="text-left"
         >
-          <p className="font-semibold text-slate-900">{tag.name}</p>
-          <p className="text-xs text-slate-500">
+          <p className="font-semibold text-slate-900 dark:text-white">
+            {tag.name}
+          </p>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {tag.description || "Reusable shared tag"}
           </p>
         </button>
@@ -58,7 +60,9 @@ export const getTagsColumns = (
     accessorKey: "slug",
     header: "Slug",
     cell: ({ row }) => (
-      <span className="font-medium text-slate-700">{row.original.slug}</span>
+      <span className="font-medium text-slate-700 dark:text-slate-300">
+        {row.original.slug}
+      </span>
     ),
   },
   {

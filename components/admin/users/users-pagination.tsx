@@ -66,15 +66,15 @@ export function UsersPagination({
   };
 
   return (
-    <div className="flex flex-col gap-4 border-t border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="text-sm text-slate-500">
+    <div className="flex flex-col gap-4 border-t border-slate-100 px-5 py-4 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
+      <div className="text-sm text-slate-500 dark:text-slate-400">
         Showing page {meta.currentPage} of {meta.totalPages || 1} with{" "}
         {meta.totalItems} total users.
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex items-center gap-2">
-          <Label htmlFor="users-rows-per-page" className="text-sm font-medium">
+          <Label htmlFor="users-rows-per-page" className="text-sm font-medium dark:text-slate-200">
             Rows per page
           </Label>
           <Select
@@ -115,7 +115,7 @@ export function UsersPagination({
           >
             <IconChevronLeft />
           </Button>
-          <span className="min-w-24 text-center text-sm font-medium text-slate-700">
+          <span className="min-w-24 text-center text-sm font-medium text-slate-700 dark:text-slate-200">
             {meta.currentPage} / {meta.totalPages || 1}
           </span>
           <Button

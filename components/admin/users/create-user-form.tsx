@@ -69,8 +69,10 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
   return (
     <div className="w-full max-w-none">
       <div>
-        <h4 className="text-sm font-semibold">Create User</h4>
-        <p className="text-xs text-muted-foreground">
+        <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+          Create User
+        </h4>
+        <p className="text-xs text-muted-foreground dark:text-slate-300">
           Add a new user with just the essentials. Username, student role, and default password are handled automatically.
         </p>
       </div>
@@ -130,32 +132,32 @@ export const CreateUserForm = ({ onSuccess }: CreateUserFormProps) => {
           />
         </FieldGroup>
 
-        <div className="rounded-2xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4">
-          <h4 className="text-sm font-semibold text-slate-900">
+        <div className="rounded-2xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4 dark:border-white/10 dark:bg-white/6">
+          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
             Default account setup
           </h4>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Username
               </p>
-              <p className="mt-1 text-sm font-medium text-slate-900">
+              <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                 Auto-generated
               </p>
             </div>
-            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Password
               </p>
-              <p className="mt-1 text-sm font-medium text-slate-900">
+              <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                 {DEFAULT_USER_PASSWORD}
               </p>
             </div>
-            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
+            <div className="rounded-2xl border border-white/80 bg-white px-3 py-3 shadow-sm dark:border-white/10 dark:bg-white/8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Role
               </p>
-              <p className="mt-1 text-sm font-medium text-slate-900">
+              <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
                 student
               </p>
             </div>

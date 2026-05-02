@@ -10,14 +10,14 @@ const Logo = ({ footer = false }: { footer?: boolean }) => {
 
   return (
     <Link href="/" className="flex items-center justify-start">
-      <div className="relative w-45 h-16">
+      <div className="relative h-14 w-36 sm:h-15 sm:w-40 md:h-16 md:w-45">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           alt={site.siteName || "logo"}
           src={src}
           width={250}
           height={60}
-          className="h-16 w-auto object-contain"
+          className="h-full w-auto object-contain"
         />
       </div>
     </Link>

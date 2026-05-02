@@ -27,10 +27,10 @@ export default async function AdminLayout({
     <div className={inter.className}>
       <AdminAccessGate>
         <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
+          <AppSidebar variant="inset" />
+          <SidebarInset className="bg-transparent">
             <Navbar />
-            <main className="flex flex-1 flex-col gap-4 bg-zinc-100 p-4">
+            <main className="flex flex-1 flex-col gap-4 bg-transparent p-3 sm:p-4 lg:p-5">
               {children}
             </main>
           </SidebarInset>

@@ -64,15 +64,17 @@ export const AssignFacultyForm = ({ course }: AssignFacultyFormProps) => {
   };
 
   return (
-    <div className="rounded-lg border bg-white">
+    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       {/* Header */}
-      <div className="px-4 py-3 border-b">
-        <h3 className="text-sm font-medium">Assign Faculties</h3>
+      <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white">
+          Assign Faculties
+        </h3>
       </div>
 
-      <div className="p-3 space-y-3">
+      <div className="space-y-3 p-4">
         {/* Gray Panel (no shadow, clean) */}
-        <div className="max-h-50 overflow-y-auto ">
+        <div className="max-h-52 overflow-y-auto rounded-xl border border-slate-100 bg-slate-50/70 p-3 dark:border-white/10 dark:bg-white/4">
           <div className="space-y-2">
             {faculties.map((faculty) => {
               const isChecked = selected.includes(faculty.id);
@@ -80,7 +82,7 @@ export const AssignFacultyForm = ({ course }: AssignFacultyFormProps) => {
               return (
                 <label
                   key={faculty.id}
-                  className="flex items-center gap-3 text-sm cursor-pointer"
+                  className="flex cursor-pointer items-center gap-3 text-sm text-slate-700 dark:text-slate-200"
                 >
                   <input
                     type="checkbox"

@@ -62,7 +62,7 @@ export function NavMain({
     .filter(Boolean) as SidebarNavItem[];
 
   return (
-    <SidebarGroup className="bg-white">
+    <SidebarGroup className="bg-transparent">
       <SidebarMenu>
         {visibleItems.map((item) => {
           const hasChildren = !!item.items?.length;

@@ -84,15 +84,15 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
   const isPublishAction = !course.isPublished;
   const disabled = isPublishAction && !canPublish;
   return (
-    <div className="w-full border-b bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 sticky top-0 z-50">
-      <div className="flex items-center justify-between px-6 py-4">
+    <div className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-white/10 dark:bg-[rgba(11,18,32,0.88)]">
+      <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
         {/* 🔥 LEFT */}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
             {course.title}
           </h1>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge
               variant={course.isPublished ? "default" : "secondary"}
               className="text-xs"
@@ -100,7 +100,7 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
               {course.isPublished ? "Published" : "Draft"}
             </Badge>
             {course.isFeatured && (
-              <Badge className="text-xs bg-purple-100 text-purple-700 border border-purple-200">
+              <Badge className="border border-purple-200 bg-purple-100 text-xs text-purple-700 dark:border-purple-400/30 dark:bg-purple-500/12 dark:text-purple-200">
                 Featured
               </Badge>
             )}
@@ -112,7 +112,7 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
         </div>
 
         {/* 🔥 RIGHT */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 lg:justify-end">
           <Button
             size="sm"
             onClick={handleToggleFeatured}
@@ -137,7 +137,7 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
                     disabled={disabled}
                     onClick={handleTogglePublish}
                     className={cn(
-                      "flex items-center gap-1 transition",
+                      "flex items-center gap-1 whitespace-nowrap transition",
                       course.isPublished
                         ? "bg-yellow-500 hover:bg-yellow-600"
                         : "bg-green-600 hover:bg-green-700",
@@ -165,7 +165,7 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
                   side="bottom"
                   align="end"
                   sideOffset={10}
-                  className=" bg-white flex flex-col text-gray-800 border shadow-md rounded-md p-3 "
+                  className="flex flex-col rounded-md border bg-white p-3 text-gray-800 shadow-md dark:border-white/10 dark:bg-[rgba(17,27,46,0.98)] dark:text-slate-100"
                 >
                   {/* 🔥 HEADING */}
                   <p className="text-sm font-semibold mb-2">
@@ -191,7 +191,7 @@ export const CourseHeader = ({ course }: CourseHeaderProps) => {
             size="sm"
             variant="destructive"
             onClick={() => setOpenDeleteDialog(true)} // 🔥 open dialog
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 whitespace-nowrap"
           >
             <Trash2 className="size-4" />
             Delete

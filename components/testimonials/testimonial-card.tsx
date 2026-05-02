@@ -27,7 +27,7 @@ export const TestimonialCard = ({
   return (
     <>
       <article
-        className={`group relative overflow-hidden rounded-[28px] border border-[var(--brand-100)] bg-white shadow-[0_18px_60px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-200)] hover:shadow-[0_28px_80px_-36px_rgba(120,53,15,0.35)] ${
+        className={`group relative overflow-hidden rounded-[28px] border border-[var(--brand-100)] bg-white shadow-[0_18px_60px_-34px_rgba(15,23,42,0.45)] transition duration-300 hover:-translate-y-1 hover:border-[var(--brand-200)] hover:shadow-[0_28px_80px_-36px_rgba(120,53,15,0.35)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(15,23,40,0.98))] dark:shadow-[0_30px_80px_-40px_rgba(0,0,0,0.58)] dark:hover:border-[var(--brand-400)]/45 ${
           variant === "featured" ? "h-full" : ""
         }`}
       >
@@ -36,7 +36,7 @@ export const TestimonialCard = ({
         <div className="flex h-full flex-col p-6 md:p-7">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-[var(--brand-100)]">
+              <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100 ring-4 ring-[var(--brand-100)] dark:bg-white/10 dark:ring-white/8">
                 <Image
                   src={testimonial.avatar?.path || "/assets/default.png"}
                   alt={testimonial.avatarAlt || testimonial.name}
@@ -46,10 +46,10 @@ export const TestimonialCard = ({
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                   {testimonial.name}
                 </h3>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-slate-400">
                   {[testimonial.designation, testimonial.company]
                     .filter(Boolean)
                     .join(" at ") || "Verified learner"}
@@ -59,7 +59,7 @@ export const TestimonialCard = ({
 
             <Badge
               variant="outline"
-              className="rounded-full border-[var(--brand-200)] bg-[var(--brand-50)] px-3 py-1 text-[var(--brand-700)]"
+              className="rounded-full border-[var(--brand-200)] bg-[var(--brand-50)] px-3 py-1 text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]"
             >
               {isVideo ? "Video Story" : "Written Review"}
             </Badge>
@@ -71,7 +71,7 @@ export const TestimonialCard = ({
             {primaryCourse && (
               <Link
                 href={`/course/${primaryCourse.slug}`}
-                className="text-xs font-medium text-[var(--brand-700)] underline-offset-4 hover:underline"
+                className="text-xs font-medium text-[var(--brand-700)] underline-offset-4 hover:underline dark:text-[var(--brand-200)]"
               >
                 {primaryCourse.title}
               </Link>
@@ -106,15 +106,15 @@ export const TestimonialCard = ({
               </div>
             </div>
           ) : (
-            <div className="relative mb-5 flex-1 rounded-[24px] bg-[linear-gradient(180deg,#fff_0%,var(--brand-50)_100%)] p-5">
-              <Quote className="mb-4 size-8 text-[var(--brand-500)]/70" />
-              <p className="text-[15px] leading-7 text-slate-700">
+            <div className="relative mb-5 flex-1 rounded-[24px] bg-[linear-gradient(180deg,#fff_0%,var(--brand-50)_100%)] p-5 dark:bg-[linear-gradient(180deg,rgba(27,41,72,0.84)_0%,rgba(18,28,50,0.96)_100%)]">
+              <Quote className="mb-4 size-8 text-[var(--brand-500)]/70 dark:text-[var(--brand-300)]/80" />
+              <p className="text-[15px] leading-7 text-slate-700 dark:text-slate-200">
                 {testimonial.message}
               </p>
             </div>
           )}
 
-          <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500">
+          <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400">
             <span>
               {new Date(testimonial.createdAt).toLocaleDateString("en-GB", {
                 day: "2-digit",
@@ -122,7 +122,7 @@ export const TestimonialCard = ({
                 year: "numeric",
               })}
             </span>
-            <span className="font-medium text-slate-600">
+            <span className="font-medium text-slate-600 dark:text-slate-300">
               {isVideo ? "Video testimonial" : "Text testimonial"}
             </span>
           </div>

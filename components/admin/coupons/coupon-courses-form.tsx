@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,8 +60,10 @@ export const CouponCoursesForm = ({
 
   const { isValid, isSubmitting, isDirty } = form.formState;
 
-  const applyToAll = form.watch("applyToAll");
-  const selected = form.watch("applicableCourseIds") || [];
+  const applyToAll =
+    useWatch({ control: form.control, name: "applyToAll" }) ?? false;
+  const selected =
+    useWatch({ control: form.control, name: "applicableCourseIds" }) || [];
 
   const filteredCourses = courses.filter((c) =>
     c.title.toLowerCase().includes(search.toLowerCase()),
@@ -109,10 +111,10 @@ export const CouponCoursesForm = ({
   };
 
   return (
-    <Card>
+    <Card className="dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardContent className="p-6 space-y-5">
         <div>
-          <h3 className="text-lg font-semibold">Course Applicability</h3>
+          <h3 className="text-lg font-semibold text-slate-950 dark:text-white">Course Applicability</h3>
           <p className="text-sm text-muted-foreground">
             Choose where this coupon should be applied
           </p>
@@ -137,7 +139,7 @@ export const CouponCoursesForm = ({
 
                 return (
                   <div
-                    className="flex items-center justify-between rounded-lg border p-3 cursor-pointer"
+                    className="flex cursor-pointer items-center justify-between rounded-lg border border-slate-200 p-3 dark:border-white/10 dark:bg-white/4"
                     onClick={() => handleToggle(!field.value)}
                   >
                     <div>
@@ -185,11 +187,11 @@ export const CouponCoursesForm = ({
                 </div>
 
                 {/* List */}
-                <div className="max-h-60 overflow-y-auto border rounded-lg p-2 space-y-1">
+                <div className="max-h-60 space-y-1 overflow-y-auto rounded-lg border border-slate-200 p-2 dark:border-white/10 dark:bg-white/4">
                   {filteredCourses.map((course) => (
                     <div
                       key={course.id}
-                      className="flex items-center gap-3 p-2 rounded-md hover:bg-muted cursor-pointer"
+                      className="flex cursor-pointer items-center gap-3 rounded-md p-2 hover:bg-muted dark:hover:bg-white/8"
                       onClick={() => toggleCourse(course.id)}
                     >
                       <div onClick={(e) => e.stopPropagation()}>

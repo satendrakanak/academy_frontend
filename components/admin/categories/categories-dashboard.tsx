@@ -130,17 +130,17 @@ export function CategoriesDashboard({ categories }: { categories: Category[] }) 
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm">
+      <section className="rounded-[28px] border border-[var(--brand-100)] bg-[linear-gradient(135deg,#ffffff_0%,#f8fbff_55%,#eef4ff_100%)] p-6 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-3">
-            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)]">
+            <span className="inline-flex rounded-full border border-[var(--brand-200)] bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-[var(--brand-200)]">
               Content Taxonomy
             </span>
             <div>
-              <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
+              <h1 className="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
                 Categories dashboard
               </h1>
-              <p className="mt-2 text-sm text-slate-600">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
                 Organize course and article structures with one clean, type-aware category workspace.
               </p>
             </div>
@@ -190,18 +190,18 @@ export function CategoriesDashboard({ categories }: { categories: Category[] }) 
               icon: Sparkles,
             },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm">
+            <div key={stat.label} className="rounded-3xl border border-white/80 bg-white px-5 py-4 shadow-sm dark:border-white/10 dark:bg-white/8">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-300">{stat.label}</p>
                 <stat.icon className="size-5 text-[var(--brand-600)]" />
               </div>
-              <p className="mt-3 text-3xl font-semibold text-slate-950">{stat.value}</p>
+              <p className="mt-3 text-3xl font-semibold text-slate-950 dark:text-white">{stat.value}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm">
+      <section className="rounded-[28px] border border-slate-100 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-1 flex-col gap-4 lg:flex-row lg:items-center">
             <div className="relative w-full max-w-md">
@@ -223,7 +223,7 @@ export function CategoriesDashboard({ categories }: { categories: Category[] }) 
                   className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     activeType === tab.value
                       ? "bg-[var(--brand-600)] text-white shadow-sm"
-                      : "border border-slate-200 bg-white text-slate-600 hover:border-[var(--brand-200)] hover:text-[var(--brand-700)]"
+                      : "border border-slate-200 bg-white text-slate-600 hover:border-[var(--brand-200)] hover:text-[var(--brand-700)] dark:border-white/10 dark:bg-white/8 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
                   }`}
                 >
                   {tab.label}
@@ -254,13 +254,13 @@ export function CategoriesDashboard({ categories }: { categories: Category[] }) 
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100">
+        <div className="mt-5 overflow-hidden rounded-[24px] border border-slate-100 dark:border-white/10">
           <DataTableContent
             table={table}
             data={filteredCategories}
             getRowId={(row) => row.id}
           />
-          <div className="border-t border-slate-100 py-4">
+          <div className="border-t border-slate-100 py-4 dark:border-white/10">
             <DataTablePagination table={table} />
           </div>
         </div>

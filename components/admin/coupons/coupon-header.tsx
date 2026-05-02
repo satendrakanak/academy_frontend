@@ -60,7 +60,7 @@ export const CouponHeader = ({ coupon }: CouponHeaderProps) => {
       toast.success(value ? "Auto apply enabled" : "Auto apply disabled");
 
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Failed to update auto apply");
     } finally {
       setIsToggling(false);
@@ -76,7 +76,7 @@ export const CouponHeader = ({ coupon }: CouponHeaderProps) => {
 
       toast.success("Coupon deleted");
       router.push("/admin/coupons");
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete coupon");
     } finally {
       setIsDeleting(false);
@@ -85,11 +85,11 @@ export const CouponHeader = ({ coupon }: CouponHeaderProps) => {
   };
 
   return (
-    <div className="w-full border-b bg-white/80 backdrop-blur sticky top-0 z-50">
-      <div className="flex items-center justify-between px-6 py-4">
+    <div className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-white/10 dark:bg-[rgba(11,18,32,0.88)]">
+      <div className="flex flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
         {/* LEFT */}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold">{coupon.code}</h1>
+          <h1 className="text-xl font-semibold text-slate-950 dark:text-white">{coupon.code}</h1>
 
           <div className="flex items-center gap-2">
             {getStatusBadge()}
@@ -101,7 +101,7 @@ export const CouponHeader = ({ coupon }: CouponHeaderProps) => {
         </div>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
           {/* AUTO APPLY */}
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted-foreground">Auto Apply</span>
@@ -117,6 +117,7 @@ export const CouponHeader = ({ coupon }: CouponHeaderProps) => {
             size="sm"
             variant="destructive"
             onClick={() => setOpenDeleteDialog(true)}
+            className="w-full sm:w-auto"
           >
             <Trash2 className="size-4" />
             Delete

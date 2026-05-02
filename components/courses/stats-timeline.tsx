@@ -27,51 +27,53 @@ const stats = [
 
 export default function StatsTimeline() {
   return (
-    <section className="pt-6 pb-14">
-      <div className="max-w-7xl mx-auto px-6 text-center">
+    <section className="academy-section-tight overflow-hidden">
+      <div className="mx-auto max-w-7xl px-6 text-center">
         {/* LABEL */}
-        <span className="mb-4 inline-block rounded-full bg-(--brand-100) px-5 py-1 text-xs font-semibold tracking-[0.22em] text-(--brand-700)">
+        <span className="academy-badge mb-4">
           WHY CHOOSE US
         </span>
 
         {/* HEADING */}
-        <h2 className="text-3xl lg:text-5xl leading-tight font-bold text-gray-900 mb-8">
+        <h2 className="mb-8 text-3xl font-semibold leading-tight text-slate-950 dark:text-white lg:text-5xl">
           Creating A Community Of <br /> Life Long Learners.
         </h2>
 
         {/* TIMELINE */}
         <div className="relative">
           {/* LINE */}
-          <div className="absolute top-4.5 left-0 h-[1.5px] w-full bg-(--brand-200)" />
+          <div className="absolute left-0 top-4.5 hidden h-[1.5px] w-full bg-(--brand-200) md:block" />
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10 relative">
+          <div className="relative grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
             {stats.map((item, index) => (
               <div
                 key={index}
-                className="relative flex mt-2 flex-col items-center"
+                className="academy-reveal relative mt-2 flex flex-col items-center"
               >
                 {/* DOT */}
-                <div className="z-20 h-5 w-5 rounded-full border-[3px] border-(--brand-500) bg-white" />
+                <div className="z-20 h-5 w-5 rounded-full border-[3px] border-(--brand-500) bg-white dark:bg-slate-950" />
 
                 {/* CONNECTOR */}
-                <div className="z-10 h-15 w-0.5 bg-(--brand-200)" />
+                <div className="z-10 h-12 w-0.5 bg-(--brand-200) md:h-15" />
 
                 {/* CARD */}
-                <div className="relative w-full max-w-65 overflow-visible rounded-[26px] border border-(--brand-100) border-b-4 border-b-(--brand-500) bg-white px-6 pt-12 pb-8 shadow-[0_20px_50px_-28px_rgba(15,23,42,0.35)]">
+                <div className="academy-card academy-hover-lift relative w-full max-w-72 overflow-visible border-(--brand-100) border-b-4 border-b-(--brand-500) px-6 pb-8 pt-12">
                   {/* ARC (FIXED PERFECT) */}
 
                   {/* ICON CIRCLE (MERGED FEEL) */}
-                  <div className="absolute -top-7.5 left-1/2 -translate-x-1/2 w-14 h-14 bg-white rounded-full shadow-md flex items-center justify-center z-20 border border-gray-100">
+                  <div className="absolute -top-7.5 left-1/2 z-20 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full border border-gray-100 bg-white shadow-md dark:border-white/10 dark:bg-slate-900">
                     <div className="text-(--brand-600)">{item.icon}</div>
                   </div>
 
                   {/* VALUE */}
-                  <h3 className="mt-2 text-3xl font-bold text-(--brand-700)">
+                  <h3 className="mt-2 text-3xl font-bold text-(--brand-700) dark:text-(--brand-300)">
                     {item.value}
                   </h3>
 
                   {/* LABEL */}
-                  <p className="text-gray-500 text-sm mt-2">{item.label}</p>
+                  <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
+                    {item.label}
+                  </p>
                 </div>
               </div>
             ))}
