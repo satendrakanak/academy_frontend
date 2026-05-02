@@ -10,16 +10,16 @@ interface OrderHeaderProps {
 
 export const OrderHeader = ({ order }: OrderHeaderProps) => {
   return (
-    <div className="w-full border-b bg-white/80 backdrop-blur sticky top-0 z-50">
-      <div className="flex items-center justify-between px-6 py-4">
+    <div className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-[rgba(11,18,32,0.88)]">
+      <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
         {/* 🔥 LEFT */}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
             Order #{order.id}
           </h1>
 
           {/* 🔥 STATUS + DATE */}
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Badge
               className={
                 order.status === "PAID"
@@ -44,7 +44,7 @@ export const OrderHeader = ({ order }: OrderHeaderProps) => {
           </div>
         </div>
 
-        {/* 🔥 RIGHT */}
+        <div />
       </div>
     </div>
   );

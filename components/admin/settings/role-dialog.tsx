@@ -91,12 +91,12 @@ export function RoleDialog({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white sm:max-w-[820px]">
-        <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left">
-          <DrawerTitle className="text-2xl font-semibold text-slate-950">
+      <DrawerContent className="w-full border-l border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] sm:max-w-[820px]">
+        <DrawerHeader className="border-b border-slate-100 px-6 py-5 text-left dark:border-white/10">
+          <DrawerTitle className="text-2xl font-semibold text-slate-950 dark:text-white">
             {title}
           </DrawerTitle>
-          <DrawerDescription className="text-sm text-slate-500">
+          <DrawerDescription className="text-sm text-slate-500 dark:text-slate-300">
             Define what this role can view, create, update, or delete.
           </DrawerDescription>
         </DrawerHeader>
@@ -104,7 +104,7 @@ export function RoleDialog({
         <ScrollArea className="h-[calc(100vh-146px)]">
           <div className="space-y-6 px-6 py-5">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-700">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 Role name
               </label>
               <Input
@@ -116,10 +116,10 @@ export function RoleDialog({
 
             <div className="space-y-3">
               <div>
-                <h3 className="text-sm font-semibold text-slate-900">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
                   Permission matrix
                 </h3>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-500 dark:text-slate-400">
                   Tick every action this role should be allowed to perform.
                 </p>
               </div>
@@ -132,7 +132,7 @@ export function RoleDialog({
           </div>
         </ScrollArea>
 
-        <DrawerFooter className="border-t border-slate-100 bg-white px-6 py-4">
+        <DrawerFooter className="border-t border-slate-100 bg-white px-6 py-4 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}

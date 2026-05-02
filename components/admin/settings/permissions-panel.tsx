@@ -90,13 +90,13 @@ export function PermissionsPanel({
 
   return (
     <>
-      <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)]">
-        <CardHeader className="flex flex-col gap-4 border-b border-slate-100 sm:flex-row sm:items-center sm:justify-between">
+      <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+        <CardHeader className="flex flex-col gap-4 border-b border-slate-100 dark:border-white/10 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle className="text-xl font-semibold text-slate-950">
+            <CardTitle className="text-xl font-semibold text-slate-950 dark:text-white">
               Permission Library
             </CardTitle>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
               Build reusable access rules, then mix them into roles from one place.
             </p>
           </div>
@@ -119,17 +119,17 @@ export function PermissionsPanel({
             return (
               <div
                 key={permission.id}
-                className="rounded-[24px] border border-slate-100 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-5 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.26)]"
+                className="rounded-[24px] border border-slate-100 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-5 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.26)] dark:border-white/10 dark:bg-white/6"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="text-base font-semibold text-slate-950">
+                      <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                         {permission.name}
                       </h3>
                       <Badge variant="outline">{usage} roles</Badge>
                     </div>
-                    <p className="mt-2 text-sm text-slate-500">
+                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
                       {getActionLabel(permission.name)} access for{" "}
                       {formatModuleName(parsed.module)}
                     </p>

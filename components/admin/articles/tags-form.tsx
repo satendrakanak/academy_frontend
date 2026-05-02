@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Check, X } from "lucide-react";
 import { tagClientService } from "@/services/tags/tag.client";
 import { Tag } from "@/types/tag";
@@ -9,13 +9,14 @@ import { useRouter } from "next/navigation";
 import { getErrorMessage } from "@/lib/error-handler";
 import { Article } from "@/types/article";
 import { articleClientService } from "@/services/articles/article.client";
+import { Input } from "@/components/ui/input";
 
 interface TagsFormProps {
   article: Article;
 }
 
 export function TagsForm({ article }: TagsFormProps) {
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>(article.tags || []);
   const [newTag, setNewTag] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestedTags, setSuggestedTags] = useState<Tag[]>([]);
@@ -25,10 +26,6 @@ export function TagsForm({ article }: TagsFormProps) {
 
   // 🔥 important: prevent duplicate API calls
   const lastSavedRef = useRef<string>("");
-
-  useEffect(() => {
-    setTags(article.tags || []);
-  }, [article]);
 
   // load suggestions (later search API laga sakta hai)
   const loadSuggestedTags = async () => {
@@ -120,16 +117,14 @@ export function TagsForm({ article }: TagsFormProps) {
   };
 
   return (
-    <div className="rounded-lg border bg-white">
-      {/* Header */}
-      <div className="px-4 py-3 border-b">
-        <h3 className="text-sm font-medium">Tags</h3>
+    <div className="rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+        <h3 className="text-sm font-medium text-slate-900 dark:text-white">Tags</h3>
       </div>
 
-      <div className="p-4 space-y-3">
-        {/* Input */}
+      <div className="space-y-3 p-4">
         <div className="relative">
-          <input
+          <Input
             value={newTag}
             onChange={(e) => setNewTag(e.target.value)}
             onKeyDown={(e) => {
@@ -139,20 +134,20 @@ export function TagsForm({ article }: TagsFormProps) {
               }
             }}
             placeholder="Add tag"
-            className="w-full border rounded-md px-2 pr-8 py-1 text-sm outline-none"
+            className="h-11 pr-10"
           />
 
           {newTag.trim() && (
             <button
               onClick={handleAddTagsFromInput}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-[var(--brand-700)] dark:hover:text-[var(--brand-200)]"
             >
               <Check size={16} />
             </button>
           )}
         </div>
 
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground dark:text-slate-300">
           Separate tags with commas
         </p>
 
@@ -161,7 +156,7 @@ export function TagsForm({ article }: TagsFormProps) {
           {tags.map((tag) => (
             <span
               key={tag.id}
-              className="flex items-center gap-1 text-xs bg-gray-100 px-2 py-1 rounded-md"
+              className="flex items-center gap-1 rounded-md bg-gray-100 px-2 py-1 text-xs text-slate-700 dark:bg-white/10 dark:text-slate-200"
             >
               {tag.name}
               <button
@@ -181,18 +176,18 @@ export function TagsForm({ article }: TagsFormProps) {
               setShowSuggestions((prev) => !prev);
               loadSuggestedTags();
             }}
-            className="text-xs text-primary hover:underline cursor-pointer"
+            className="cursor-pointer text-xs text-[var(--brand-700)] hover:underline dark:text-[var(--brand-200)]"
           >
             Choose from the most used tags
           </button>
 
           {showSuggestions && (
-            <div className="border rounded-md p-2 space-y-2">
-              <input
+            <div className="space-y-2 rounded-xl border border-slate-100 p-3 dark:border-white/10 dark:bg-white/6">
+              <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search tags..."
-                className="w-full border px-2 py-1 text-sm rounded"
+                className="h-10"
               />
 
               <div className="max-h-40 overflow-y-auto space-y-1">
@@ -211,8 +206,8 @@ export function TagsForm({ article }: TagsFormProps) {
                       }}
                       className={`text-sm px-2 py-1 rounded cursor-pointer ${
                         isSelected
-                          ? "bg-gray-200 text-muted-foreground"
-                          : "hover:bg-gray-100"
+                          ? "bg-gray-200 text-muted-foreground dark:bg-white/10 dark:text-slate-400"
+                          : "text-slate-700 hover:bg-gray-100 dark:text-slate-200 dark:hover:bg-white/8"
                       }`}
                     >
                       {tag.name}

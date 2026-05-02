@@ -64,23 +64,23 @@ export function AccessControlOverview({
           return (
             <Card
               key={card.key}
-              className={`border border-[var(--brand-100)] bg-gradient-to-br ${card.tone} shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)]`}
+              className={`border border-[var(--brand-100)] bg-gradient-to-br ${card.tone} shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10`}
             >
               <CardHeader className="pb-0">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm text-slate-500">{card.title}</p>
-                    <CardTitle className="mt-2 text-3xl font-semibold text-slate-950">
+                    <p className="text-sm text-slate-500 dark:text-slate-300">{card.title}</p>
+                    <CardTitle className="mt-2 text-3xl font-semibold text-slate-950 dark:text-white">
                       {statValues[card.key]}
                     </CardTitle>
                   </div>
-                  <div className="rounded-2xl bg-white/80 p-3 text-[var(--brand-700)] shadow-sm">
+                  <div className="rounded-2xl bg-white/80 p-3 text-[var(--brand-700)] shadow-sm dark:bg-white/10 dark:text-[var(--brand-200)]">
                     <Icon className="size-5" />
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-3">
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   {card.key === "roles" && "Keep your admin hierarchy structured."}
                   {card.key === "customRoles" &&
                     "Separate academy operations from system defaults."}
@@ -96,12 +96,12 @@ export function AccessControlOverview({
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
-        <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)]">
+        <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-slate-950">
+            <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
               Permission Modules
             </CardTitle>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-300">
               See how your access rules are distributed across the platform.
             </p>
           </CardHeader>
@@ -109,10 +109,10 @@ export function AccessControlOverview({
             {permissionGroups.map((group) => (
               <div
                 key={group.module}
-                className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3"
+                className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3 dark:border-white/10 dark:bg-white/6"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
                     {group.module
                       .split("_")
                       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -124,13 +124,13 @@ export function AccessControlOverview({
                   {group.permissions.slice(0, 4).map((permission) => (
                     <span
                       key={permission.id}
-                      className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-600 ring-1 ring-slate-200"
+                      className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-600 ring-1 ring-slate-200 dark:bg-white/10 dark:text-slate-200 dark:ring-white/10"
                     >
                       {permission.name}
                     </span>
                   ))}
                   {group.permissions.length > 4 && (
-                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-500 ring-1 ring-slate-200">
+                    <span className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-500 ring-1 ring-slate-200 dark:bg-white/10 dark:text-slate-300 dark:ring-white/10">
                       +{group.permissions.length - 4} more
                     </span>
                   )}
@@ -140,12 +140,12 @@ export function AccessControlOverview({
           </CardContent>
         </Card>
 
-        <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)]">
+        <Card className="border border-[var(--brand-100)] bg-white shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-slate-950">
+            <CardTitle className="text-lg font-semibold text-slate-950 dark:text-white">
               Protected Roles
             </CardTitle>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-slate-300">
               These baseline roles stay locked to protect the academy setup.
             </p>
           </CardHeader>
@@ -155,14 +155,14 @@ export function AccessControlOverview({
               .map((role) => (
                 <div
                   key={role.id}
-                  className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3"
+                  className="rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3 dark:border-white/10 dark:bg-white/6"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <p className="text-sm font-semibold text-slate-900">
+                      <p className="text-sm font-semibold text-slate-900 dark:text-white">
                         {role.name.charAt(0).toUpperCase() + role.name.slice(1)}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                         {role.permissions?.length ?? 0} permissions assigned
                       </p>
                     </div>

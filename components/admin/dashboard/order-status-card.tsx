@@ -25,8 +25,8 @@ export function OrderStatusCard({
   return (
     <Card className="border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardHeader>
-        <CardTitle>Order Status Split</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-slate-950 dark:text-white">Order Status Split</CardTitle>
+        <CardDescription className="text-slate-500 dark:text-slate-300">
           Payment flow health across all recorded orders.
         </CardDescription>
       </CardHeader>

@@ -87,7 +87,7 @@ export function ContactLeadsDashboard({
         header: "Lead",
         cell: ({ row }) => (
           <div className="space-y-1">
-            <p className="font-semibold text-slate-950">
+            <p className="font-semibold text-slate-950 dark:text-white">
               {row.original.fullName}
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -106,7 +106,7 @@ export function ContactLeadsDashboard({
         header: "Enquiry",
         cell: ({ row }) => (
           <div className="max-w-[360px]">
-            <p className="font-medium text-slate-900">
+            <p className="font-medium text-slate-900 dark:text-slate-100">
               {row.original.subject || "General enquiry"}
             </p>
             <p className="mt-1 line-clamp-2 text-sm leading-6 text-slate-500 dark:text-slate-400">

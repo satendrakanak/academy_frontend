@@ -29,8 +29,8 @@ export function RevenueTrendCard({
   return (
     <Card className="border-[var(--brand-100)] bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <CardHeader>
-        <CardTitle>Revenue Trend</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-slate-950 dark:text-white">Revenue Trend</CardTitle>
+        <CardDescription className="text-slate-500 dark:text-slate-300">
           Monthly paid revenue, discounts, and order activity.
         </CardDescription>
       </CardHeader>

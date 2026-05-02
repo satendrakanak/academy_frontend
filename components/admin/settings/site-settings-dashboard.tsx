@@ -265,7 +265,7 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const { hasPassword, smtpPassword, ...rest } = emailForm;
+        const { hasPassword: _hasPassword, smtpPassword, ...rest } = emailForm;
 
         const payload = {
           ...rest,
@@ -403,12 +403,12 @@ export function SiteSettingsDashboard({
           <form onSubmit={saveSiteSettings} className="space-y-5">
             <div className="grid gap-5 xl:grid-cols-[1.18fr_0.92fr]">
               <div className="space-y-5">
-                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6">
                   <div className="mb-4">
-                    <h3 className="text-base font-semibold text-slate-950">
+                    <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                       Website branding
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-300">
                       These details appear across the public website.
                     </p>
                   </div>
@@ -442,12 +442,12 @@ export function SiteSettingsDashboard({
                   </Field>
                 </div>
 
-                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6">
                   <div className="mb-4">
-                    <h3 className="text-base font-semibold text-slate-950">
+                    <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                       Contact details
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-300">
                       Keep support information synced everywhere.
                     </p>
                   </div>
@@ -483,12 +483,12 @@ export function SiteSettingsDashboard({
               </div>
 
               <div className="space-y-5">
-                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6">
                   <div className="mb-4">
-                    <h3 className="text-base font-semibold text-slate-950">
+                    <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                       Media assets
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-300">
                       Choose each image separately from the media library.
                     </p>
                   </div>
@@ -512,12 +512,12 @@ export function SiteSettingsDashboard({
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4">
+                <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6">
                   <div className="mb-4">
-                    <h3 className="text-base font-semibold text-slate-950">
+                    <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                       Admin branding
                     </h3>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-300">
                       Use a short label and compact icon for the sidebar.
                     </p>
                   </div>

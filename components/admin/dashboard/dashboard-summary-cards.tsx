@@ -83,7 +83,7 @@ export function DashboardSummaryCards({
           <Card
             key={item.title}
             className={cn(
-              "border border-[var(--brand-100)] bg-gradient-to-br transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.4)]",
+              "border border-[var(--brand-100)] bg-gradient-to-br transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_-36px_rgba(15,23,42,0.4)] dark:border-white/10",
               item.tone,
             )}
           >

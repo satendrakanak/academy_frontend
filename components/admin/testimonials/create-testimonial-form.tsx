@@ -180,10 +180,10 @@ export const CreateTestimonialForm = ({
   return (
     <div className="w-full max-w-none">
       <div>
-        <h4 className="text-sm font-semibold">
+        <h4 className="text-sm font-semibold text-slate-950 dark:text-white">
           {testimonial?.id ? "Edit Testimonial" : "Create Testimonial"}
         </h4>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground dark:text-slate-300">
           Add student or customer feedback for the website.
         </p>
       </div>
@@ -289,9 +289,9 @@ export const CreateTestimonialForm = ({
             )}
           />
 
-          <div className="rounded-xl border bg-white">
-            <div className="border-b px-4 py-3">
-              <h3 className="text-sm font-medium">Assign Courses</h3>
+          <div className="rounded-xl border border-slate-200 bg-white dark:border-white/10 dark:bg-white/6">
+            <div className="border-b border-slate-100 px-4 py-3 dark:border-white/10">
+              <h3 className="text-sm font-medium text-slate-900 dark:text-white">Assign Courses</h3>
             </div>
 
             <div className="max-h-52 space-y-2 overflow-y-auto p-4">
@@ -301,7 +301,7 @@ export const CreateTestimonialForm = ({
                 return (
                   <label
                     key={course.id}
-                    className="flex cursor-pointer items-center gap-3 text-sm"
+                    className="flex cursor-pointer items-center gap-3 text-sm text-slate-700 dark:text-slate-200"
                   >
                     <input
                       type="checkbox"
@@ -315,7 +315,7 @@ export const CreateTestimonialForm = ({
               })}
 
               {!courses.length && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground dark:text-slate-300">
                   No courses found yet.
                 </p>
               )}

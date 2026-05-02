@@ -71,15 +71,15 @@ export function UserExamAccessForm({
   };
 
   return (
-    <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+    <section className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <div className="mb-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
           Final Exam Access
         </p>
-        <h3 className="mt-2 text-xl font-semibold text-slate-950">
+        <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
           Manage user-wise extra exam attempts
         </h3>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
+        <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-300">
           If a learner exhausts all attempts, management can extend access
           course-wise from here without changing the global exam settings.
         </p>
@@ -95,15 +95,15 @@ export function UserExamAccessForm({
           return (
             <div
               key={item.courseId}
-              className="rounded-[24px] border border-slate-200 bg-slate-50/70 p-5"
+              className="rounded-[24px] border border-slate-200 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/6"
             >
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div className="space-y-3">
                   <div>
-                    <h4 className="text-lg font-semibold text-slate-950">
+                    <h4 className="text-lg font-semibold text-slate-950 dark:text-white">
                       {item.courseTitle}
                     </h4>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
                       Base attempts {item.baseAttempts} • Effective attempts{" "}
                       {item.effectiveAttempts} • Used {item.attemptsUsed} •
                       Remaining {item.remainingAttempts}
@@ -112,8 +112,8 @@ export function UserExamAccessForm({
                   <span
                     className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                       item.passed
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "bg-amber-50 text-amber-700"
+                        ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/16 dark:text-emerald-200"
+                        : "bg-amber-50 text-amber-700 dark:bg-amber-500/16 dark:text-amber-200"
                     }`}
                   >
                     {item.passed ? "Exam already passed" : "Still retry eligible"}
@@ -122,7 +122,7 @@ export function UserExamAccessForm({
 
                 <div className="grid gap-3 xl:min-w-[360px] xl:max-w-[420px] xl:flex-1">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                       Extra attempts
                     </label>
                     <Input
@@ -135,7 +135,7 @@ export function UserExamAccessForm({
                     />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-700">
+                    <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                       Internal note
                     </label>
                     <Textarea

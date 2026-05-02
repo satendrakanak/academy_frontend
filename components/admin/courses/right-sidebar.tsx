@@ -15,7 +15,7 @@ interface RightSidebarProps {
 
 export const RightSidebar = ({ course }: RightSidebarProps) => {
   return (
-    <div className="grid gap-4 lg:grid-cols-2 xl:sticky xl:top-24 xl:grid-cols-1">
+    <div className="grid gap-4 sm:grid-cols-2 xl:sticky xl:top-24 xl:grid-cols-1">
       {/* 🔥 Featured Image */}
       <FeaturedImageForm course={course} />
       {/* 🔥 Featured Video */}

@@ -32,7 +32,7 @@ export const UserCoverImageForm = ({ user }: UserCoverImageFormProps) => {
   };
 
   return (
-    <div className="rounded-2xl border p-4 bg-white shadow-sm">
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <FileUpload
         label="User Cover Image"
         previewType="image"
