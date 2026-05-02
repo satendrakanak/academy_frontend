@@ -265,7 +265,9 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const { hasPassword: _hasPassword, smtpPassword, ...rest } = emailForm;
+        const emailPayload = { ...emailForm };
+        Reflect.deleteProperty(emailPayload, "hasPassword");
+        const { smtpPassword, ...rest } = emailPayload;
 
         const payload = {
           ...rest,
@@ -708,12 +710,12 @@ export function SiteSettingsDashboard({
             description="Store delivery settings in the database and use them for outgoing transactional mail."
           >
             <form onSubmit={saveEmailSettings} className="space-y-4">
-              <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
                 <div>
-                  <p className="font-semibold text-slate-900">
+                  <p className="font-semibold text-slate-900 dark:text-white">
                     Enable DB mailer
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     When enabled, outgoing mail uses the saved SMTP config.
                   </p>
                 </div>
@@ -790,7 +792,7 @@ export function SiteSettingsDashboard({
                   />
                 </Field>
                 <Field label="Use secure connection">
-                  <div className="flex h-11 items-center rounded-xl border border-slate-200 px-3">
+                  <div className="flex h-11 items-center rounded-xl border border-slate-200 px-3 dark:border-white/10 dark:bg-white/6">
                     <Switch
                       checked={emailForm.secure}
                       onCheckedChange={(checked) =>
@@ -818,14 +820,14 @@ export function SiteSettingsDashboard({
               {socialForm.map((provider) => (
                 <div
                   key={provider.provider}
-                  className="rounded-2xl border border-slate-200 p-4"
+                  className="rounded-2xl border border-slate-200 p-4 dark:border-white/10 dark:bg-white/6"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="font-semibold text-slate-950">
+                      <p className="font-semibold text-slate-950 dark:text-white">
                         {socialLabels[provider.provider]}
                       </p>
-                      <p className="text-sm text-slate-500">
+                      <p className="text-sm text-slate-500 dark:text-slate-300">
                         {provider.clientIdPreview || "No client ID saved yet"}
                       </p>
                     </div>
@@ -917,12 +919,12 @@ export function SiteSettingsDashboard({
             description="Move S3 credentials, bucket details, and CloudFront setup into the database-backed settings panel."
           >
             <form onSubmit={saveAwsStorageSettings} className="space-y-4">
-              <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+              <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
                 <div>
-                  <p className="font-semibold text-slate-900">
+                  <p className="font-semibold text-slate-900 dark:text-white">
                     Enable DB-backed storage config
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-500 dark:text-slate-300">
                     Uploads and certificate storage can use the values saved
                     here.
                   </p>
@@ -1011,7 +1013,7 @@ export function SiteSettingsDashboard({
                   type="button"
                   onClick={() => selectGateway(gateway)}
                   className={cn(
-                    "rounded-3xl border bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-[var(--brand-300)] hover:shadow-xl",
+                    "rounded-3xl border bg-white p-4 text-left transition hover:-translate-y-0.5 hover:border-[var(--brand-300)] hover:shadow-xl dark:border-white/10 dark:bg-white/6 dark:hover:border-[var(--brand-400)] dark:hover:bg-white/8",
                     selectedGateway?.id === gateway.id
                       ? "border-[var(--brand-400)] shadow-xl"
                       : "border-slate-200",
@@ -1020,14 +1022,14 @@ export function SiteSettingsDashboard({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-slate-950">
+                        <span className="font-semibold text-slate-950 dark:text-white">
                           {gateway.displayName}
                         </span>
-                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700">
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-700 dark:bg-white/10 dark:text-slate-200">
                           {gateway.mode}
                         </span>
                       </div>
-                      <p className="mt-2 text-sm text-slate-500">
+                      <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
                         {gateway.keyIdPreview || "Key preview unavailable"}
                       </p>
                     </div>
@@ -1041,11 +1043,11 @@ export function SiteSettingsDashboard({
                 </button>
               ))
             ) : (
-              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-                <p className="font-semibold text-slate-900">
+              <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center dark:border-white/10 dark:bg-white/6">
+                <p className="font-semibold text-slate-900 dark:text-white">
                   No payment gateway configured yet
                 </p>
-                <p className="mt-2 text-sm text-slate-500">
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
                   Add your first checkout config from the editor.
                 </p>
               </div>
@@ -1054,7 +1056,7 @@ export function SiteSettingsDashboard({
 
           <form
             onSubmit={saveGateway}
-            className="space-y-4 rounded-3xl border border-slate-200 p-5"
+            className="space-y-4 rounded-3xl border border-slate-200 p-5 dark:border-white/10 dark:bg-white/6"
           >
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Provider">
@@ -1066,7 +1068,7 @@ export function SiteSettingsDashboard({
                       event.target.value as PaymentProvider,
                     )
                   }
-                  className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm"
+                  className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-white"
                 >
                   {providers.map((provider) => (
                     <option key={provider.value} value={provider.value}>
@@ -1084,7 +1086,7 @@ export function SiteSettingsDashboard({
                       event.target.value as PaymentMode,
                     )
                   }
-                  className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm"
+                  className="h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-white"
                 >
                   {modes.map((mode) => (
                     <option key={mode.value} value={mode.value}>
@@ -1130,12 +1132,12 @@ export function SiteSettingsDashboard({
               </Field>
             </div>
 
-            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
               <div>
-                <p className="font-semibold text-slate-900">
+                <p className="font-semibold text-slate-900 dark:text-white">
                   Activate this gateway
                 </p>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-slate-300">
                   The active config will power checkout and webhook
                   verification.
                 </p>
@@ -1184,18 +1186,18 @@ function StatCard({
   meta: string;
 }) {
   return (
-    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_22px_60px_-42px_rgba(15,23,42,0.45)]">
+    <div className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_22px_60px_-42px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
             {label}
           </p>
-          <h3 className="mt-3 text-2xl font-semibold text-slate-950">
+          <h3 className="mt-3 text-2xl font-semibold text-slate-950 dark:text-white">
             {value}
           </h3>
-          <p className="mt-2 text-sm text-slate-500">{meta}</p>
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">{meta}</p>
         </div>
-        <div className="rounded-2xl bg-[var(--brand-50)] p-3 text-[var(--brand-700)]">
+        <div className="rounded-2xl bg-[var(--brand-50)] p-3 text-[var(--brand-700)] dark:bg-[var(--brand-500)]/15 dark:text-[var(--brand-300)]">
           <Icon className="size-5" />
         </div>
       </div>
@@ -1215,12 +1217,12 @@ function SettingsCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_22px_60px_-42px_rgba(15,23,42,0.45)]">
-      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+    <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_22px_60px_-42px_rgba(15,23,42,0.45)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(11,18,32,0.96),rgba(17,27,46,0.98))]">
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
         {eyebrow}
       </p>
-      <h2 className="mt-2 text-2xl font-semibold text-slate-950">{title}</h2>
-      <p className="mt-1 text-sm text-slate-500">{description}</p>
+      <h2 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">{description}</p>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -1259,14 +1261,14 @@ function MediaField({
       <Label>{label}</Label>
       <div
         className={cn(
-          "rounded-2xl border border-slate-200 bg-white p-3",
-          compact ? "min-h-[188px]" : "min-h-[214px]",
-        )}
+            "rounded-2xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]",
+            compact ? "min-h-[188px]" : "min-h-[214px]",
+          )}
       >
         <div className="flex h-full flex-col">
           <div
             className={cn(
-              "flex items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50",
+              "flex items-center justify-center overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/6",
               compact ? "h-24" : "h-32",
             )}
           >
@@ -1278,12 +1280,12 @@ function MediaField({
                 className="h-full w-full object-contain p-3"
               />
             ) : (
-              <ImageIcon className="size-5 text-slate-400" />
+              <ImageIcon className="size-5 text-slate-400 dark:text-slate-500" />
             )}
           </div>
           <div className="min-w-0 flex-1 pt-3">
-            <p className="text-sm font-medium text-slate-900">{label}</p>
-            <p className="mt-1 line-clamp-2 break-all text-xs text-slate-500">
+            <p className="text-sm font-medium text-slate-900 dark:text-white">{label}</p>
+            <p className="mt-1 line-clamp-2 break-all text-xs text-slate-500 dark:text-slate-300">
               {value || "Choose from media library"}
             </p>
           </div>

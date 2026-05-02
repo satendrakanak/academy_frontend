@@ -76,11 +76,11 @@ export const CreateTagForm = ({ tag, onSuccess }: CreateTagFormProps) => {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <div className="rounded-3xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)]">
+      <div className="rounded-3xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4 dark:border-white/10 dark:bg-white/6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
           Shared tag
         </p>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
           Tags are reusable across both courses and articles, so keep names short and evergreen.
         </p>
       </div>
@@ -91,7 +91,7 @@ export const CreateTagForm = ({ tag, onSuccess }: CreateTagFormProps) => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Tag name
               </label>
               <Input {...field} placeholder="e.g. ayurveda, yoga, wellness" className="h-11" />
@@ -105,7 +105,7 @@ export const CreateTagForm = ({ tag, onSuccess }: CreateTagFormProps) => {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Description
               </label>
               <Textarea
@@ -120,12 +120,12 @@ export const CreateTagForm = ({ tag, onSuccess }: CreateTagFormProps) => {
         />
       </FieldGroup>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end border-t border-slate-100 pt-4 dark:border-white/10">
         <SubmitButton
           type="submit"
           disabled={!isValid}
           loading={isSubmitting}
-          className="px-6"
+          className="bg-[var(--brand-600)] px-6 text-white hover:bg-[var(--brand-700)] dark:bg-[var(--brand-500)] dark:hover:bg-[var(--brand-400)]"
         >
           {tag?.id ? "Update Tag" : "Create Tag"}
         </SubmitButton>

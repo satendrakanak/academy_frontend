@@ -84,7 +84,7 @@ export default function LectureDrawer({
     if (lecture?.attachments) {
       setSelectedFiles(lecture.attachments);
     }
-  }, [lecture]);
+  }, [lecture, form]);
   const handleVideoFileUpload = async (file: FileType) => {
     try {
       setSelectedVideo(file);
@@ -99,11 +99,9 @@ export default function LectureDrawer({
     try {
       const isPersisted = !lecture?.isTemp;
 
-      let createdAttachment = null;
-
       // ✅ Only if lecture DB me hai
       if (isPersisted) {
-        createdAttachment = await attachmentClientService.create({
+        await attachmentClientService.create({
           lectureId: lecture.id,
           fileId: file.id,
           name: file.name,
@@ -118,7 +116,7 @@ export default function LectureDrawer({
           name: file.name,
           file,
           isTemp: !isPersisted,
-        } as any,
+        } as Attachment,
       ]);
 
       if (isPersisted) {
@@ -160,7 +158,7 @@ export default function LectureDrawer({
   const { isValid, isSubmitting } = form.formState;
   const onSubmit = async (data: z.input<typeof lectureSchema>) => {
     try {
-      const { isPublished, ...rest } = data;
+      const { ...rest } = data;
       const payload = {
         ...rest,
         chapterId,
@@ -230,14 +228,14 @@ export default function LectureDrawer({
   return (
     <Drawer key={lecture.id} direction="right">
       <div
-        className={`p-2 rounded border text-xs flex items-center justify-between transition-colors ${
+        className={`flex items-center justify-between rounded-lg border p-2 text-xs transition-colors ${
           lecture.isPublished
             ? activeId === lecture.id
-              ? "bg-green-100 border-green-400"
-              : "bg-green-50 border-green-300"
+              ? "border-emerald-300 bg-emerald-50 dark:border-emerald-500/40 dark:bg-emerald-500/12"
+              : "border-emerald-200 bg-emerald-50/70 dark:border-emerald-500/30 dark:bg-emerald-500/8"
             : activeId === lecture.id
-              ? "bg-muted border-primary"
-              : "hover:bg-muted border-border"
+              ? "border-[var(--brand-300)] bg-[var(--brand-50)] dark:border-[var(--brand-500)]/35 dark:bg-[var(--brand-500)]/10"
+              : "border-slate-200 bg-white hover:bg-slate-50 dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:hover:bg-white/6"
         }`}
       >
         {/* 🔥 DRAG HANDLE */}
@@ -247,7 +245,7 @@ export default function LectureDrawer({
               {...dragHandle.attributes}
               {...dragHandle.listeners}
               onClick={(e) => e.stopPropagation()}
-              className="cursor-grab text-muted-foreground text-sm leading-none flex items-center"
+              className="flex items-center text-sm leading-none text-muted-foreground dark:text-slate-400"
             >
               ☰
             </span>
@@ -257,7 +255,7 @@ export default function LectureDrawer({
         <DrawerTrigger asChild>
           <div
             onClick={() => setActiveId(lecture.id)}
-            className="flex-1 cursor-pointer text-xs font-medium text-foreground truncate flex items-center h-full"
+            className="flex h-full flex-1 cursor-pointer items-center truncate text-xs font-medium text-foreground dark:text-slate-100"
           >
             {lecture.title || `Untitled ${index + 1}`}
           </div>
@@ -272,7 +270,7 @@ export default function LectureDrawer({
                 e.stopPropagation();
                 onTooglePublish(lecture.id, false);
               }}
-              className="p-1 rounded hover:bg-red-50 text-red-600 transition cursor-pointer"
+              className="cursor-pointer rounded p-1 text-red-600 transition hover:bg-red-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
               title="Unpublish"
             >
               <RotateCcw className="size-3" />
@@ -296,8 +294,8 @@ export default function LectureDrawer({
                     "p-1.5 rounded-md transition flex items-center justify-center",
                     "focus:outline-none focus:ring-2 focus:ring-green-400/40 cursor-pointer",
                     disabled
-                      ? "opacity-40 cursor-not-allowed text-gray-400 bg-gray-100"
-                      : "text-green-600 hover:bg-green-50 active:scale-95",
+                      ? "cursor-not-allowed bg-gray-100 text-gray-400 opacity-40 dark:bg-white/6 dark:text-slate-500"
+                      : "text-green-600 hover:bg-green-50 active:scale-95 dark:text-emerald-300 dark:hover:bg-emerald-500/10",
                   )}
                   title={
                     disabled
@@ -316,7 +314,7 @@ export default function LectureDrawer({
                     e.stopPropagation();
                     onDelete?.(lecture.id);
                   }}
-                  className="p-1 rounded hover:bg-red-50 text-red-500 transition cursor-pointer"
+                  className="cursor-pointer rounded p-1 text-red-500 transition hover:bg-red-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
                   title="Delete"
                 >
                   <Trash2 className="size-3" />
@@ -327,19 +325,19 @@ export default function LectureDrawer({
         </div>
       </div>
 
-      <DrawerContent className="ml-auto h-full w-100 max-w-4xl! sm:max-w-4xl flex flex-col">
+      <DrawerContent className="ml-auto flex h-full w-[min(720px,100vw)] max-w-[720px] flex-col border-l border-slate-200 bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col h-full"
         >
-          <DrawerHeader className="border-b pb-4">
+          <DrawerHeader className="border-b border-slate-200 pb-4 dark:border-white/10">
             <div className="flex items-center justify-between w-full gap-4">
               {/* LEFT */}
               <div className="min-w-0">
-                <DrawerTitle className="font-semibold">
+                <DrawerTitle className="font-semibold text-slate-950 dark:text-white">
                   {isTemp ? "Add New" : "Edit"} Lecture
                 </DrawerTitle>
-                <DrawerDescription>
+                <DrawerDescription className="dark:text-slate-300">
                   Manage chapters lecture details
                 </DrawerDescription>
               </div>
@@ -351,7 +349,7 @@ export default function LectureDrawer({
                   control={form.control}
                   render={({ field }) => (
                     <div className="flex items-center gap-2">
-                      <span className="text-xs">
+                      <span className="text-xs text-slate-700 dark:text-slate-200">
                         You want to make this lecture free?
                       </span>
                       <Switch
@@ -422,11 +420,11 @@ export default function LectureDrawer({
 
                   {/* 🔥 Attachment List */}
                   {selectedFiles.length > 0 ? (
-                    <div className="space-y-2">
+                <div className="space-y-2">
                       {selectedFiles.map((file) => (
                         <div
                           key={file.id}
-                          className="flex items-center gap-3 p-2 border rounded-md bg-muted/30 hover:bg-muted/50 transition"
+                          className="flex items-center gap-3 rounded-md border border-slate-200 bg-muted/30 p-2 transition hover:bg-muted/50 dark:border-white/10 dark:bg-white/6 dark:hover:bg-white/10"
                         >
                           {/* ICON */}
                           <div className="text-sm">
@@ -437,7 +435,7 @@ export default function LectureDrawer({
                           </div>
 
                           {/* NAME */}
-                          <div className="flex-1 text-xs truncate font-medium">
+                          <div className="flex-1 truncate text-xs font-medium text-slate-900 dark:text-slate-100">
                             {file.name}
                           </div>
 
@@ -448,7 +446,7 @@ export default function LectureDrawer({
                               <Link
                                 href={file.file.path}
                                 target="_blank"
-                                className="text-blue-500 hover:text-blue-600 hover:bg-blue-50 p-1 rounded transition"
+                                className="rounded p-1 text-[var(--brand-600)] transition hover:bg-[var(--brand-50)] hover:text-[var(--brand-700)] dark:text-[var(--brand-300)] dark:hover:bg-[var(--brand-500)]/10 dark:hover:text-[var(--brand-200)]"
                                 title="Download"
                               >
                                 <Download className="size-3" />
@@ -459,7 +457,7 @@ export default function LectureDrawer({
                             <button
                               type="button"
                               onClick={() => handleRemoveAttachment(file.id)}
-                              className="text-red-500 hover:text-red-600 hover:bg-red-50 p-1 rounded transition"
+                              className="rounded p-1 text-red-500 transition hover:bg-red-50 hover:text-red-600 dark:text-rose-300 dark:hover:bg-rose-500/10 dark:hover:text-rose-200"
                               title="Remove"
                             >
                               {loadingId === file.id ? (
@@ -474,12 +472,12 @@ export default function LectureDrawer({
                     </div>
                   ) : (
                     // 🔥 EMPTY STATE
-                    <div className="flex flex-col items-center justify-center border border-dashed rounded-md p-6 text-center bg-muted/20">
+                    <div className="flex flex-col items-center justify-center rounded-md border border-dashed border-slate-200 bg-muted/20 p-6 text-center dark:border-white/10 dark:bg-white/4">
                       <div className="text-3xl mb-2">📎</div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-sm font-medium text-muted-foreground dark:text-slate-300">
                         No attachments added yet
                       </p>
-                      <p className="text-xs text-muted-foreground/70 mt-1">
+                      <p className="mt-1 text-xs text-muted-foreground/70 dark:text-slate-400">
                         Upload files to support your lecture
                       </p>
                     </div>

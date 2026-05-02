@@ -21,14 +21,14 @@ export function PermissionsMatrix({
       {groups.map((group) => (
         <div
           key={group.module}
-          className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4"
+          className="rounded-2xl border border-slate-100 bg-slate-50/70 p-4 dark:border-white/10 dark:bg-white/6"
         >
           <div className="mb-3 flex items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
                 {formatModuleName(group.module)}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {group.permissions.length} permissions available
               </p>
             </div>
@@ -40,7 +40,7 @@ export function PermissionsMatrix({
               return (
                 <label
                   key={permission.id}
-                  className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white bg-white px-3 py-3 shadow-sm transition hover:border-[var(--brand-200)]"
+                  className="flex cursor-pointer items-start gap-3 rounded-2xl border border-white bg-white px-3 py-3 shadow-sm transition hover:border-[var(--brand-200)] dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:hover:border-[var(--brand-400)]"
                 >
                   <Checkbox
                     checked={checked}
@@ -50,10 +50,10 @@ export function PermissionsMatrix({
                     className="mt-0.5"
                   />
                   <div className="space-y-1">
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">
                       {formatPermissionName(permission.name)}
                     </p>
-                    <p className="text-xs text-slate-500">{permission.name}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{permission.name}</p>
                   </div>
                 </label>
               );

@@ -16,7 +16,6 @@ import { SortableItem } from "../../sortable-item";
 import type { DragEndEvent, DraggableAttributes } from "@dnd-kit/core";
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import ChapterAccordion from "./chapter-accordion";
-import { Accordion } from "@/components/ui/accordion";
 
 type SortableRenderProps = {
   attributes: DraggableAttributes;
@@ -67,28 +66,26 @@ export default function ChaptersList({
             items={chapters.map((c) => c.id)}
             strategy={verticalListSortingStrategy}
           >
-            <Accordion type="single" collapsible className="w-full space-y-2">
-              {chapters.map((chapter, index) => (
-                <SortableItem key={chapter.id} id={chapter.id}>
-                  {({ attributes, listeners }: SortableRenderProps) => (
-                    <ChapterAccordion
-                      chapter={chapter}
-                      index={index}
-                      activeId={activeId}
-                      setActiveId={setActiveId}
-                      courseId={courseId}
-                      onTooglePublish={onTooglePublish}
-                      onDelete={onDelete}
-                      viewType={viewType}
-                      dragHandle={{
-                        attributes,
-                        listeners,
-                      }}
-                    />
-                  )}
-                </SortableItem>
-              ))}
-            </Accordion>
+            {chapters.map((chapter, index) => (
+              <SortableItem key={chapter.id} id={chapter.id}>
+                {({ attributes, listeners }: SortableRenderProps) => (
+                  <ChapterAccordion
+                    chapter={chapter}
+                    index={index}
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                    courseId={courseId}
+                    onTooglePublish={onTooglePublish}
+                    onDelete={onDelete}
+                    viewType={viewType}
+                    dragHandle={{
+                      attributes,
+                      listeners,
+                    }}
+                  />
+                )}
+              </SortableItem>
+            ))}
           </SortableContext>
         </DndContext>
       </div>

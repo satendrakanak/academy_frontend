@@ -64,7 +64,7 @@ export function AccessControlOverview({
           return (
             <Card
               key={card.key}
-              className={`border border-[var(--brand-100)] bg-gradient-to-br ${card.tone} shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10`}
+              className={`border border-[var(--brand-100)] bg-gradient-to-br ${card.tone} shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:[background-image:none]`}
             >
               <CardHeader className="pb-0">
                 <div className="flex items-start justify-between gap-4">
@@ -118,7 +118,7 @@ export function AccessControlOverview({
                       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
                       .join(" ")}
                   </p>
-                  <Badge variant="outline">{group.permissions.length}</Badge>
+                  <Badge variant="outline" className="dark:border-white/10 dark:bg-white/8 dark:text-slate-200">{group.permissions.length}</Badge>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {group.permissions.slice(0, 4).map((permission) => (
@@ -166,7 +166,7 @@ export function AccessControlOverview({
                         {role.permissions?.length ?? 0} permissions assigned
                       </p>
                     </div>
-                    <Badge className="border-[var(--brand-200)] bg-[var(--brand-50)] text-[var(--brand-700)]">
+                    <Badge className="border-[var(--brand-200)] bg-[var(--brand-50)] text-[var(--brand-700)] dark:border-[var(--brand-500)]/25 dark:bg-[var(--brand-500)]/12 dark:text-[var(--brand-300)]">
                       System
                     </Badge>
                   </div>

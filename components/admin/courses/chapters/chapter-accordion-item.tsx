@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 import type { DraggableAttributes } from "@dnd-kit/core";
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import { CheckCircle, Trash2, RotateCcw, Pencil } from "lucide-react";
+import { CheckCircle, Trash2, RotateCcw, Pencil, ChevronDown, ChevronUp } from "lucide-react";
 import { Chapter } from "@/types/chapter";
 import { LectureForm } from "./lectures/lecture-form";
 import { canPublishChapter } from "@/helpers/publish-rules";
@@ -45,15 +45,22 @@ export const ChapterAccordionItem = ({
   const isActive = activeId === chapter.id;
   const disabled = !canPublishChapter(chapter);
   return (
-    <AccordionItem
-      value={String(chapter.id)}
+    <Collapsible
+      open={isActive}
+      onOpenChange={(open) => {
+        if (open) {
+          setActiveId(chapter.id);
+        } else if (isActive) {
+          setActiveId(null);
+        }
+      }}
       className={`w-full rounded-lg transition-all ${
         isActive
           ? "border border-[var(--brand-200)] bg-background shadow-sm dark:border-white/15 dark:bg-white/6"
           : "border border-border dark:border-white/10 dark:bg-white/4"
       }`}
     >
-      <AccordionTrigger
+      <CollapsibleTrigger
         className={`w-full px-3 py-3 cursor-pointer flex items-center justify-between text-sm font-medium transition-all no-underline hover:no-underline
     ${
       chapter.isPublished
@@ -96,6 +103,9 @@ export const ChapterAccordionItem = ({
           onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1 shrink-0"
         >
+          <div className="mr-1 text-slate-500 dark:text-slate-300">
+            {isActive ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />}
+          </div>
           {/* EDIT (Drawer open) */}
           <div
             role="button"
@@ -165,14 +175,14 @@ export const ChapterAccordionItem = ({
             </>
           )}
         </div>
-      </AccordionTrigger>
+      </CollapsibleTrigger>
 
       {/* CONTENT */}
-      <AccordionContent className="w-full overflow-auto!">
+      <CollapsibleContent className="w-full overflow-hidden">
         <div className="min-h-50 max-h-[60vh] overflow-y-auto rounded-b-md bg-muted/30 px-3 pt-3 pb-4 dark:bg-white/3">
           <LectureForm chapter={chapter} />
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };

@@ -84,11 +84,11 @@ export const ArticleHeader = ({ article }: ArticleHeaderProps) => {
   const isPublishAction = !article.isPublished;
   const disabled = isPublishAction && !canPublish;
   return (
-    <div className="w-full border-b bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 sticky top-0 z-50">
+    <div className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/80 backdrop-blur supports-backdrop-filter:bg-white/60 dark:border-white/10 dark:bg-[rgba(11,18,32,0.92)] dark:supports-backdrop-filter:bg-[rgba(11,18,32,0.78)]">
       <div className="flex items-center justify-between px-6 py-4">
         {/* 🔥 LEFT */}
         <div className="space-y-1">
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
             {article.title}
           </h1>
 
@@ -105,7 +105,7 @@ export const ArticleHeader = ({ article }: ArticleHeaderProps) => {
               </Badge>
             )}
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-slate-300">
               Manage your article settings
             </p>
           </div>
@@ -163,15 +163,15 @@ export const ArticleHeader = ({ article }: ArticleHeaderProps) => {
                   side="bottom"
                   align="end"
                   sideOffset={10}
-                  className=" bg-white flex flex-col text-gray-800 border shadow-md rounded-md p-3 "
+                  className="flex flex-col rounded-md border bg-white p-3 text-gray-800 shadow-md dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-slate-100"
                 >
                   {/* 🔥 HEADING */}
-                  <p className="text-sm font-semibold mb-2">
+                  <p className="mb-2 text-sm font-semibold">
                     Complete required steps
                   </p>
 
                   {/* 🔥 LIST */}
-                  <ul className="text-xs space-y-1">
+                  <ul className="space-y-1 text-xs">
                     {reasons.map((r, i) => (
                       <li key={i} className="flex items-start gap-2">
                         <span className="text-red-500">•</span>

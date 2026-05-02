@@ -64,22 +64,22 @@ export default function PublishedList({
               .filter((chapter) => chapter.isPublished)
               .map((chapter, index) => (
                 <SortableItem key={chapter.id} id={chapter.id}>
-                {({ attributes, listeners }: SortableRenderProps) => (
-                  <ChapterAccordion
-                    chapter={chapter}
-                    index={index}
-                    activeId={activeId}
-                    setActiveId={setActiveId}
-                    courseId={courseId}
-                    onTooglePublish={onTooglePublish}
-                    onDelete={onDelete}
-                    viewType={viewType}
-                    dragHandle={{
-                      attributes,
-                      listeners,
-                    }}
-                  />
-                )}
+                  {({ attributes, listeners }: SortableRenderProps) => (
+                    <ChapterAccordion
+                      chapter={chapter}
+                      index={index}
+                      activeId={activeId}
+                      setActiveId={setActiveId}
+                      courseId={courseId}
+                      onTooglePublish={onTooglePublish}
+                      onDelete={onDelete}
+                      viewType={viewType}
+                      dragHandle={{
+                        attributes,
+                        listeners,
+                      }}
+                    />
+                  )}
                 </SortableItem>
               ))}
           </SortableContext>

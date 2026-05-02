@@ -453,7 +453,7 @@ export const CreateTestimonialForm = ({
             type="submit"
             disabled={!isValid}
             loading={isSubmitting}
-            className="w-auto px-6"
+            className="w-auto bg-[var(--brand-600)] px-6 text-white hover:bg-[var(--brand-700)] dark:bg-[var(--brand-500)] dark:hover:bg-[var(--brand-400)]"
           >
             {testimonial?.id ? "Update" : "Create"}
           </SubmitButton>

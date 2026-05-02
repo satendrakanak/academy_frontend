@@ -119,7 +119,7 @@ export function PermissionsPanel({
             return (
               <div
                 key={permission.id}
-                className="rounded-[24px] border border-slate-100 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-5 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.26)] dark:border-white/10 dark:bg-white/6"
+                className="rounded-[24px] border border-slate-100 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] p-5 shadow-[0_18px_50px_-40px_rgba(15,23,42,0.26)] dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:[background-image:none]"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -127,7 +127,7 @@ export function PermissionsPanel({
                       <h3 className="text-base font-semibold text-slate-950 dark:text-white">
                         {permission.name}
                       </h3>
-                      <Badge variant="outline">{usage} roles</Badge>
+                      <Badge variant="outline" className="dark:border-white/10 dark:bg-white/8 dark:text-slate-200">{usage} roles</Badge>
                     </div>
                     <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
                       {getActionLabel(permission.name)} access for{" "}
@@ -138,6 +138,7 @@ export function PermissionsPanel({
                     <Button
                       variant="outline"
                       size="sm"
+                      className="dark:border-white/10 dark:bg-white/6 dark:text-slate-100 dark:hover:bg-white/10"
                       onClick={() => {
                         setActivePermission(permission);
                         setEditorOpen(true);
@@ -149,6 +150,7 @@ export function PermissionsPanel({
                     <Button
                       variant="destructive"
                       size="sm"
+                      className="dark:bg-rose-500/12 dark:text-rose-200 dark:hover:bg-rose-500/20"
                       onClick={() => setDeletePermission(permission)}
                     >
                       <Trash2 className="size-3.5" />

@@ -22,11 +22,11 @@ export function RefundTimeline({
   title?: string;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white/80 p-4">
+    <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 dark:border-white/10 dark:bg-white/8">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-slate-950">{title}</p>
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="text-sm font-semibold text-slate-950 dark:text-white">{title}</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
             Requested on {formatEventDate(refundRequest.createdAt)}
           </p>
         </div>
@@ -44,14 +44,14 @@ export function RefundTimeline({
             return (
               <div
                 key={log.id}
-                className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3"
+                className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 dark:border-white/10 dark:bg-white/6"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">
                       {log.action.replaceAll("_", " ")}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       By {actorName} • {formatEventDate(log.createdAt)}
                     </p>
                   </div>
@@ -60,7 +60,7 @@ export function RefundTimeline({
                   ) : null}
                 </div>
                 {log.message ? (
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                     {log.message}
                   </p>
                 ) : null}
@@ -68,7 +68,7 @@ export function RefundTimeline({
             );
           })
         ) : (
-          <p className="text-sm text-slate-500">No refund events recorded yet.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">No refund events recorded yet.</p>
         )}
       </div>
     </div>

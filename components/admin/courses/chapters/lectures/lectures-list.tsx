@@ -87,7 +87,7 @@ export const LectureList = ({
       {/* 🔥 Add Lecture Button */}
       <button
         onClick={addLecture}
-        className="w-full text-xs font-medium py-2.5 rounded-md border border-dashed border-primary text-primary hover:bg-primary/10 transition-all cursor-pointer"
+        className="w-full cursor-pointer rounded-md border border-dashed border-[var(--brand-400)] py-2.5 text-xs font-medium text-[var(--brand-700)] transition-all hover:bg-[var(--brand-50)] dark:border-[var(--brand-500)]/45 dark:text-[var(--brand-300)] dark:hover:bg-[var(--brand-500)]/10"
       >
         + Add Lecture
       </button>

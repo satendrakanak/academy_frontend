@@ -33,7 +33,7 @@ export default async function CourseIdPage({
     <div>
       <CourseHeader course={course} />
 
-      <div className="grid gap-6 py-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="grid gap-6 py-6 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="space-y-6">
           <BasicInfoForm course={course} />
           <CourseDescription course={course} />

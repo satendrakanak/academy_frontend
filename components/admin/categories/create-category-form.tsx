@@ -98,11 +98,11 @@ export const CreateCategoryForm = ({
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-      <div className="rounded-3xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)]">
+      <div className="rounded-3xl border border-[var(--brand-100)] bg-[var(--brand-50)]/45 p-4 dark:border-white/10 dark:bg-white/6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--brand-700)] dark:text-[var(--brand-200)]">
           Scope
         </p>
-        <p className="mt-1 text-sm text-slate-600">
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
           Choose where this category should appear across the platform.
         </p>
       </div>
@@ -114,7 +114,7 @@ export const CreateCategoryForm = ({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                   Category name
                 </label>
                 <Input {...field} placeholder="e.g. Nutrition Basics" className="h-11" />
@@ -128,7 +128,7 @@ export const CreateCategoryForm = ({
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                   Type
                 </label>
                 <Select value={field.value} onValueChange={field.onChange}>
@@ -159,7 +159,7 @@ export const CreateCategoryForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Image alt text
               </label>
               <Input {...field} value={field.value ?? ""} placeholder="Accessible image description" className="h-11" />
@@ -173,7 +173,7 @@ export const CreateCategoryForm = ({
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <label className="mb-2 block text-sm font-medium text-slate-700">
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
                 Description
               </label>
               <Textarea
@@ -188,12 +188,12 @@ export const CreateCategoryForm = ({
         />
       </FieldGroup>
 
-      <div className="flex justify-end">
+      <div className="flex justify-end border-t border-slate-100 pt-4 dark:border-white/10">
         <SubmitButton
           type="submit"
           disabled={!isValid}
           loading={isSubmitting}
-          className="px-6"
+          className="bg-[var(--brand-600)] px-6 text-white hover:bg-[var(--brand-700)] dark:bg-[var(--brand-500)] dark:hover:bg-[var(--brand-400)]"
         >
           {category?.id ? "Update Category" : "Create Category"}
         </SubmitButton>

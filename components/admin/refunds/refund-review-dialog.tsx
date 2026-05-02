@@ -30,7 +30,7 @@ import { getErrorMessage } from "@/lib/error-handler";
 
 const reviewSchema = z.object({
   approvedAmount: z
-    .string()
+    .number()
     .optional()
     .transform((value) => (value ? Number(value) : undefined)),
   adminNote: z.string().max(2000).optional(),
@@ -55,7 +55,7 @@ export function RefundReviewDialog({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       approvedAmount: refundRequest
-        ? String(refundRequest.approvedAmount || refundRequest.requestedAmount)
+        ? refundRequest.approvedAmount || refundRequest.requestedAmount
         : "",
       adminNote: refundRequest?.adminNote || "",
     },
@@ -64,7 +64,7 @@ export function RefundReviewDialog({
   useEffect(() => {
     form.reset({
       approvedAmount: refundRequest
-        ? String(refundRequest.approvedAmount || refundRequest.requestedAmount)
+        ? refundRequest.approvedAmount || refundRequest.requestedAmount
         : "",
       adminNote: refundRequest?.adminNote || "",
     });
@@ -126,10 +126,12 @@ export function RefundReviewDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl! dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-slate-100">
+      <DialogContent className="w-[min(960px,calc(100vw-2rem))] max-w-4xl! dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)] dark:text-slate-100">
         <DialogHeader>
-          <DialogTitle>Review refund request #{refundRequest.id}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-slate-950 dark:text-white">
+            Review refund request #{refundRequest.id}
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 dark:text-slate-300">
             {order ? `Order #${order.id}` : "Order unavailable"} • Requested by{" "}
             {refundRequest.requester?.firstName}{" "}
             {refundRequest.requester?.lastName}
@@ -140,7 +142,9 @@ export function RefundReviewDialog({
           <div className="space-y-4 rounded-3xl border border-slate-200 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/6">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400">Current status</p>
+                <p className="text-sm text-slate-500 dark:text-slate-400">
+                  Current status
+                </p>
                 <p className="mt-1 text-lg font-semibold text-slate-950 dark:text-white">
                   Refund request
                 </p>
@@ -160,7 +164,9 @@ export function RefundReviewDialog({
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8">
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">Reason</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                Reason
+              </p>
               <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                 {refundRequest.reason}
               </p>
@@ -228,7 +234,7 @@ export function RefundReviewDialog({
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="border-t border-slate-100 pt-4 dark:border-white/10">
           {canSync ? (
             <Button
               type="button"

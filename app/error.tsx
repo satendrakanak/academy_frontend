@@ -19,56 +19,56 @@ export default function GlobalError({
   const isAuthExpired = error.message === "AUTH_EXPIRED";
 
   return (
-    <div className="flex h-screen items-center justify-center bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_42%,#eef4ff_100%)] px-4">
+    <div className="flex h-screen items-center justify-center bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_42%,#eef4ff_100%)] px-4 dark:bg-[radial-gradient(circle_at_top_left,rgba(128,32,46,0.18),transparent_26%),linear-gradient(180deg,rgba(11,18,32,0.98),rgba(17,27,46,1))]">
       <Card
         className="
-          w-full max-w-md rounded-2xl shadow-xl border
+          w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]
           transform transition-all duration-500
           animate-in slide-in-from-top-6 fade-in zoom-in-95
         "
       >
-        <CardContent className="flex flex-col items-center text-center p-6 space-y-5">
+        <CardContent className="flex flex-col items-center space-y-5 p-6 text-center">
           {/* 🔥 Icon with subtle pulse */}
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 animate-pulse">
-            <AlertTriangle className="w-8 h-8 text-red-600" />
+          <div className="flex h-16 w-16 animate-pulse items-center justify-center rounded-full bg-red-100 dark:bg-rose-500/12">
+            <AlertTriangle className="h-8 w-8 text-red-600 dark:text-rose-300" />
           </div>
 
           {/* 🔥 Title */}
-          <h2 className="text-xl font-semibold tracking-tight">
+          <h2 className="text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
             {isAuthExpired ? "Session expired 🔒" : "Something went wrong"}
           </h2>
 
           {/* 🔥 Description */}
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm leading-relaxed text-muted-foreground dark:text-slate-300">
             {isAuthExpired
               ? "Your session has expired. Please refresh to continue."
               : error.message || "Unexpected error occurred. Please try again."}
           </p>
 
           {/* 🔥 Actions */}
-          <div className="flex gap-3 w-full pt-3">
+          <div className="flex w-full gap-3 pt-3">
             <Button
               onClick={() => reset()}
-              className="w-full flex items-center gap-2 bg-sidebar-primary hover:opacity-90 transition"
+              className="flex w-full items-center gap-2 bg-[var(--brand-600)] text-white transition hover:bg-[var(--brand-700)]"
             >
-              <RefreshCcw className="w-4 h-4" />
+              <RefreshCcw className="h-4 w-4" />
               Try Again
             </Button>
 
             {isAuthExpired ? (
               <Button
                 variant="outline"
-              onClick={() => (window.location.href = "/auth/sign-in")}
-                className="w-full flex items-center gap-2"
+                onClick={() => (window.location.href = "/auth/sign-in")}
+                className="flex w-full items-center gap-2 dark:border-white/10 dark:bg-white/6 dark:text-slate-100 dark:hover:bg-white/10"
               >
-                <LogIn className="w-4 h-4" />
+                <LogIn className="h-4 w-4" />
                 Login
               </Button>
             ) : (
               <Button
                 variant="outline"
                 onClick={() => (window.location.href = "/")}
-                className="w-full"
+                className="w-full dark:border-white/10 dark:bg-white/6 dark:text-slate-100 dark:hover:bg-white/10"
               >
                 Go Home
               </Button>
