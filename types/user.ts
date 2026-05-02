@@ -135,9 +135,40 @@ export type DashboardStats = {
   courses: number;
   completed: number;
   progress: number;
+  examsTaken: number;
+  examsPassed: number;
+  certificatesEarned: number;
 };
 
 export type WeeklyProgress = {
   day: string;
   progress: number;
+};
+
+export type PublicCertificateSummary = {
+  id: number;
+  certificateNumber: string;
+  issuedAt: string;
+  course: {
+    id: number;
+    title: string;
+    slug: string;
+  };
+};
+
+export type PublicProfileBundle = {
+  user: User;
+  stats: DashboardStats;
+  weeklyProgress: WeeklyProgress[];
+  courses: Course[];
+  certificates: PublicCertificateSummary[];
+  examHistory: Array<{
+    courseId: number;
+    courseTitle: string;
+    courseSlug: string;
+    attempts: number;
+    bestPercentage: number;
+    latestPercentage: number;
+    passed: boolean;
+  }>;
 };

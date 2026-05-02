@@ -3,6 +3,8 @@
 import {
   BadgeIndianRupee,
   BookOpen,
+  ClipboardCheck,
+  GraduationCap,
   TicketPercent,
   Users,
 } from "lucide-react";
@@ -50,6 +52,20 @@ const statCards = (data: AdminDashboardData) => [
     icon: TicketPercent,
     tone: "from-violet-500/16 via-violet-50 to-white",
   },
+  {
+    title: "Exam Attempts",
+    value: compactNumberFormatter.format(data.summary.totalExamAttempts),
+    description: `${data.summary.passedExamAttempts} passed attempts with ${data.examOverview.passRate}% pass rate`,
+    icon: ClipboardCheck,
+    tone: "from-amber-500/16 via-amber-50 to-white",
+  },
+  {
+    title: "Certificates Issued",
+    value: compactNumberFormatter.format(data.summary.certificatesIssued),
+    description: `${data.summary.averageExamScore}% average exam score overall`,
+    icon: GraduationCap,
+    tone: "from-rose-500/16 via-rose-50 to-white",
+  },
 ];
 
 export function DashboardSummaryCards({
@@ -60,7 +76,7 @@ export function DashboardSummaryCards({
   const stats = statCards(data);
 
   return (
-    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
       {stats.map((item) => {
         const Icon = item.icon;
         return (

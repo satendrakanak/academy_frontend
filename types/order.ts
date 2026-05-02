@@ -7,6 +7,33 @@ export enum OrderStatus {
   PAID = "PAID",
   FAILED = "FAILED",
   CANCELLED = "CANCELLED",
+  REFUND_REQUESTED = "REFUND_REQUESTED",
+  REFUND_APPROVED = "REFUND_APPROVED",
+  REFUND_PROCESSING = "REFUND_PROCESSING",
+  REFUND_REJECTED = "REFUND_REJECTED",
+  REFUND_FAILED = "REFUND_FAILED",
+  REFUNDED = "REFUNDED",
+}
+
+export enum RefundRequestStatus {
+  REQUESTED = "REQUESTED",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+  PROCESSING = "PROCESSING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+}
+
+export enum RefundActorType {
+  USER = "USER",
+  ADMIN = "ADMIN",
+  SYSTEM = "SYSTEM",
+  GATEWAY = "GATEWAY",
+}
+
+export enum RefundDecision {
+  APPROVE = "APPROVE",
+  REJECT = "REJECT",
 }
 
 export interface BillingAddress {
@@ -98,10 +125,47 @@ export interface Order {
   billingAddress: BillingAddress;
 
   items: OrderItem[];
+  refundRequests?: RefundRequest[];
 
   createdAt: string;
   updatedAt: string;
   paidAt: string | null;
+}
+
+export interface RefundLog {
+  id: number;
+  actorType: RefundActorType;
+  action: string;
+  fromStatus?: RefundRequestStatus | null;
+  toStatus?: RefundRequestStatus | null;
+  message?: string | null;
+  metadata?: Record<string, unknown> | null;
+  actor?: User | null;
+  createdAt: string;
+}
+
+export interface RefundRequest {
+  id: number;
+  order: Order;
+  status: RefundRequestStatus;
+  reason: string;
+  customerNote?: string | null;
+  adminNote?: string | null;
+  requestedAmount: number;
+  approvedAmount?: number | null;
+  gatewayRefundId?: string | null;
+  gatewayStatus?: string | null;
+  gatewayReference?: string | null;
+  requester?: User;
+  reviewedBy?: User | null;
+  logs: RefundLog[];
+  createdAt: string;
+  updatedAt: string;
+  reviewedAt?: string | null;
+  processedAt?: string | null;
+  completedAt?: string | null;
+  rejectedAt?: string | null;
+  failedAt?: string | null;
 }
 
 export type RazorpaySuccessResponse = {

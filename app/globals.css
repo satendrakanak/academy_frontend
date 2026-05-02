@@ -239,3 +239,21 @@
 [data-radix-arrow] {
   display: none !important;
 }
+
+/* Hide scrollbar but allow scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.academy-hero .swiper-pagination-bullet {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.academy-hero .swiper-pagination-bullet-active {
+  background-color: oklch(0.505 0.213 27.518);
+}

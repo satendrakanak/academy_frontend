@@ -8,12 +8,15 @@ import { Course } from "@/types/course";
 import { DashboardStats, WeeklyProgress } from "@/types/user";
 import { Order } from "@/types/order";
 import { OrderHistory } from "./order-history";
+import { ExamHistoryRecord } from "@/types/exam";
+import { ExamHistory } from "./exam-history";
 
 interface DashboardClientProps {
   stats: DashboardStats;
   courses: Course[];
   weeklyProgress: WeeklyProgress[];
   orders: Order[];
+  examHistory: ExamHistoryRecord[];
 }
 
 export default function DashboardClient({
@@ -21,6 +24,7 @@ export default function DashboardClient({
   courses,
   weeklyProgress,
   orders,
+  examHistory,
 }: DashboardClientProps) {
   const ProgressChart = dynamic(
     () => import("@/components/profile/progress-chart"),
@@ -28,16 +32,11 @@ export default function DashboardClient({
   );
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard
-          title="Active Courses"
-          value={stats.courses}
-          description="Programs currently available in your learner area."
-        />
-        <StatCard
-          title="Completed"
-          value={stats.completed}
-          description="Courses you have fully finished so far."
+          title="Courses Completed"
+          value={`${stats.completed}/${stats.courses}`}
+          description="Completed courses out of your total active enrollments."
         />
         <StatCard
           title="Average Progress"
@@ -45,16 +44,31 @@ export default function DashboardClient({
           description="Overall learning momentum across enrolled courses."
           highlight
         />
+        <StatCard
+          title="Exam Attempts"
+          value={stats.examsTaken}
+          description="Total final exam submissions across your courses."
+        />
+        <StatCard
+          title="Exams Passed"
+          value={stats.examsPassed}
+          description="Final exams you have cleared successfully."
+        />
+        <StatCard
+          title="Certificates"
+          value={stats.certificatesEarned}
+          description="Certificates unlocked after completion milestones."
+        />
       </div>
 
-      <div className="h-[360px]">
+      <div className="h-90">
         <ProgressChart weeklyProgress={weeklyProgress} />
       </div>
 
       <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] md:p-6">
         <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-(--brand-700)">
               Continue Learning
             </p>
             <h3 className="mt-2 text-2xl font-semibold text-slate-950">
@@ -98,9 +112,13 @@ export default function DashboardClient({
         <OrderHistory
           orders={orders}
           enrolledCourses={courses}
-          limit={5}
+          limit={2}
           showViewAll
         />
+      </div>
+
+      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] md:p-6">
+        <ExamHistory records={examHistory} />
       </div>
     </>
   );
@@ -121,7 +139,7 @@ function StatCard({
     <Card
       className={`overflow-hidden rounded-[28px] border shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] ${
         highlight
-          ? "border-[var(--brand-100)] bg-[linear-gradient(135deg,var(--brand-50),#ffffff)]"
+          ? "border-(--brand-100) bg-[linear-gradient(135deg,var(--brand-50),#ffffff)]"
           : "border-slate-200 bg-white"
       }`}
     >

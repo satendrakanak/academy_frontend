@@ -3,12 +3,7 @@ export type Gateway = {
   displayName: string;
 };
 
-export type PaymentProvider =
-  | "RAZORPAY"
-  | "STRIPE"
-  | "PAYPAL"
-  | "PAYU"
-  | "COD";
+export type PaymentProvider = "RAZORPAY" | "STRIPE" | "PAYPAL" | "PAYU" | "COD";
 
 export type PaymentMode = "TEST" | "LIVE";
 

@@ -111,13 +111,15 @@ export const usePayment = () => {
         };
       };
 
-      void orderClientService.reportPaymentFailure(orderId, {
-        paymentId: failureResponse?.error?.metadata?.payment_id || null,
-        gatewayOrderId:
-          failureResponse?.error?.metadata?.order_id || razorpayOrderId,
-      }).catch((error) => {
-        console.error("Payment failure reporting failed", error);
-      });
+      void orderClientService
+        .reportPaymentFailure(orderId, {
+          paymentId: failureResponse?.error?.metadata?.payment_id || null,
+          gatewayOrderId:
+            failureResponse?.error?.metadata?.order_id || razorpayOrderId,
+        })
+        .catch((error) => {
+          console.error("Payment failure reporting failed", error);
+        });
 
       toast.error(
         failureResponse?.error?.description ||

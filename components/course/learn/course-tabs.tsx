@@ -11,15 +11,16 @@ import { CourseQaSection } from "@/components/course/sections/course-qa-section"
 import { CourseRatingReviews } from "@/components/course/sections/course-rating-reviews";
 import { slugify } from "@/utils/slugify";
 import { downloadRemoteFile } from "@/lib/download-file";
+import { CourseExamSection } from "@/components/course/learn/course-exam-section";
 
 interface CourseTabsProps {
   course: Course;
 }
 
 export const CourseTabs = ({ course }: CourseTabsProps) => {
-  const [activeTab, setActiveTab] = useState<"overview" | "qa" | "reviews">(
-    "overview",
-  );
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "exam" | "qa" | "reviews"
+  >("overview");
   const [meta, setMeta] = useState({
     totalLectures: 0,
     totalDuration: "0m",
@@ -28,6 +29,8 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const { completed, total, percent } = getCourseProgress(course);
   const isCourseCompleted = total > 0 && completed >= total;
+  const hasPublishedExam =
+    !!course.exam?.isPublished && !!course.exam?.questions?.length;
 
   useEffect(() => {
     const loadMeta = async () => {
@@ -104,7 +107,7 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
   return (
     <div className="bg-white border-t">
       {/* 🔥 TAB HEADER */}
-      <div className="flex gap-5 px-6 pt-4 border-b">
+      <div className="flex flex-wrap gap-5 px-6 pt-4 border-b">
         <button
           type="button"
           onClick={() => setActiveTab("overview")}
@@ -138,10 +141,27 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
         >
           Reviews
         </button>
+        {hasPublishedExam ? (
+          <button
+            type="button"
+            onClick={() => setActiveTab("exam")}
+            className={`pb-2 text-sm cursor-pointer font-bold ${
+              activeTab === "exam"
+                ? "border-b-2 border-primary text-primary"
+                : "text-gray-800"
+            }`}
+          >
+            Final Exams
+          </button>
+        ) : null}
       </div>
 
       {/* 🔥 CONTENT */}
-      {activeTab === "qa" ? (
+      {activeTab === "exam" ? (
+        <div className="px-6 py-6">
+          <CourseExamSection course={{ ...course, isEnrolled: true }} />
+        </div>
+      ) : activeTab === "qa" ? (
         <div className="px-6 py-6">
           <CourseQaSection course={{ ...course, isEnrolled: true }} />
         </div>
@@ -201,7 +221,9 @@ export const CourseTabs = ({ course }: CourseTabsProps) => {
                   <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
                     {certificate
                       ? `Certificate ID ${certificate.certificateNumber}. You can download it anytime from here or your profile.`
-                      : `Complete all ${total || meta.totalLectures} lectures to generate your official Unitus certificate. Current progress: ${percent}%.`}
+                      : hasPublishedExam
+                        ? `Complete all ${total || meta.totalLectures} lectures and clear the final exam to generate your official Unitus certificate. Current lecture progress: ${percent}%.`
+                        : `Complete all ${total || meta.totalLectures} lectures to generate your official Unitus certificate. Current progress: ${percent}%.`}
                   </p>
                 </div>
 

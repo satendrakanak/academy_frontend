@@ -102,6 +102,7 @@ const defaultEmailSettings: EmailSettings = {
   secure: false,
   smtpUser: "",
   smtpPassword: "",
+  hasPassword: false,
   fromName: "Unitus Academy",
   fromEmail: "info@academy.com",
   replyToEmail: "",
@@ -158,15 +159,18 @@ export function SiteSettingsDashboard({
 }) {
   const router = useRouter();
   const [items, setItems] = useState(gateways);
-  const [siteForm, setSiteForm] = useState<SiteSettings>(
-    { ...defaultSiteSettings, ...(siteSettings || {}) },
-  );
-  const [emailForm, setEmailForm] = useState<EmailSettings>(
-    { ...defaultEmailSettings, ...(emailSettings || {}) },
-  );
-  const [awsForm, setAwsForm] = useState<AwsStorageSettings>(
-    { ...defaultAwsStorageSettings, ...(awsStorageSettings || {}) },
-  );
+  const [siteForm, setSiteForm] = useState<SiteSettings>({
+    ...defaultSiteSettings,
+    ...(siteSettings || {}),
+  });
+  const [emailForm, setEmailForm] = useState<EmailSettings>({
+    ...defaultEmailSettings,
+    ...(emailSettings || {}),
+  });
+  const [awsForm, setAwsForm] = useState<AwsStorageSettings>({
+    ...defaultAwsStorageSettings,
+    ...(awsStorageSettings || {}),
+  });
   const [socialForm, setSocialForm] = useState<SocialAuthProvider[]>(
     socialProviders.length ? socialProviders : defaultSocialProviders,
   );
@@ -246,7 +250,8 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const response = await settingsClientService.upsertSiteSettings(siteForm);
+        const response =
+          await settingsClientService.upsertSiteSettings(siteForm);
         setSiteForm(response.data);
         toast.success("Site settings updated");
         router.refresh();
@@ -260,9 +265,17 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const response = await settingsClientService.upsertEmailSettings(
-          emailForm,
-        );
+        const { hasPassword, smtpPassword, ...rest } = emailForm;
+
+        const payload = {
+          ...rest,
+          ...(smtpPassword?.trim()
+            ? { smtpPassword: smtpPassword.trim() }
+            : {}),
+        };
+
+        const response =
+          await settingsClientService.upsertEmailSettings(payload);
         setEmailForm({
           ...response.data,
           smtpPassword: "",
@@ -302,9 +315,8 @@ export function SiteSettingsDashboard({
     event.preventDefault();
     startTransition(async () => {
       try {
-        const response = await settingsClientService.upsertAwsStorageSettings(
-          awsForm,
-        );
+        const response =
+          await settingsClientService.upsertAwsStorageSettings(awsForm);
         setAwsForm({
           ...response.data,
           accessKeyId: "",
@@ -698,7 +710,9 @@ export function SiteSettingsDashboard({
             <form onSubmit={saveEmailSettings} className="space-y-4">
               <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                 <div>
-                  <p className="font-semibold text-slate-900">Enable DB mailer</p>
+                  <p className="font-semibold text-slate-900">
+                    Enable DB mailer
+                  </p>
                   <p className="text-sm text-slate-500">
                     When enabled, outgoing mail uses the saved SMTP config.
                   </p>
@@ -737,15 +751,15 @@ export function SiteSettingsDashboard({
                     }
                   />
                 </Field>
+
                 <Field label="SMTP password">
                   <Input
                     type="password"
+                    disabled={!emailForm.hasPassword}
                     placeholder={
-                      emailForm.hasPassword
-                        ? "Saved already, enter a new password to rotate"
-                        : "Enter SMTP password"
+                      emailForm.hasPassword ? "********" : "Enter SMTP password"
                     }
-                    value={emailForm.smtpPassword}
+                    value={emailForm.smtpPassword || ""}
                     onChange={(event) =>
                       updateEmailField("smtpPassword", event.target.value)
                     }
@@ -818,7 +832,11 @@ export function SiteSettingsDashboard({
                     <Switch
                       checked={provider.isEnabled}
                       onCheckedChange={(checked) =>
-                        updateSocialField(provider.provider, "isEnabled", checked)
+                        updateSocialField(
+                          provider.provider,
+                          "isEnabled",
+                          checked,
+                        )
                       }
                     />
                   </div>
@@ -850,7 +868,9 @@ export function SiteSettingsDashboard({
                     </Field>
                     <Field label="Client ID">
                       <Input
-                        placeholder={provider.clientIdPreview || "Enter client ID"}
+                        placeholder={
+                          provider.clientIdPreview || "Enter client ID"
+                        }
                         value={provider.clientId || ""}
                         onChange={(event) =>
                           updateSocialField(
@@ -903,7 +923,8 @@ export function SiteSettingsDashboard({
                     Enable DB-backed storage config
                   </p>
                   <p className="text-sm text-slate-500">
-                    Uploads and certificate storage can use the values saved here.
+                    Uploads and certificate storage can use the values saved
+                    here.
                   </p>
                 </div>
                 <Switch
@@ -941,7 +962,9 @@ export function SiteSettingsDashboard({
                 </Field>
                 <Field label="Access key ID">
                   <Input
-                    placeholder={awsStorageSettings?.accessKeyId || "Enter access key ID"}
+                    placeholder={
+                      awsStorageSettings?.accessKeyId || "Enter access key ID"
+                    }
                     value={awsForm.accessKeyId}
                     onChange={(event) =>
                       updateAwsField("accessKeyId", event.target.value)
@@ -1029,7 +1052,10 @@ export function SiteSettingsDashboard({
             )}
           </div>
 
-          <form onSubmit={saveGateway} className="space-y-4 rounded-3xl border border-slate-200 p-5">
+          <form
+            onSubmit={saveGateway}
+            className="space-y-4 rounded-3xl border border-slate-200 p-5"
+          >
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Provider">
                 <select
@@ -1110,7 +1136,8 @@ export function SiteSettingsDashboard({
                   Activate this gateway
                 </p>
                 <p className="text-sm text-slate-500">
-                  The active config will power checkout and webhook verification.
+                  The active config will power checkout and webhook
+                  verification.
                 </p>
               </div>
               <Switch
@@ -1163,7 +1190,9 @@ function StatCard({
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
             {label}
           </p>
-          <h3 className="mt-3 text-2xl font-semibold text-slate-950">{value}</h3>
+          <h3 className="mt-3 text-2xl font-semibold text-slate-950">
+            {value}
+          </h3>
           <p className="mt-2 text-sm text-slate-500">{meta}</p>
         </div>
         <div className="rounded-2xl bg-[var(--brand-50)] p-3 text-[var(--brand-700)]">
@@ -1243,7 +1272,11 @@ function MediaField({
           >
             {value ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={value} alt={label} className="h-full w-full object-contain p-3" />
+              <img
+                src={value}
+                alt={label}
+                className="h-full w-full object-contain p-3"
+              />
             ) : (
               <ImageIcon className="size-5 text-slate-400" />
             )}

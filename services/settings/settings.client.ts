@@ -57,7 +57,9 @@ export const settingsClientService = {
 
   getAwsStorageSettings: () =>
     withAuthRetry(() =>
-      apiClient.get<ApiResponse<AwsStorageSettings>>("/api/settings/aws-storage"),
+      apiClient.get<ApiResponse<AwsStorageSettings>>(
+        "/api/settings/aws-storage",
+      ),
     ),
 
   upsertAwsStorageSettings: (data: Partial<AwsStorageSettings>) =>

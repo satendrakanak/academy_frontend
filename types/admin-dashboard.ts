@@ -9,6 +9,10 @@ export type AdminDashboardSummary = {
   couponRedemptions: number;
   totalDiscountGiven: number;
   averageOrderValue: number;
+  totalExamAttempts: number;
+  passedExamAttempts: number;
+  certificatesIssued: number;
+  averageExamScore: number;
 };
 
 export type AdminRevenuePoint = {
@@ -58,4 +62,25 @@ export type AdminDashboardData = {
   topCourses: AdminTopCoursePoint[];
   couponUsage: AdminCouponUsagePoint[];
   recentOrders: AdminRecentOrderPoint[];
+  examOverview: {
+    uniqueLearners: number;
+    passRate: number;
+    recentAttempts: {
+      id: number;
+      learnerName: string;
+      courseTitle: string;
+      score: number;
+      maxScore: number;
+      percentage: number;
+      passed: boolean;
+      submittedAt: string | null;
+    }[];
+    topCourses: {
+      courseId: number;
+      courseTitle: string;
+      attempts: number;
+      passCount: number;
+      averageScore: number;
+    }[];
+  };
 };

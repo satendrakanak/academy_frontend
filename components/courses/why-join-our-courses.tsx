@@ -38,7 +38,7 @@ const features = [
 
 export default function WhyJoinOurCourses() {
   return (
-    <section className="py-24 bg-white">
+    <section className="py-14 bg-blue-50">
       <div className="max-w-6xl mx-auto px-6">
         {/* HEADER */}
         <div className="text-center mb-16">

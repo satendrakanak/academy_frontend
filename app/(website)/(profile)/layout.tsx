@@ -6,6 +6,7 @@ import { getSession } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/error-handler";
 import { userServerService } from "@/services/users/user.server";
 import { User } from "@/types/user";
+import { notFound } from "next/navigation";
 
 export default async function ProfileLayout({
   children,
@@ -18,10 +19,23 @@ export default async function ProfileLayout({
   const session = await getSession();
 
   let user: User | null = null;
+  let stats = {
+    courses: 0,
+    completed: 0,
+    progress: 0,
+    examsTaken: 0,
+    examsPassed: 0,
+    certificatesEarned: 0,
+  };
 
   if (username) {
-    // 👉 future public profile
-    // user = await getUserByUsername(...)
+    const response = await userServerService.getPublicProfile(
+      username.startsWith("@") ? username.slice(1) : username,
+    );
+    const bundle = response.data;
+    if (!bundle) notFound();
+    user = bundle.user;
+    stats = bundle.stats;
   } else {
     user = session;
   }
@@ -30,20 +44,14 @@ export default async function ProfileLayout({
 
   const isOwner = session?.id === user.id;
 
-  // 🔥 stats fetch
-  let stats = {
-    courses: 0,
-    completed: 0,
-    progress: 0,
-  };
-
-  try {
-    const res = await userServerService.getDashboardStats(user.id);
-
-    stats = res.data;
-  } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+  if (!username) {
+    try {
+      const res = await userServerService.getDashboardStats(user.id);
+      stats = res.data;
+    } catch (error: unknown) {
+      const message = getErrorMessage(error);
+      throw new Error(message);
+    }
   }
 
   return (
@@ -53,7 +61,7 @@ export default async function ProfileLayout({
           <ProfileCover coverImage={user.coverImage?.path} isOwner={isOwner} />
           <div className="relative z-10 px-2 md:px-6">
             <ProfileHeader user={user} isOwner={isOwner} stats={stats} />
-            <ProfileMenu isOwner={isOwner} />
+            {!username ? <ProfileMenu isOwner={isOwner} /> : null}
             <div className="py-8">{children}</div>
           </div>
         </div>

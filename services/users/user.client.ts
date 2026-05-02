@@ -4,6 +4,7 @@ import {
   ChangePasswordPayload,
   CreateBulkUsersPayload,
   CreateUserPayload,
+  PublicProfileBundle,
   Role,
   UpdateFacultyProfilePayload,
   UpdateProfilePayload,
@@ -90,4 +91,9 @@ export const userClientService = {
 
   getFacultyProfile: (id: number) =>
     apiClient.get<ApiResponse<User>>(`/api/users/faculty-profile/${id}`),
+
+  getPublicProfile: (username: string) =>
+    apiClient.get<ApiResponse<PublicProfileBundle | null>>(
+      `/api/users/public-profile/${username}`,
+    ),
 };

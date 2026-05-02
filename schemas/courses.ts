@@ -93,6 +93,117 @@ export const courseFaqsSchema = z.object({
     .default([]),
 });
 
+const courseExamOptionSchema = z.object({
+  id: z.string().trim().min(1),
+  text: z.string().trim().min(1, "Option text is required"),
+  isCorrect: z.boolean().default(false),
+});
+
+const courseExamQuestionSchema = z
+  .object({
+    id: z.string().trim().min(1),
+    prompt: z.string().trim().min(3, "Question must be at least 3 characters"),
+    type: z.enum([
+      "single",
+      "multiple",
+      "true_false",
+      "short_text",
+      "drag_drop",
+    ]),
+    points: z.coerce.number().min(1, "Points must be at least 1"),
+    explanation: z.string().optional(),
+    acceptedAnswers: z.array(z.string().trim().min(1)).optional().default([]),
+    options: z
+      .array(courseExamOptionSchema)
+      .default([]),
+  })
+  .superRefine((question, ctx) => {
+    const correctOptions = question.options.filter((option) => option.isCorrect);
+
+    if (question.type === "single" || question.type === "true_false") {
+      if (question.options.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "At least 2 options are required",
+          path: ["options"],
+        });
+      }
+      if (correctOptions.length !== 1) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Select exactly one correct option",
+          path: ["options"],
+        });
+      }
+    }
+
+    if (question.type === "multiple" && correctOptions.length < 1) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Select at least one correct option",
+        path: ["options"],
+      });
+    }
+
+    if (question.type === "multiple" && question.options.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least 2 options are required",
+        path: ["options"],
+      });
+    }
+
+    if (question.type === "drag_drop" && question.options.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Add at least 2 items for drag and drop",
+        path: ["options"],
+      });
+    }
+
+    if (
+      question.type === "short_text" &&
+      (!question.acceptedAnswers?.length ||
+        !question.acceptedAnswers.some((answer) => answer.trim()))
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Add at least one accepted answer",
+        path: ["acceptedAnswers"],
+      });
+    }
+  });
+
+export const courseExamSchema = z.object({
+  exam: z
+    .object({
+      title: z.string().trim().min(3, "Exam title must be at least 3 characters"),
+      description: z.string().optional(),
+      instructions: z.string().optional(),
+      passingPercentage: z.coerce
+        .number()
+        .min(1, "Passing percentage must be at least 1")
+        .max(100, "Passing percentage cannot exceed 100"),
+      maxAttempts: z.coerce.number().min(1, "Minimum 1 attempt is required"),
+      timeLimitMinutes: z.preprocess(
+        (value) => {
+          if (value === "" || value === null || value === undefined) {
+            return undefined;
+          }
+
+          return value;
+        },
+        z.coerce.number().min(1).optional(),
+      ),
+      showResultImmediately: z.boolean().default(true),
+      isPublished: z.boolean().default(false),
+      questions: z
+        .array(courseExamQuestionSchema)
+        .min(1, "Add at least one exam question"),
+    })
+    .nullable(),
+});
+
 export const metaSchema = z.object({
   metaTitle: z.string().max(60).optional(),
   metaDescription: z.string().max(160).optional(),

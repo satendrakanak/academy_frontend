@@ -15,6 +15,15 @@ const getStatusVariant = (status: OrderStatus) => {
       return "bg-red-100 text-red-700 border-red-200";
     case OrderStatus.CANCELLED:
       return "bg-gray-100 text-gray-600 border-gray-200";
+    case OrderStatus.REFUND_REQUESTED:
+    case OrderStatus.REFUND_APPROVED:
+    case OrderStatus.REFUND_PROCESSING:
+      return "bg-violet-100 text-violet-700 border-violet-200";
+    case OrderStatus.REFUND_REJECTED:
+    case OrderStatus.REFUND_FAILED:
+      return "bg-orange-100 text-orange-700 border-orange-200";
+    case OrderStatus.REFUNDED:
+      return "bg-sky-100 text-sky-700 border-sky-200";
     default:
       return "bg-yellow-100 text-yellow-700 border-yellow-200";
   }
