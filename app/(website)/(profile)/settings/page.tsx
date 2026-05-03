@@ -11,7 +11,6 @@ export default async function SettingsPage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">Settings</h2>
       <SettingsView user={user} />
     </div>
   );

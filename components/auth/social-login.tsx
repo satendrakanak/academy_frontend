@@ -1,10 +1,11 @@
 "use client";
 
+import { toast } from "sonner";
+
 import { Field, FieldSeparator } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { useSiteSettings } from "@/context/site-settings-context";
 import { PublicSocialProvider, SocialProvider } from "@/types/settings";
-import { toast } from "sonner";
 
 const iconMap: Record<SocialProvider, React.ReactNode> = {
   APPLE: (
@@ -36,9 +37,7 @@ const iconMap: Record<SocialProvider, React.ReactNode> = {
 export default function SocialLogin() {
   const { socialProviders } = useSiteSettings();
 
-  if (!socialProviders.length) {
-    return null;
-  }
+  if (!socialProviders.length) return null;
 
   const handleClick = (provider: PublicSocialProvider) => {
     if (provider.redirectUrl) {
@@ -49,28 +48,33 @@ export default function SocialLogin() {
     toast.message(`${provider.label} will be wired next with the same config.`);
   };
 
+  const gridClass =
+    socialProviders.length === 1
+      ? "grid-cols-1"
+      : socialProviders.length === 2
+        ? "grid-cols-2"
+        : "grid-cols-3";
+
   return (
     <>
-      <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
+      <FieldSeparator className="text-slate-400 before:bg-slate-200 after:bg-slate-200 dark:text-slate-500 dark:before:bg-white/10 dark:after:bg-white/10 [&_[data-slot=field-separator-content]]:bg-white [&_[data-slot=field-separator-content]]:px-3 dark:[&_[data-slot=field-separator-content]]:bg-[#07111f]">
         Or continue with
       </FieldSeparator>
-      <Field
-        className={`grid gap-4 ${
-          socialProviders.length === 1
-            ? "grid-cols-1"
-            : socialProviders.length === 2
-              ? "grid-cols-2"
-              : "grid-cols-3"
-        }`}
-      >
+
+      <Field className={`grid gap-3 ${gridClass}`}>
         {socialProviders.map((provider) => (
           <Button
             key={provider.provider}
             variant="outline"
             type="button"
             onClick={() => handleClick(provider)}
+            title={provider.label}
+            className="group h-12 rounded-2xl border-slate-200 bg-slate-50 text-slate-700 shadow-none transition hover:-translate-y-0.5 hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-white/10 dark:bg-[#0b1628] dark:text-slate-200 dark:hover:border-rose-200 dark:hover:bg-rose-200 dark:hover:text-black"
           >
-            {iconMap[provider.provider]}
+            <span className="flex h-5 w-5 items-center justify-center [&>svg]:h-5 [&>svg]:w-5">
+              {iconMap[provider.provider]}
+            </span>
+
             <span className="sr-only">{provider.label}</span>
           </Button>
         ))}

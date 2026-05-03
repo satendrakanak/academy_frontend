@@ -18,7 +18,6 @@ export default async function CertificatesPage() {
 
   return (
     <div className=" min-h-[60vh]">
-      <h2 className="mb-6 text-2xl font-semibold">My Certificates</h2>
       <CertificatesView certificates={certificates} />
     </div>
   );

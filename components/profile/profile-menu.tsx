@@ -22,18 +22,19 @@ export function ProfileMenu({ isOwner }: ProfileMenuProps) {
 
   return (
     <div className="mt-8">
-      <div className="flex gap-3 overflow-x-auto rounded-[24px] border border-slate-200 bg-white p-2 shadow-[0_20px_45px_-38px_rgba(15,23,42,0.35)] dark:border-white/10 dark:bg-[rgba(11,18,32,0.86)] dark:shadow-[0_28px_70px_-40px_rgba(0,0,0,0.65)]">
+      <div className="flex gap-2 overflow-x-auto rounded-3xl border border-slate-200 bg-white p-2 shadow-[0_18px_55px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
         {menu.map((item) => {
-          const isActive = pathname.includes(item.key);
+          const isActive =
+            pathname === `/${item.key}` || pathname.startsWith(`/${item.key}/`);
 
           return (
             <Link
               key={item.key}
               href={`/${item.key}`}
-              className={`whitespace-nowrap rounded-2xl px-4 py-3 text-sm font-medium transition ${
+              className={`shrink-0 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition ${
                 isActive
-                  ? "bg-[var(--brand-600)] text-white shadow-sm"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/8 dark:hover:text-white"
+                  ? "bg-blue-600 text-white shadow-[0_12px_30px_rgba(37,99,235,0.24)] dark:bg-rose-200 dark:text-black"
+                  : "text-slate-600 hover:bg-blue-50 hover:text-blue-700 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
               }`}
             >
               {item.label}

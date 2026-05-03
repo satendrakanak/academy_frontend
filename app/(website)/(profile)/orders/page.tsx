@@ -27,13 +27,6 @@ export default async function OrdersPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold dark:text-white">Your Orders</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-300">
-          Review purchased courses, coupon usage, and retry pending payments.
-        </p>
-      </div>
-
       <OrderHistory orders={orders} enrolledCourses={enrolledCourses} />
     </div>
   );

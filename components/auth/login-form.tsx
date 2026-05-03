@@ -1,4 +1,13 @@
 "use client";
+
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, LogIn } from "lucide-react";
+
 import {
   Field,
   FieldGroup,
@@ -7,24 +16,21 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { CardWrapper } from "./card-wrapper";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitButton } from "../submit-button";
 import { loginFormSchema } from "@/schemas";
 import { authService } from "@/services/auth.service";
-import { useState, useTransition } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { SubmitButton } from "../submit-button";
-import Link from "next/link";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 
 export function LoginForm() {
   const [error, setError] = useState<string>("");
   const [isPending, startTransition] = useTransition();
+
   const router = useRouter();
   const searchParams = useSearchParams();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
+    mode: "onChange",
     defaultValues: {
       email: "",
       password: "",
@@ -35,7 +41,10 @@ export function LoginForm() {
 
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
+      setError("");
+
       await authService.login(data);
+
       const rawCallbackUrl = searchParams.get("callbackUrl");
       const callbackUrl =
         rawCallbackUrl &&
@@ -49,15 +58,14 @@ export function LoginForm() {
         router.push(callbackUrl);
       });
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Something went wrong");
-      }
+      setError(err instanceof Error ? err.message : "Something went wrong");
     }
   };
 
   const isLoading = isSubmitting || isPending;
+
+  const inputClass =
+    "h-12 rounded-2xl border-slate-200 bg-slate-50 px-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-none transition focus-visible:border-blue-600 focus-visible:ring-blue-600 dark:border-white/10 dark:bg-[#0b1628] dark:text-white dark:placeholder:text-slate-500 dark:focus-visible:border-rose-200 dark:focus-visible:ring-rose-200";
 
   return (
     <CardWrapper
@@ -66,64 +74,84 @@ export function LoginForm() {
       backButtonHref="/auth/sign-up"
       showSocial
       imageUrl="/assets/login-form.jpg"
-      alt="Signup form image"
+      alt="Login form image"
       width={600}
       height={600}
     >
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FieldGroup>
-          {/* Email */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <FieldGroup className="gap-5">
           <Controller
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel>Email</FieldLabel>
-                <Input {...field} type="email" placeholder="m@example.com" />
-                {fieldState.invalid && (
+                <FieldLabel className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                  Email address
+                </FieldLabel>
+
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="m@example.com"
+                  className={inputClass}
+                />
+
+                {fieldState.invalid ? (
                   <FieldError errors={[fieldState.error]} />
-                )}
+                ) : null}
               </Field>
             )}
           />
+
           <Controller
             name="password"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <div className="flex items-center justify-between">
-                  <FieldLabel>Password</FieldLabel>
+                <div className="flex items-center justify-between gap-3">
+                  <FieldLabel className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                    Password
+                  </FieldLabel>
 
                   <Link
                     href="/auth/forgot-password"
-                    className="text-xs text-primary hover:underline"
+                    className="text-xs font-semibold text-blue-700 transition hover:text-blue-800 hover:underline dark:text-rose-200 dark:hover:text-rose-100"
                   >
                     Forgot password?
                   </Link>
                 </div>
-                <Input {...field} type="password" />
-                {fieldState.invalid && (
+
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="Enter your password"
+                  className={inputClass}
+                />
+
+                {fieldState.invalid ? (
                   <FieldError errors={[fieldState.error]} />
-                )}
+                ) : null}
               </Field>
             )}
           />
 
+          {error ? (
+            <div className="flex items-start gap-2 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:border-red-300/20 dark:bg-red-300/10 dark:text-red-300">
+              <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <span>{error}</span>
+            </div>
+          ) : null}
+
           <SubmitButton
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             loading={isLoading}
             loadingText="Logging you in..."
+            className="h-12 w-full rounded-full bg-blue-600 text-base font-semibold text-white shadow-[0_14px_35px_rgba(37,99,235,0.24)] transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300"
           >
+            <LogIn className="h-4 w-4" />
             Login
           </SubmitButton>
-          <FieldGroup>
-            {error && (
-              <div className="rounded-md bg-red-50 text-red-600 text-sm px-3 py-2">
-                {error}
-              </div>
-            )}
-          </FieldGroup>
         </FieldGroup>
       </form>
     </CardWrapper>

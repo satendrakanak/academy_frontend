@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Camera } from "lucide-react";
+import { Camera, Loader2 } from "lucide-react";
 
 interface ProfileAvatarProps {
   avatar?: string;
@@ -14,9 +14,12 @@ interface ProfileAvatarProps {
 
 function getInitials(name?: string) {
   if (!name) return "U";
-  const parts = name.trim().split(" ");
+
+  const parts = name.trim().split(" ").filter(Boolean);
+
   if (parts.length === 1) return parts[0][0]?.toUpperCase() || "U";
-  return (parts[0][0] + parts[1][0]).toUpperCase();
+
+  return `${parts[0][0] || ""}${parts[1][0] || ""}`.toUpperCase() || "U";
 }
 
 export function ProfileAvatar({
@@ -29,65 +32,78 @@ export function ProfileAvatar({
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | undefined>(avatar);
 
+  useEffect(() => {
+    setPreview(avatar);
+  }, [avatar]);
+
   const handleFileChange = (file?: File) => {
     if (!file) return;
-    setPreview(URL.createObjectURL(file));
+
+    const previewUrl = URL.createObjectURL(file);
+    setPreview(previewUrl);
     onChange?.(file);
   };
 
+  const normalizedProgress = Math.max(0, Math.min(100, progress));
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (progress / 100) * circumference;
+  const offset = circumference - (normalizedProgress / 100) * circumference;
 
   return (
-    <div className="group relative h-32 w-32 cursor-pointer md:h-36 md:w-36">
-      <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,#93c5fd,transparent_55%),linear-gradient(135deg,var(--brand-500),var(--brand-700))] opacity-90 blur-[2px]" />
-      <Avatar className="relative h-32 w-32 border-[5px] border-white shadow-[0_24px_50px_-22px_rgba(15,23,42,0.45)] md:h-36 md:w-36">
-        <AvatarImage src={preview} />
-        <AvatarFallback className="bg-slate-200 text-lg font-semibold text-slate-700">
+    <div className="group relative h-32 w-32 shrink-0 overflow-hidden rounded-full md:h-36 md:w-36">
+      <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-400 via-blue-600 to-indigo-700 opacity-90 blur-[2px] dark:from-rose-200 dark:via-rose-300 dark:to-pink-400" />
+
+      <Avatar className="relative h-32 w-32 border-[5px] border-white bg-slate-100 shadow-[0_24px_50px_rgba(15,23,42,0.22)] dark:border-[#07111f] dark:bg-[#0b1628] md:h-36 md:w-36">
+        <AvatarImage src={preview} alt={name || "Profile avatar"} />
+
+        <AvatarFallback className="bg-blue-50 text-xl font-bold text-blue-700 dark:bg-white/10 dark:text-rose-200">
           {getInitials(name)}
         </AvatarFallback>
       </Avatar>
 
       {uploading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full">
+        <div className="absolute inset-0 z-20 flex items-center justify-center rounded-full bg-slate-950/60 backdrop-blur-sm">
           <svg className="h-28 w-28 -rotate-90 transform md:h-32 md:w-32">
             <circle
               cx="50%"
               cy="50%"
               r={radius}
-              stroke="white"
+              stroke="currentColor"
               strokeWidth="4"
               fill="transparent"
-              opacity="0.2"
+              className="text-white/20"
             />
+
             <circle
               cx="50%"
               cy="50%"
               r={radius}
-              stroke="white"
+              stroke="currentColor"
               strokeWidth="4"
               fill="transparent"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
               strokeLinecap="round"
-              className="transition-all duration-200"
+              className="text-white transition-all duration-200"
             />
           </svg>
 
-          <span className="absolute text-white text-sm font-semibold">
-            {progress}%
+          <span className="absolute flex items-center gap-1 text-sm font-semibold text-white">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            {normalizedProgress}%
           </span>
         </div>
       )}
 
-      {!uploading && (
-        <div
+      {!uploading && onChange && (
+        <button
+          type="button"
           onClick={() => inputRef.current?.click()}
-          className="absolute inset-x-0 bottom-0 flex h-1/2 items-center justify-center rounded-b-full bg-slate-950/55 opacity-0 transition group-hover:opacity-100"
+          className="absolute inset-x-0 bottom-0 z-20 flex h-1/2 cursor-pointer items-center justify-center rounded-b-full bg-slate-950/60 text-white opacity-0 backdrop-blur-sm transition group-hover:opacity-100"
+          title="Change avatar"
         >
-          <Camera size={18} className="text-white" />
-        </div>
+          <Camera className="h-5 w-5" />
+        </button>
       )}
 
       <input
@@ -95,7 +111,10 @@ export function ProfileAvatar({
         type="file"
         hidden
         accept="image/*"
-        onChange={(e) => handleFileChange(e.target.files?.[0])}
+        onChange={(event) => {
+          handleFileChange(event.target.files?.[0]);
+          event.target.value = "";
+        }}
       />
     </div>
   );

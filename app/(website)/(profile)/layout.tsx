@@ -32,8 +32,10 @@ export default async function ProfileLayout({
     const response = await userServerService.getPublicProfile(
       username.startsWith("@") ? username.slice(1) : username,
     );
+
     const bundle = response.data;
     if (!bundle) notFound();
+
     user = bundle.user;
     stats = bundle.stats;
   } else {
@@ -49,19 +51,21 @@ export default async function ProfileLayout({
       const res = await userServerService.getDashboardStats(user.id);
       stats = res.data;
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      throw new Error(message);
+      throw new Error(getErrorMessage(error));
     }
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f7faff_0%,#ffffff_24%,#f4f8ff_100%)] dark:bg-[linear-gradient(180deg,#08101f_0%,#0d1528_28%,#0f182d_100%)]">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-50 dark:bg-[#101b2d] dark:bg-none">
       <Container>
-        <div className="pt-6 pb-12">
+        <div className="pb-12 pt-6">
           <ProfileCover coverImage={user.coverImage?.path} isOwner={isOwner} />
+
           <div className="relative z-10 px-2 md:px-6">
             <ProfileHeader user={user} isOwner={isOwner} stats={stats} />
+
             {!username ? <ProfileMenu isOwner={isOwner} /> : null}
+
             <div className="py-8">{children}</div>
           </div>
         </div>

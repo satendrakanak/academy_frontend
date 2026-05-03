@@ -10,6 +10,13 @@ import { Order } from "@/types/order";
 import { OrderHistory } from "./order-history";
 import { ExamHistoryRecord } from "@/types/exam";
 import { ExamHistory } from "./exam-history";
+import {
+  Award,
+  BarChart3,
+  BookOpenCheck,
+  ClipboardCheck,
+  GraduationCap,
+} from "lucide-react";
 
 interface DashboardClientProps {
   stats: DashboardStats;
@@ -30,71 +37,85 @@ export default function DashboardClient({
     () => import("@/components/profile/progress-chart"),
     { ssr: false },
   );
+
   return (
-    <>
+    <div className="space-y-8">
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard
+          icon={BookOpenCheck}
           title="Courses Completed"
           value={`${stats.completed}/${stats.courses}`}
           description="Completed courses out of your total active enrollments."
         />
+
         <StatCard
+          icon={BarChart3}
           title="Average Progress"
           value={`${stats.progress}%`}
           description="Overall learning momentum across enrolled courses."
           highlight
         />
+
         <StatCard
+          icon={ClipboardCheck}
           title="Exam Attempts"
           value={stats.examsTaken}
           description="Total final exam submissions across your courses."
         />
+
         <StatCard
+          icon={GraduationCap}
           title="Exams Passed"
           value={stats.examsPassed}
           description="Final exams you have cleared successfully."
         />
+
         <StatCard
+          icon={Award}
           title="Certificates"
           value={stats.certificatesEarned}
           description="Certificates unlocked after completion milestones."
         />
       </div>
 
-      <div className="h-90">
-        <ProgressChart weeklyProgress={weeklyProgress} />
-      </div>
+      <ProgressChart weeklyProgress={weeklyProgress} />
 
-      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)] md:p-6">
-        <div className="mb-5 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)] md:p-6">
+        <div className="mb-5 flex flex-col gap-2 border-b border-slate-100 pb-5 dark:border-white/10 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-(--brand-700)">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-blue-700 dark:text-rose-200">
               Continue Learning
             </p>
+
             <h3 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
               Pick up where you left off
             </h3>
           </div>
-          <p className="max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-300">
+
+          <p className="max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-400">
             Resume your latest courses, keep the streak alive, and move one step
             closer to completion.
           </p>
         </div>
 
         {courses.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-[26px] border border-dashed border-slate-200 bg-slate-50 p-10 text-center dark:border-white/10 dark:bg-white/6">
-            <div className="text-5xl mb-4">📚</div>
+          <div className="flex flex-col items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50/70 p-10 text-center dark:border-white/10 dark:bg-[#0b1628]">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-blue-50 text-blue-700 ring-1 ring-blue-100 dark:bg-white/10 dark:text-rose-200 dark:ring-white/10">
+              <BookOpenCheck className="h-8 w-8" />
+            </div>
 
-            <h3 className="mb-2 text-xl font-semibold dark:text-white">No courses yet</h3>
+            <h3 className="mb-2 text-xl font-semibold text-slate-950 dark:text-white">
+              No courses yet
+            </h3>
 
-            <p className="mb-6 max-w-md text-gray-500 dark:text-slate-300">
+            <p className="mb-6 max-w-md text-sm leading-7 text-slate-500 dark:text-slate-400">
               You haven’t enrolled in any courses yet. Start learning something
-              new today 🚀
+              new today.
             </p>
 
             <Link
               href="/courses"
-              className="bg-primary text-white px-6 py-3 rounded-lg hover:opacity-90 transition"
+              className="inline-flex h-11 items-center justify-center rounded-full bg-blue-600 px-6 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(37,99,235,0.24)] transition hover:-translate-y-0.5 hover:bg-blue-700 dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300"
             >
               Explore Courses
             </Link>
@@ -106,30 +127,32 @@ export default function DashboardClient({
             ))}
           </div>
         )}
-      </div>
+      </section>
 
-      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)] md:p-6">
+      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)] md:p-6">
         <OrderHistory
           orders={orders}
           enrolledCourses={courses}
           limit={2}
           showViewAll
         />
-      </div>
+      </section>
 
-      <div className="rounded-[30px] border border-slate-200 bg-white p-5 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)] md:p-6">
+      <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)] md:p-6">
         <ExamHistory records={examHistory} />
-      </div>
-    </>
+      </section>
+    </div>
   );
 }
 
 function StatCard({
+  icon: Icon,
   title,
   value,
   description,
   highlight = false,
 }: {
+  icon: typeof BookOpenCheck;
   title: string;
   value: string | number;
   description: string;
@@ -137,20 +160,26 @@ function StatCard({
 }) {
   return (
     <Card
-      className={`overflow-hidden rounded-[28px] border shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] ${
+      className={
         highlight
-          ? "border-(--brand-100) bg-[linear-gradient(135deg,var(--brand-50),#ffffff)] dark:border-[var(--brand-900)] dark:bg-[linear-gradient(135deg,rgba(59,88,191,0.22),rgba(18,28,48,0.98))]"
-          : "border-slate-200 bg-white dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.92),rgba(16,26,46,0.98))]"
-      }`}
+          ? "overflow-hidden rounded-3xl border border-blue-100 bg-blue-50/80 shadow-[0_20px_60px_rgba(37,99,235,0.08)] dark:border-rose-200/20 dark:bg-rose-200/10 dark:shadow-[0_24px_70px_rgba(0,0,0,0.24)]"
+          : "overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)]"
+      }
     >
-      <CardContent className="p-5 md:p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
+      <CardContent className="p-4 md:p-5">
+        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-700 ring-1 ring-blue-100 dark:bg-white/10 dark:text-rose-200 dark:ring-white/10">
+          <Icon className="h-5 w-5" />
+        </div>
+
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
           {title}
         </p>
-        <p className="mt-3 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+
+        <p className="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
           {value}
         </p>
-        <p className="mt-3 max-w-xs text-sm leading-6 text-slate-500 dark:text-slate-300">
+
+        <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">
           {description}
         </p>
       </CardContent>

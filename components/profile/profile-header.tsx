@@ -1,15 +1,17 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { UserRound } from "lucide-react";
+import { toast } from "sonner";
+
 import { DashboardStats, User } from "@/types/user";
 import { ProfileAvatar } from "./profile-avatar";
 import { ProfileInfo } from "./profile-info";
 import { userClientService } from "@/services/users/user.client";
-import { toast } from "sonner";
-import axios from "axios";
-import { useState } from "react";
 import { FileType, UploadingFile } from "@/types/file";
 import { ApiResponse } from "@/types/api";
-import { useRouter } from "next/navigation";
 import { getErrorMessage } from "@/lib/error-handler";
 
 interface ProfileHeaderProps {
@@ -22,10 +24,20 @@ export function ProfileHeader({ user, stats, isOwner }: ProfileHeaderProps) {
   const [uploadingFile, setUploadingFile] = useState<UploadingFile | null>(
     null,
   );
+
   const router = useRouter();
+
   const handleAvatarUpload = async (file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+
     try {
-      // STEP 1: init
+      setUploadingFile({
+        file,
+        preview: previewUrl,
+        uploading: true,
+        progress: 0,
+      });
+
       const initRes = await fetch("/api/uploads/init", {
         method: "POST",
         credentials: "include",
@@ -41,7 +53,7 @@ export function ProfileHeader({ user, stats, isOwner }: ProfileHeaderProps) {
 
       const json = await initRes.json();
       const { uploadId, url } = json.data;
-      // 🔥 STEP 2: upload to S3 (REAL progress)
+
       await axios.put(url, file, {
         headers: {
           "Content-Type": file.type,
@@ -57,63 +69,84 @@ export function ProfileHeader({ user, stats, isOwner }: ProfileHeaderProps) {
         },
       });
 
-      // STEP 3: confirm
       const confirmRes = await fetch(`/api/uploads/confirm/${uploadId}`, {
         method: "POST",
         credentials: "include",
       });
 
       const confirmJson: ApiResponse<FileType> = await confirmRes.json();
-
       const newMedia = confirmJson.data;
 
-      // STEP 4: update avatar
       await userClientService.updateUser({
         avatarId: newMedia.id,
       });
+
       router.refresh();
       toast.success("Avatar updated");
     } catch (error: unknown) {
-      const message = getErrorMessage(error);
-      toast.error(message);
+      toast.error(getErrorMessage(error));
+    } finally {
+      setUploadingFile(null);
+      URL.revokeObjectURL(previewUrl);
     }
   };
+
   return (
-    <div className="-mt-14 rounded-[32px] border border-white/70 bg-white/90 p-5 shadow-[0_34px_90px_-48px_rgba(15,23,42,0.45)] backdrop-blur dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.9),rgba(16,24,44,0.94))] dark:shadow-[0_32px_90px_-48px_rgba(0,0,0,0.7)] md:-mt-20 md:p-7">
-      <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-        <div className="flex flex-col gap-5 md:flex-row md:items-end">
-        <ProfileAvatar
-          avatar={user.avatar?.path}
-          name={`${user.firstName} ${user.lastName || ""}`}
-          onChange={handleAvatarUpload}
-          uploading={!!uploadingFile}
-          progress={uploadingFile?.progress || 0}
-        />
-        <ProfileInfo
-          name={user.firstName + " " + user.lastName}
-          email={user.email}
-          stats={stats}
-        />
+    <div className="-mt-14 rounded-3xl border border-slate-200 bg-white/92 p-5 shadow-[0_30px_90px_rgba(15,23,42,0.12)] backdrop-blur-xl dark:border-white/10 dark:bg-[#07111f]/92 dark:shadow-[0_32px_90px_rgba(0,0,0,0.42)] md:-mt-20 md:p-6">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        {/* LEFT */}
+        <div className="flex min-w-0 flex-col gap-5 md:flex-row md:items-end">
+          <ProfileAvatar
+            avatar={user.avatar?.path}
+            name={`${user.firstName} ${user.lastName || ""}`.trim()}
+            onChange={isOwner ? handleAvatarUpload : undefined}
+            uploading={!!uploadingFile}
+            progress={uploadingFile?.progress || 0}
+          />
+
+          <ProfileInfo
+            name={`${user.firstName} ${user.lastName || ""}`.trim()}
+            email={user.email}
+            stats={stats}
+          />
         </div>
 
-        <div className="flex flex-wrap gap-3 md:justify-end">
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
-              Username
-            </p>
-            <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
-              @{user.username}
-            </p>
-          </div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
-              Access
-            </p>
-            <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">
-              {isOwner ? "Owner view" : "Public view"}
-            </p>
-          </div>
+        {/* RIGHT */}
+        <div className="flex w-full justify-start lg:w-auto lg:justify-end">
+          <ProfileMiniCard
+            icon={UserRound}
+            label="Username"
+            value={`@${user.username || "user"}`}
+          />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ProfileMiniCard({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: typeof UserRound;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/80 px-4 py-3 shadow-sm dark:border-white/10 dark:bg-[#0b1628] sm:w-auto sm:min-w-[240px]">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700 ring-1 ring-blue-100 dark:bg-white/10 dark:text-rose-200 dark:ring-white/10">
+        <Icon className="h-4.5 w-4.5" />
+      </div>
+
+      <div className="min-w-0">
+        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 dark:text-slate-400">
+          {label}
+        </p>
+
+        <p className="mt-1 truncate text-sm font-semibold leading-none text-slate-950 dark:text-white">
+          {value}
+        </p>
       </div>
     </div>
   );

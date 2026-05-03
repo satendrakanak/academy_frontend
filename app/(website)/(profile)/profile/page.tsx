@@ -11,7 +11,6 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-6">Profile</h2>
       <ProfileView user={user} />
     </div>
   );
