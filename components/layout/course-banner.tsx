@@ -20,9 +20,9 @@ export function CourseBanner({ course }: CourseBannerProps) {
             <h1 className="text-2xl lg:text-5xl font-bold mb-4 text-center lg:text-left">
               {course.title}
             </h1>
-            <div className="mb-4 lg:mb-0 text-center lg:text-left">
+              <div className="mb-4 lg:mb-0 text-center lg:text-left">
               {course.description && (
-                <p className="text-gray-700 lg:text-base wrap-break-word">
+                <p className="text-white/84 lg:text-base wrap-break-word">
                   {course.description}
                 </p>
               )}

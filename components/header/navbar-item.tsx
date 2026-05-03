@@ -21,18 +21,30 @@ const NavbarItem = ({ item }: NavbarItemProps) => {
   const pathname = usePathname();
 
   const isActive =
-    pathname === item.href || pathname?.startsWith(`${item.href}/`);
+    item.href === "/"
+      ? pathname === "/"
+      : pathname === item.href || pathname?.startsWith(`${item.href}/`);
 
   return (
     <Link
       href={item.href}
       className={cn(
-        "relative inline-flex items-center rounded-full px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:text-[var(--brand-600)] dark:text-slate-200 dark:hover:text-white xl:px-4",
+        "group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-full px-4 text-sm font-semibold transition-all duration-300 xl:px-5",
+        "text-slate-700 hover:bg-blue-50 hover:text-blue-700",
+        "dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white",
         isActive &&
-          "bg-[color-mix(in_oklab,var(--brand-50)_78%,white)] text-[var(--brand-700)] shadow-[0_10px_30px_-18px_rgba(37,99,235,0.45)] dark:bg-white/10 dark:text-white",
+          "bg-blue-600 text-white shadow-[0_14px_35px_rgba(37,99,235,0.28)] hover:bg-blue-600 hover:text-white dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300 dark:hover:text-black",
       )}
     >
-      {item.label}
+      <span
+        className={cn(
+          "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300",
+          "bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.35),transparent_62%)]",
+          isActive && "opacity-100",
+        )}
+      />
+
+      <span className="relative z-10">{item.label}</span>
     </Link>
   );
 };

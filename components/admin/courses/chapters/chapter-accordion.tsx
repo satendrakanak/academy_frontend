@@ -12,7 +12,7 @@ interface ChapterAccordionProps {
   index: number;
   activeId: number | null;
   courseId: number;
-  setActiveId: (id: number) => void;
+  setActiveId: (id: number | null) => void;
   onTooglePublish: (id: number, isPublished: boolean) => void;
   onDelete: (id: number) => void;
   viewType: string;
@@ -42,7 +42,6 @@ export default function ChapterAccordion({
 
   const handleEdit = (chapter: Chapter) => {
     setEditingChapter(chapter);
-    console.log("editing chapter", chapter);
     setOpen(true);
   };
 

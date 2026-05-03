@@ -28,14 +28,14 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
 
   if (!certificates.length) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+      <div className="flex flex-col items-center justify-center rounded-[28px] border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-white/6 dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
         <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary">
           <Award className="size-7" />
         </div>
 
-        <h3 className="mb-2 text-xl font-semibold">No certificates yet</h3>
+        <h3 className="mb-2 text-xl font-semibold dark:text-white">No certificates yet</h3>
 
-        <p className="mb-6 max-w-md text-gray-500">
+        <p className="mb-6 max-w-md text-gray-500 dark:text-slate-300">
           Complete a course and your certificate will appear here automatically.
         </p>
 
@@ -54,9 +54,9 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
       {certificates.map((certificate) => (
         <div
           key={certificate.id}
-          className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] transition hover:-translate-y-1 hover:shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)]"
+          className="overflow-hidden rounded-[30px] border border-slate-200 bg-white shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] transition hover:-translate-y-1 hover:shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.92),rgba(16,26,46,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]"
         >
-          <div className="bg-linear-to-br from-[#102048] via-[#304fdb] to-[#e34b44] p-6 text-white">
+          <div className="academy-hero-gradient p-6 text-white">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
               Certificate
             </p>
@@ -71,7 +71,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
                 <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
                   Certificate ID
                 </p>
-                <p className="mt-1 font-semibold text-slate-950">
+                <p className="mt-1 font-semibold text-slate-950 dark:text-white">
                   {certificate.certificateNumber}
                 </p>
               </div>
@@ -80,7 +80,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
                 <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
                   Issued On
                 </p>
-                <p className="mt-1 font-semibold text-slate-950">
+                <p className="mt-1 font-semibold text-slate-950 dark:text-white">
                   {new Date(certificate.issuedAt).toLocaleDateString("en-IN", {
                     day: "2-digit",
                     month: "long",
@@ -90,7 +90,7 @@ export function CertificatesView({ certificates }: CertificatesViewProps) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600">
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-600 dark:border-white/10 dark:bg-white/6 dark:text-slate-300">
               Your certificate is stored safely and can be downloaded anytime
               from this page.
             </div>

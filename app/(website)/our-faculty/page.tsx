@@ -23,20 +23,30 @@ export default async function FacultiesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#fff_0%,var(--brand-50)_100%)]">
+    <div className="relative min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:bg-[#101b2d] dark:bg-none">
       <PageHero
         pageTitle="Faculty Network"
         pageHeadline="Meet the minds behind the learning experience."
-        pageDescription="Learn from experienced faculty across nutrition, wellness, and
-          lifestyle sciences who bring both depth and real practice into every
-          session."
+        pageDescription="Learn from experienced faculty across nutrition, wellness, and lifestyle sciences who bring both depth and real practice into every session."
       />
 
-      <Container>
-        <div className="py-16">
-          <FacultyGrid faculties={faculties} />
-        </div>
-      </Container>
+      <section className="py-12 pb-20">
+        <Container>
+          {faculties.length ? (
+            <FacultyGrid faculties={faculties} />
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_20px_60px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.32)]">
+              <p className="text-sm font-semibold text-slate-800 dark:text-white">
+                No faculty profiles found
+              </p>
+
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Faculty profiles will appear here once they are added.
+              </p>
+            </div>
+          )}
+        </Container>
+      </section>
     </div>
   );
 }

@@ -55,7 +55,7 @@ export default async function ProfileLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[linear-gradient(180deg,#f8fbff_0%,#ffffff_24%,#f8fafc_100%)]">
+    <div className="min-h-screen bg-[linear-gradient(180deg,#f7faff_0%,#ffffff_24%,#f4f8ff_100%)] dark:bg-[linear-gradient(180deg,#08101f_0%,#0d1528_28%,#0f182d_100%)]">
       <Container>
         <div className="pt-6 pb-12">
           <ProfileCover coverImage={user.coverImage?.path} isOwner={isOwner} />

@@ -1,208 +1,205 @@
 "use client";
 
 import Link from "next/link";
+import { Mail, MapPin, Phone, ArrowRight } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+
 import Container from "../container";
-import { useSiteSettings } from "@/context/site-settings-context";
 import Logo from "../logo";
+import { useSiteSettings } from "@/context/site-settings-context";
+import FooterCta from "./footer-cta";
 
 export default function Footer() {
   const { site } = useSiteSettings();
+
   const socialLinks = [
-    { href: site.facebookUrl, icon: <FaFacebookF size={18} /> },
-    { href: site.twitterUrl, icon: <FaXTwitter size={18} /> },
-    { href: site.instagramUrl, icon: <FaInstagram size={18} /> },
-    { href: site.linkedinUrl, icon: <FaLinkedinIn size={18} /> },
+    {
+      href: site.facebookUrl,
+      icon: <FaFacebookF size={15} />,
+      label: "Facebook",
+    },
+    {
+      href: site.twitterUrl,
+      icon: <FaXTwitter size={15} />,
+      label: "X",
+    },
+    {
+      href: site.instagramUrl,
+      icon: <FaInstagram size={15} />,
+      label: "Instagram",
+    },
+    {
+      href: site.linkedinUrl,
+      icon: <FaLinkedinIn size={15} />,
+      label: "LinkedIn",
+    },
   ].filter((item) => item.href);
 
+  const usefulLinks = [
+    { href: "/", label: "Home" },
+    { href: "/courses", label: "Courses" },
+    { href: "/articles", label: "Articles" },
+    { href: "/client-testimonials", label: "Testimonials" },
+    { href: "/our-faculty", label: "Faculty" },
+  ];
+
+  const companyLinks = [
+    { href: "/contact", label: "Contact Us" },
+    { href: "/courses", label: "Admissions" },
+    { href: "/articles", label: "Learning Resources" },
+    { href: "/our-faculty", label: "Meet the Faculty" },
+    { href: "/cart", label: "Your Cart" },
+  ];
+
   return (
-    <footer className="bg-[color-mix(in_oklab,var(--surface-1)_88%,white)] text-slate-700 dark:bg-[#0b1222] dark:text-slate-200">
-      <div className="academy-hero-gradient text-white">
-        <Container>
-          <div className="grid gap-10 py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+    <>
+      <FooterCta />
+
+      <footer className="relative overflow-hidden bg-slate-100 text-slate-700 dark:bg-[#050b14] dark:text-slate-300">
+        {/* subtle footer-only background */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent dark:via-white/10" />
+          <div className="absolute -left-32 top-16 h-72 w-72 rounded-full bg-blue-100/60 blur-[100px] dark:bg-blue-500/5" />
+          <div className="absolute right-[-120px] bottom-0 h-72 w-72 rounded-full bg-slate-200/80 blur-[100px] dark:bg-rose-300/5" />
+        </div>
+
+        <Container className="relative z-10">
+          <div className="grid gap-10 py-16 md:grid-cols-2 xl:grid-cols-[1.25fr_0.8fr_0.9fr_1.1fr]">
+            {/* ABOUT */}
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/70">
-                {site.footerCtaEyebrow}
-              </p>
-              <h2 className="mt-3 max-w-2xl text-3xl font-bold leading-tight md:text-5xl">
-                {site.footerCtaHeading}
-              </h2>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-white/80 md:text-lg">
-                {site.footerCtaDescription}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link
-                  href={site.footerPrimaryCtaHref || "/courses"}
-                  className="inline-flex items-center rounded-full bg-white px-6 py-3 font-semibold text-(--brand-900) transition hover:bg-(--brand-50)"
-                >
-                  {site.footerPrimaryCtaLabel}
-                </Link>
-                <Link
-                  href={site.footerSecondaryCtaHref || "/contact"}
-                  className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-6 py-3 font-semibold text-white transition hover:bg-white/16"
-                >
-                  {site.footerSecondaryCtaLabel}
-                </Link>
+              <div className="mb-5">
+                <Logo footer />
               </div>
+
+              <p className="mb-6 max-w-sm text-sm leading-7 text-slate-600 dark:text-slate-400">
+                {site.footerAbout || site.siteDescription}
+              </p>
+
+              <Link
+                href="/contact"
+                className="group inline-flex h-11 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:border-rose-200 dark:hover:bg-rose-200 dark:hover:text-black"
+              >
+                Contact With Us
+                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+              </Link>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-[28px] border border-white/14 bg-white/10 p-5 backdrop-blur-sm academy-float">
-                <h3 className="text-3xl font-bold">500+</h3>
-                <p className="mt-2 font-normal">Learners mentored</p>
-                <p className="text-sm text-white/72">Growing every cohort</p>
-              </div>
-              <div className="rounded-[28px] border border-white/14 bg-white/10 p-5 backdrop-blur-sm academy-float-delayed">
-                <h3 className="text-3xl font-bold">100+</h3>
-                <p className="mt-2 font-medium">Certified outcomes</p>
-                <p className="text-sm text-white/72">Focused programs</p>
-              </div>
-              <div className="rounded-[28px] border border-white/14 bg-white/10 p-5 backdrop-blur-sm">
-                <h3 className="text-3xl font-bold">Live</h3>
-                <p className="mt-2 font-medium">Faculty support</p>
-                <p className="text-sm text-white/72">Human-first learning</p>
-              </div>
+            {/* USEFUL LINKS */}
+            <div>
+              <h3 className="mb-5 text-base font-semibold text-slate-950 dark:text-white">
+                Useful Links
+              </h3>
+
+              <ul className="space-y-3 text-sm">
+                {usefulLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="inline-flex text-slate-600 transition hover:translate-x-1 hover:text-blue-700 dark:text-slate-400 dark:hover:text-rose-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* COMPANY */}
+            <div>
+              <h3 className="mb-5 text-base font-semibold text-slate-950 dark:text-white">
+                Our Company
+              </h3>
+
+              <ul className="space-y-3 text-sm">
+                {companyLinks.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="inline-flex text-slate-600 transition hover:translate-x-1 hover:text-blue-700 dark:text-slate-400 dark:hover:text-rose-200"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* CONTACT */}
+            <div>
+              <h3 className="mb-5 text-base font-semibold text-slate-950 dark:text-white">
+                Get Contact
+              </h3>
+
+              <ul className="mb-6 space-y-4 text-sm text-slate-600 dark:text-slate-400">
+                {site.supportPhone && (
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm dark:bg-white/8 dark:text-rose-200">
+                      <Phone className="h-4 w-4" />
+                    </span>
+                    <span>{site.supportPhone}</span>
+                  </li>
+                )}
+
+                {site.supportEmail && (
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm dark:bg-white/8 dark:text-rose-200">
+                      <Mail className="h-4 w-4" />
+                    </span>
+                    <span>{site.supportEmail}</span>
+                  </li>
+                )}
+
+                {site.supportAddress && (
+                  <li className="flex gap-3">
+                    <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm dark:bg-white/8 dark:text-rose-200">
+                      <MapPin className="h-4 w-4" />
+                    </span>
+                    <span className="leading-6">{site.supportAddress}</span>
+                  </li>
+                )}
+              </ul>
+
+              {socialLinks.length > 0 && (
+                <div className="flex flex-wrap gap-3">
+                  {socialLinks.map((item) => (
+                    <a
+                      key={item.href}
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={item.label}
+                      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:border-rose-200 dark:hover:bg-rose-200 dark:hover:text-black"
+                    >
+                      {item.icon}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-300/70 py-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-500 md:flex-row">
+            <p>{site.footerCopyright}</p>
+
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <Link
+                href="/terms"
+                className="transition hover:text-blue-700 dark:hover:text-rose-200"
+              >
+                Terms
+              </Link>
+
+              <Link
+                href="/privacy"
+                className="transition hover:text-blue-700 dark:hover:text-rose-200"
+              >
+                Privacy
+              </Link>
             </div>
           </div>
         </Container>
-      </div>
-
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-16 md:grid-cols-2 xl:grid-cols-4">
-        <div>
-          <div className="mb-4">
-            <Logo footer />
-          </div>
-
-          <p className="mb-6 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-            {site.footerAbout || site.siteDescription}
-          </p>
-
-          <Link
-            href="/contact"
-            className="inline-flex rounded-full border border-(--brand-400) px-5 py-2 text-(--brand-600) transition hover:bg-(--brand-500) hover:text-white dark:border-[var(--brand-300)] dark:text-[var(--brand-200)]"
-          >
-            Contact With Us →
-          </Link>
-        </div>
-
-        <div>
-          <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">
-            Useful Links
-          </h3>
-
-          <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li>
-              <Link href="/" className="hover:text-(--brand-600)">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/courses" className="hover:text-(--brand-600)">
-                Courses
-              </Link>
-            </li>
-            <li>
-              <Link href="/articles" className="hover:text-(--brand-600)">
-                Articles
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/client-testimonials"
-                className="hover:text-(--brand-600)"
-              >
-                Testimonials
-              </Link>
-            </li>
-            <li>
-              <Link href="/our-faculty" className="hover:text-(--brand-600)">
-                Faculty
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">
-            Our Company
-          </h3>
-
-          <ul className="space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li>
-              <Link href="/contact" className="hover:text-(--brand-600)">
-                Contact Us
-              </Link>
-            </li>
-            <li>
-              <Link href="/courses" className="hover:text-(--brand-600)">
-                Admissions
-              </Link>
-            </li>
-            <li>
-              <Link href="/articles" className="hover:text-(--brand-600)">
-                Learning Resources
-              </Link>
-            </li>
-            <li>
-              <Link href="/our-faculty" className="hover:text-(--brand-600)">
-                Meet the Faculty
-              </Link>
-            </li>
-            <li>
-              <Link href="/cart" className="hover:text-(--brand-600)">
-                Your Cart
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="mb-4 font-semibold text-slate-900 dark:text-white">
-            Get Contact
-          </h3>
-
-          <ul className="mb-4 space-y-2 text-sm text-slate-500 dark:text-slate-400">
-            <li>
-              <span className="font-medium">Phone:</span> {site.supportPhone}
-            </li>
-            <li>
-              <span className="font-medium">Email:</span> {site.supportEmail}
-            </li>
-            <li>
-              <span className="font-medium">Location:</span>{" "}
-              {site.supportAddress}
-            </li>
-          </ul>
-
-          {/* SOCIAL */}
-          <div className="flex gap-4 text-slate-500 dark:text-slate-400">
-            {socialLinks.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                className="cursor-pointer hover:text-(--brand-600)"
-              >
-                {item.icon}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-border/70 px-6 py-6 text-sm text-slate-500 dark:text-slate-400 md:flex-row">
-        <p>{site.footerCopyright}</p>
-
-        <div className="flex gap-4">
-          <span className="cursor-pointer hover:text-(--brand-600)">Terms</span>
-          <span className="cursor-pointer hover:text-(--brand-600)">
-            Privacy
-          </span>
-          <span className="cursor-pointer hover:text-(--brand-600)">Login</span>
-        </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }

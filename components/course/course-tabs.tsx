@@ -8,9 +8,10 @@ import { CourseDetails } from "./sections/course-details";
 import { CourseRequirements } from "./sections/course-requirements";
 import { Course } from "@/types/course";
 import { Testimonial } from "@/types/testimonial";
-import { CourseReviews } from "./sections/course-reviews";
+import { CourseTestimonials } from "./sections/course-testimonials";
 import { CourseRatingReviews } from "./sections/course-rating-reviews";
 import { CourseFaqs } from "./sections/course-faqs";
+import { cn } from "@/lib/utils";
 
 const baseTabs = [
   { id: "overview", label: "Overview" },
@@ -37,12 +38,11 @@ export const CourseTabs = ({
   const tabsRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
-  // 🔥 Scroll to section
   const handleScroll = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
 
-    const yOffset = -110;
+    const yOffset = -120;
     const y = el.getBoundingClientRect().top + window.scrollY + yOffset;
 
     window.scrollTo({ top: y, behavior: "smooth" });
@@ -58,7 +58,7 @@ export const CourseTabs = ({
       {
         root: null,
         threshold: 0,
-        rootMargin: "-100px 0px 0px 0px",
+        rootMargin: "-105px 0px 0px 0px",
       },
     );
 
@@ -67,7 +67,6 @@ export const CourseTabs = ({
     return () => observer.disconnect();
   }, []);
 
-  // 🔥 Active tab logic (already correct)
   useEffect(() => {
     const handleScrollActive = () => {
       let current = "overview";
@@ -78,7 +77,7 @@ export const CourseTabs = ({
 
         const rect = el.getBoundingClientRect();
 
-        if (rect.top <= 150) {
+        if (rect.top <= 160) {
           current = tab.id;
         }
       }
@@ -86,74 +85,82 @@ export const CourseTabs = ({
       setActive(current);
     };
 
+    handleScrollActive();
+
     window.addEventListener("scroll", handleScrollActive);
     return () => window.removeEventListener("scroll", handleScrollActive);
   }, [tabs]);
 
   return (
-    <div>
-      {/* 🔥 SENTINEL (invisible trigger point) */}
+    <div className="relative">
       <div ref={sentinelRef} />
 
-      {/* 🔥 TABS */}
       <div
         ref={tabsRef}
-        className={`z-40 mb-6 px-2 py-3 rounded-2xl transition-all duration-300 ${
-          isSticky
-            ? "sticky top-28 bg-primary/10 shadow-md backdrop-blur-sm"
-            : "bg-white shadow-none"
-        }`}
+        className={cn(
+          "z-40 mb-8 rounded-3xl border p-2 transition-all duration-300",
+          "border-slate-200 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.06)]",
+          "dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]",
+          isSticky &&
+            "sticky top-20 border-blue-100 bg-white/85 shadow-[0_18px_65px_rgba(37,99,235,0.14)] backdrop-blur-xl dark:border-white/10 dark:bg-[#07111f]/90 dark:shadow-[0_24px_80px_rgba(0,0,0,0.45)]",
+        )}
       >
-        <div className="flex gap-2 overflow-x-auto no-scrollbar px-1 md:px-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => handleScroll(tab.id)}
-              className={`px-3 py-2 whitespace-nowrap rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition cursor-pointer md:px-4 ${
-                active === tab.id
-                  ? "bg-primary text-white"
-                  : isSticky
-                    ? "bg-white/70 text-primary hover:bg-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {tab.label.toLocaleUpperCase()}
-            </button>
-          ))}
+        <div className="flex gap-2 overflow-x-auto no-scrollbar px-1">
+          {tabs.map((tab) => {
+            const isCurrent = active === tab.id;
+
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => handleScroll(tab.id)}
+                className={cn(
+                  "relative inline-flex h-10 shrink-0 cursor-pointer items-center justify-center rounded-full px-4 text-xs font-bold uppercase tracking-[0.14em] transition-all duration-300",
+                  "text-slate-600 hover:bg-blue-50 hover:text-blue-700",
+                  "dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white",
+                  isCurrent &&
+                    "bg-blue-600 text-white shadow-[0_12px_30px_rgba(37,99,235,0.28)] hover:bg-blue-600 hover:text-white dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300 dark:hover:text-black",
+                )}
+              >
+                <span className="relative z-10">{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      {/* 🔥 SECTIONS */}
-      <div id="overview" className="mb-8 scroll-mt-32">
-        <WhatYouWillLearn course={course} />
-      </div>
+      <div className="space-y-8">
+        <div id="overview" className="scroll-mt-36">
+          <WhatYouWillLearn course={course} />
+        </div>
 
-      <div id="content" className="mb-8 scroll-mt-32">
-        <CourseContent course={course} />
-      </div>
+        <div id="content" className="scroll-mt-36">
+          <CourseContent course={course} />
+        </div>
 
-      <div id="details" className="mb-8 scroll-mt-32">
-        <CourseDetails course={course} />
-      </div>
+        <div id="details" className="scroll-mt-36">
+          <CourseDetails course={course} />
+        </div>
 
-      <div id="requirements" className="mb-8 scroll-mt-32">
-        <CourseRequirements course={course} />
-      </div>
+        <div id="requirements" className="scroll-mt-36">
+          <CourseRequirements course={course} />
+        </div>
 
-      <div id="instructor" className="mb-8 scroll-mt-32">
-        <CourseInstructor course={course} />
-      </div>
+        <div id="instructor" className="scroll-mt-36">
+          <CourseInstructor course={course} />
+        </div>
 
-      <div id="reviews" className="mb-8 scroll-mt-32">
-        <CourseRatingReviews course={course} />
-      </div>
+        <div id="reviews" className="scroll-mt-36">
+          <CourseRatingReviews course={course} />
+        </div>
 
-      <div id="testimonials" className="mb-8 scroll-mt-32">
-        <CourseReviews testimonials={testimonials} />
-      </div>
+        <div id="testimonials" className="scroll-mt-36">
+          <CourseTestimonials testimonials={testimonials} />
+        </div>
 
-      <div id="faqs" className="mb-8 scroll-mt-32">
-        <CourseFaqs faqs={course.faqs} />
+        <div id="faqs" className="scroll-mt-36">
+          <CourseFaqs faqs={course.faqs} />
+        </div>
       </div>
     </div>
   );

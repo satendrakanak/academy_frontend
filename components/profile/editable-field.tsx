@@ -89,7 +89,7 @@ export function EditableField({
 
             {/* 🔥 Loading overlay */}
             {loading && (
-              <div className="absolute inset-0 bg-white/60 flex items-center justify-center rounded-sm">
+              <div className="absolute inset-0 flex items-center justify-center rounded-sm bg-white/60 dark:bg-slate-950/50">
                 <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
               </div>
             )}

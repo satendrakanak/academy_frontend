@@ -47,14 +47,14 @@ export default function SettingsView({ user }: ProfileViewProps) {
     <div className="space-y-8">
       <div className="grid gap-8 xl:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-6">
-          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Privacy Settings
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-slate-950">
+            <h3 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
               Control how your profile appears
             </h3>
-            <p className="mt-2 text-sm leading-6 text-slate-500">
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-300">
               Decide what visitors and learners can see when they open your
               public profile surfaces.
             </p>
@@ -108,11 +108,11 @@ export default function SettingsView({ user }: ProfileViewProps) {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Account Summary
             </p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-950">
+            <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
               Current visibility state
             </h3>
 
@@ -136,14 +136,14 @@ export default function SettingsView({ user }: ProfileViewProps) {
             </div>
           </div>
 
-          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Security Notes
             </p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-950">
+            <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
               Keep your account protected
             </h3>
-            <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
               <li>Use a strong password that you do not reuse elsewhere.</li>
               <li>Keep your contact email accurate so certificates and updates reach you.</li>
               <li>Review public profile visibility before sharing your dashboard publicly.</li>
@@ -157,11 +157,11 @@ export default function SettingsView({ user }: ProfileViewProps) {
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
         {label}
       </p>
-      <p className="mt-1 text-sm font-medium text-slate-900">{value}</p>
+      <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">{value}</p>
     </div>
   );
 }

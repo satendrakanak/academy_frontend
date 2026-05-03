@@ -96,99 +96,95 @@ export function CourseCard({ course, coupon }: CourseCardProps) {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition overflow-hidden flex flex-col h-full hover:-translate-y-1">
+    <div className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_28px_80px_rgba(37,99,235,0.16)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_25px_70px_rgba(0,0,0,0.38)] dark:hover:shadow-[0_30px_90px_rgba(244,63,94,0.16)]">
       {/* IMAGE */}
-      <div className="relative h-48">
+      <div className="relative h-48 overflow-hidden">
         <Link href={`/course/${course.slug}`}>
           <Image
             src={course.image?.path || "/assets/default.png"}
             alt={course.imageAlt || course.title}
             fill
-            className="object-cover"
+            className="object-cover transition duration-500 group-hover:scale-105"
           />
         </Link>
 
-        {/* BADGE */}
         {!isEnrolled ? (
-          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
+          <span className="absolute left-3 top-3 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white shadow-lg dark:bg-rose-200 dark:text-black dark:shadow-[0_0_18px_rgba(251,113,133,0.45)]">
             Bestseller
           </span>
         ) : (
-          <span className="absolute top-3 left-3 bg-green-600 text-white text-xs px-3 py-1 rounded-full">
+          <span className="absolute left-3 top-3 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white shadow-lg dark:bg-emerald-300 dark:text-black">
             Enrolled
           </span>
         )}
       </div>
 
       {/* CONTENT */}
-      <div className="p-5 flex flex-col flex-1">
+      <div className="flex flex-1 flex-col p-5">
         <Link href={`/course/${course.slug}`}>
-          <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-2">
+          <h3 className="mb-2 line-clamp-2 text-lg font-semibold text-slate-950 transition hover:text-blue-700 dark:text-white dark:hover:text-rose-200">
             {course.title}
           </h3>
         </Link>
 
-        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
+        <p className="mb-3 line-clamp-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
           {course.shortDescription}
         </p>
 
-        {/* ⭐ dummy rating */}
-        <div className="text-yellow-500 text-sm mb-3">
-          ⭐⭐⭐⭐⭐ <span className="text-gray-400">(120)</span>
+        <div className="mb-3 text-sm text-yellow-500">
+          ⭐⭐⭐⭐⭐{" "}
+          <span className="text-slate-400 dark:text-slate-500">(120)</span>
         </div>
-        {/* 🔥 META INFO */}
-        <div className="flex items-center gap-4 text-xs text-gray-500 mb-4">
+
+        <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500 dark:text-slate-400">
           <span>🎬 {meta.totalLectures} lectures</span>
           <span>⏱ {meta.totalDuration}</span>
           <span>📊 {course.experienceLevel || "All Levels"}</span>
         </div>
 
-        {/* 🔥 ENROLLED FLOW */}
         {course.isEnrolled ? (
           <CourseProgressBar
             percent={course.progress.progress}
             slug={course.slug}
           />
         ) : (
-          <div className="mt-auto flex items-center justify-between">
-            {/* 🔥 PRICE */}
+          <div className="mt-auto flex items-center justify-between gap-4">
             <div className="flex flex-col">
               {discount > 0 ? (
                 <>
                   <div className="flex items-center gap-2">
-                    <span className="text-primary font-semibold text-base">
+                    <span className="text-base font-semibold text-blue-700 dark:text-rose-200">
                       ₹{new Intl.NumberFormat("en-IN").format(finalPrice)}
                     </span>
-                    <span className="text-xs line-through text-gray-400">
+                    <span className="text-xs text-slate-400 line-through dark:text-slate-500">
                       ₹{new Intl.NumberFormat("en-IN").format(basePrice)}
                     </span>
                   </div>
 
-                  <span className="text-[11px] text-green-600 font-medium">
+                  <span className="text-[11px] font-medium text-emerald-600 dark:text-emerald-300">
                     🎉 {couponCode} applied
                   </span>
                 </>
               ) : (
-                <span className="text-primary font-semibold text-base">
+                <span className="text-base font-semibold text-blue-700 dark:text-rose-200">
                   ₹{new Intl.NumberFormat("en-IN").format(basePrice)}
                 </span>
               )}
             </div>
 
-            {/* 🔥 ICON CTA */}
             <button
               onClick={handleAdd}
-              className={`w-9 h-9 flex items-center justify-center rounded-full border transition cursor-pointer ${
+              className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border transition ${
                 alreadyAdded
-                  ? "bg-green-600 text-white border-green-600"
-                  : "hover:bg-gray-100"
+                  ? "border-emerald-600 bg-emerald-600 text-white dark:border-emerald-300 dark:bg-emerald-300 dark:text-black"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-blue-600 hover:bg-blue-600 hover:text-white dark:border-white/10 dark:bg-white/10 dark:text-white dark:hover:border-rose-200 dark:hover:bg-rose-200 dark:hover:text-black"
               }`}
               title={alreadyAdded ? "View cart" : "Add to cart"}
             >
               {alreadyAdded ? (
-                <Check className="w-4 h-4" />
+                <Check className="h-4 w-4" />
               ) : (
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="h-4 w-4" />
               )}
             </button>
           </div>

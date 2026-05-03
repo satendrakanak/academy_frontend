@@ -6,8 +6,9 @@ import { useCartStore } from "@/store/cart-store";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Loader, ShoppingCart } from "lucide-react";
+import { CheckCircle2, Loader, ShoppingCart } from "lucide-react";
 import { getCourseMeta } from "@/helpers/course-meta";
+import { cn } from "@/lib/utils";
 
 interface AddToCartButtonProps {
   course: Course;
@@ -22,9 +23,7 @@ const getInstructorLabel = (course: Course) => {
       )
       .filter(Boolean) || [];
 
-  if (facultyNames.length) {
-    return facultyNames.join(", ");
-  }
+  if (facultyNames.length) return facultyNames.join(", ");
 
   return [course.createdBy?.firstName, course.createdBy?.lastName]
     .filter(Boolean)
@@ -37,8 +36,11 @@ export const AddToCartButton = ({
   className,
 }: AddToCartButtonProps) => {
   const router = useRouter();
-
   const addToCart = useCartStore((s) => s.addToCart);
+
+  const alreadyAdded = useCartStore((s) =>
+    s.cartItems.some((item) => item.id === course.id),
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -56,10 +58,6 @@ export const AddToCartButton = ({
     loadMeta();
   }, [course]);
 
-  const alreadyAdded = useCartStore((s) =>
-    s.cartItems.some((i) => i.id === course.id),
-  );
-
   const handleAddToCart = async () => {
     if (alreadyAdded) {
       router.push("/cart");
@@ -68,7 +66,7 @@ export const AddToCartButton = ({
 
     setLoading(true);
 
-    await new Promise((res) => setTimeout(res, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     addToCart({
       id: course.id,
@@ -83,7 +81,7 @@ export const AddToCartButton = ({
 
     setLoading(false);
 
-    toast.success("Added to cart 🛒", {
+    toast.success("Added to cart", {
       description: course.title,
       action: {
         label: "View Cart",
@@ -94,27 +92,39 @@ export const AddToCartButton = ({
 
   return (
     <Button
+      type="button"
       onClick={handleAddToCart}
       disabled={loading}
-      className={`w-full h-12 text-base font-semibold rounded-lg flex items-center justify-center gap-2 ${className}`}
-      variant={alreadyAdded ? "secondary" : "default"}
-    >
-      {loading ? (
-        <>
-          <Loader className="h-5 w-5 animate-spin" />
-          Adding...
-        </>
-      ) : alreadyAdded ? (
-        <>
-          <ShoppingCart className="h-5 w-5" />
-          Go to Cart
-        </>
-      ) : (
-        <>
-          <ShoppingCart className="h-5 w-5" />
-          Add to Cart
-        </>
+      variant="default"
+      className={cn(
+        "group relative h-12 w-full overflow-hidden rounded-full text-base font-semibold shadow-[0_16px_40px_rgba(37,99,235,0.24)] transition-all duration-300 hover:-translate-y-0.5",
+        alreadyAdded
+          ? "bg-slate-900 text-white hover:bg-slate-800 dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300"
+          : "bg-blue-600 text-white hover:bg-blue-700 dark:bg-rose-200 dark:text-black dark:hover:bg-rose-300",
+        loading && "cursor-not-allowed opacity-80 hover:translate-y-0",
+        className,
       )}
+    >
+      <span className="absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/25 to-transparent transition duration-700 group-hover:translate-x-full" />
+
+      <span className="relative z-10 flex items-center justify-center gap-2">
+        {loading ? (
+          <>
+            <Loader className="h-5 w-5 animate-spin" />
+            Adding...
+          </>
+        ) : alreadyAdded ? (
+          <>
+            <CheckCircle2 className="h-5 w-5" />
+            Go to Cart
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="h-5 w-5" />
+            Add to Cart
+          </>
+        )}
+      </span>
     </Button>
   );
 };

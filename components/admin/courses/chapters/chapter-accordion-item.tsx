@@ -8,7 +8,14 @@ import {
 
 import type { DraggableAttributes } from "@dnd-kit/core";
 import type { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
-import { CheckCircle, Trash2, RotateCcw, Pencil, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  CheckCircle,
+  Trash2,
+  RotateCcw,
+  Pencil,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Chapter } from "@/types/chapter";
 import { LectureForm } from "./lectures/lecture-form";
 import { canPublishChapter } from "@/helpers/publish-rules";
@@ -18,7 +25,7 @@ interface ChapterAccordionItemProps {
   chapter: Chapter;
   index: number;
   activeId: number | null;
-  setActiveId: (id: number) => void;
+  setActiveId: (id: number | null) => void;
   onDelete?: (id: number) => void;
   onTooglePublish: (id: number, value: boolean) => void;
   isPublishedView?: boolean;
@@ -56,7 +63,7 @@ export const ChapterAccordionItem = ({
       }}
       className={`w-full rounded-lg transition-all ${
         isActive
-          ? "border border-[var(--brand-200)] bg-background shadow-sm dark:border-white/15 dark:bg-white/6"
+          ? "border border-(--brand-200) bg-background shadow-sm dark:border-white/15 dark:bg-white/6"
           : "border border-border dark:border-white/10 dark:bg-white/4"
       }`}
     >
@@ -104,7 +111,11 @@ export const ChapterAccordionItem = ({
           className="flex items-center gap-1 shrink-0"
         >
           <div className="mr-1 text-slate-500 dark:text-slate-300">
-            {isActive ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />}
+            {isActive ? (
+              <ChevronUp className="size-3.5" />
+            ) : (
+              <ChevronDown className="size-3.5" />
+            )}
           </div>
           {/* EDIT (Drawer open) */}
           <div

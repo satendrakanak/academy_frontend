@@ -10,11 +10,11 @@ export function SwitchRow({
   onChange: (val: boolean) => void;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 dark:border-white/10 dark:bg-white/6">
       <div>
-        <span className="text-sm font-medium text-slate-900">{label}</span>
+        <span className="text-sm font-medium text-slate-900 dark:text-white">{label}</span>
         {description ? (
-          <p className="mt-1 max-w-xl text-sm leading-6 text-slate-500">
+          <p className="mt-1 max-w-xl text-sm leading-6 text-slate-500 dark:text-slate-300">
             {description}
           </p>
         ) : null}
@@ -24,7 +24,7 @@ export function SwitchRow({
         type="button"
         onClick={() => onChange(!checked)}
         className={`mt-1 flex h-6 w-11 items-center rounded-full p-1 transition ${
-          checked ? "bg-primary" : "bg-gray-300"
+          checked ? "bg-primary" : "bg-gray-300 dark:bg-white/20"
         }`}
       >
         <div

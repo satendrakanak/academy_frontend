@@ -63,14 +63,14 @@ export function OrderHistory({
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <h3 className="text-lg font-semibold">Recent Orders</h3>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-slate-500 dark:text-slate-300">
             Track purchases, applied coupons, and retry pending payments.
           </p>
         </div>
         {showViewAll ? (
           <Link
             href="/orders"
-            className="text-sm font-medium text-[var(--brand-700)] hover:text-[var(--brand-800)]"
+            className="text-sm font-medium text-[var(--brand-700)] hover:text-[var(--brand-800)] dark:text-[var(--brand-300)] dark:hover:text-[var(--brand-200)]"
           >
             View all orders
           </Link>
@@ -78,14 +78,14 @@ export function OrderHistory({
       </div>
 
       {visibleOrders.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-8 text-center">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+        <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-8 text-center dark:border-white/10 dark:bg-white/6">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300">
             <BadgeAlert className="size-6" />
           </div>
-          <h4 className="mt-4 text-lg font-semibold text-slate-900">
+          <h4 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
             No orders yet
           </h4>
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
             Once you purchase a course, the complete order trail will appear
             here.
           </p>
@@ -139,13 +139,13 @@ export function OrderHistory({
             return (
               <Card
                 key={order.id}
-                className="overflow-hidden rounded-3xl border-slate-200"
+                className="overflow-hidden rounded-3xl border-slate-200 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.92),rgba(16,26,46,0.98))]"
               >
                 <CardContent className="space-y-5 p-5 md:p-6">
                   <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                     <div>
                       <div className="flex flex-wrap items-center gap-3">
-                        <h4 className="text-lg font-semibold text-slate-900">
+                        <h4 className="text-lg font-semibold text-slate-900 dark:text-white">
                           Order #{order.id}
                         </h4>
                         <span
@@ -176,7 +176,7 @@ export function OrderHistory({
                           {order.status}
                         </span>
                       </div>
-                      <p className="mt-2 text-sm text-slate-500">
+                      <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
                         Placed on{" "}
                         {new Date(order.createdAt).toLocaleDateString("en-IN", {
                           day: "numeric",
@@ -187,8 +187,8 @@ export function OrderHistory({
                     </div>
 
                     <div className="text-left md:text-right">
-                      <p className="text-sm text-slate-500">Total paid</p>
-                      <p className="text-xl font-semibold text-slate-950">
+                      <p className="text-sm text-slate-500 dark:text-slate-300">Total paid</p>
+                      <p className="text-xl font-semibold text-slate-950 dark:text-white">
                         INR{" "}
                         {Number(order.totalAmount || 0).toLocaleString("en-IN")}
                       </p>
@@ -196,12 +196,12 @@ export function OrderHistory({
                   </div>
 
                   <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                    <div className="rounded-2xl bg-slate-50 p-4">
+                    <div className="rounded-2xl bg-slate-50 p-4 dark:bg-white/6">
                       {course ? (
                         <div className="flex gap-4">
                           <Link
                             href={`/course/${course.slug}`}
-                            className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white"
+                            className="relative h-28 w-28 shrink-0 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-white/6"
                           >
                             <Image
                               src={course.image?.path || "/assets/default.png"}
@@ -216,16 +216,16 @@ export function OrderHistory({
                               <div className="min-w-0">
                                 <Link
                                   href={`/course/${course.slug}`}
-                                  className="line-clamp-2 text-lg font-semibold text-slate-900 hover:text-(--brand-700)"
+                                  className="line-clamp-2 text-lg font-semibold text-slate-900 hover:text-(--brand-700) dark:text-white dark:hover:text-[var(--brand-300)]"
                                 >
                                   {course.title}
                                 </Link>
-                                <p className="mt-1 text-sm text-slate-500">
+                                <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
                                   {course.shortDescription ||
                                     "Purchased course from your learning dashboard."}
                                 </p>
                               </div>
-                              <p className="shrink-0 text-sm font-semibold text-slate-700">
+                              <p className="shrink-0 text-sm font-semibold text-slate-700 dark:text-slate-200">
                                 INR{" "}
                                 {Number(primaryItem.price || 0).toLocaleString(
                                   "en-IN",
@@ -233,14 +233,14 @@ export function OrderHistory({
                               </p>
                             </div>
 
-                            <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500">
+                            <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-300">
                               {course.experienceLevel ? (
-                                <span className="rounded-full bg-white px-3 py-1">
+                                <span className="rounded-full bg-white px-3 py-1 dark:bg-white/8">
                                   {course.experienceLevel}
                                 </span>
                               ) : null}
                               {course.language ? (
-                                <span className="rounded-full bg-white px-3 py-1">
+                                <span className="rounded-full bg-white px-3 py-1 dark:bg-white/8">
                                   {course.language}
                                 </span>
                               ) : null}
@@ -264,23 +264,23 @@ export function OrderHistory({
                       ) : null}
                     </div>
 
-                    <div className="rounded-2xl border border-slate-200 p-4">
-                      <div className="space-y-2 text-sm text-slate-600">
+                    <div className="rounded-2xl border border-slate-200 p-4 dark:border-white/10 dark:bg-white/4">
+                      <div className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
                         <p>
-                          <span className="font-medium text-slate-900">
+                          <span className="font-medium text-slate-900 dark:text-white">
                             Billing:
                           </span>{" "}
                           {order.billingAddress?.firstName}{" "}
                           {order.billingAddress?.lastName}
                         </p>
                         <p>
-                          <span className="font-medium text-slate-900">
+                          <span className="font-medium text-slate-900 dark:text-white">
                             City:
                           </span>{" "}
                           {order.billingAddress?.city || "NA"}
                         </p>
                         <p>
-                          <span className="font-medium text-slate-900">
+                          <span className="font-medium text-slate-900 dark:text-white">
                             Coupon:
                           </span>{" "}
                           {couponCode || "No coupon used"}
@@ -309,7 +309,7 @@ export function OrderHistory({
                             <button
                               type="button"
                               onClick={() => setRefundDialogOrderId(order.id)}
-                              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-(--brand-300) hover:text-(--brand-700) cursor-pointer"
+                              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-(--brand-300) hover:text-(--brand-700) cursor-pointer dark:border-white/10 dark:bg-white/8 dark:text-slate-100 dark:hover:border-[var(--brand-500)] dark:hover:text-[var(--brand-200)]"
                             >
                               <HandCoins className="size-4" />
                               Request refund

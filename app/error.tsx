@@ -19,7 +19,7 @@ export default function GlobalError({
   const isAuthExpired = error.message === "AUTH_EXPIRED";
 
   return (
-    <div className="flex h-screen items-center justify-center bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_42%,#eef4ff_100%)] px-4 dark:bg-[radial-gradient(circle_at_top_left,rgba(128,32,46,0.18),transparent_26%),linear-gradient(180deg,rgba(11,18,32,0.98),rgba(17,27,46,1))]">
+    <div className="flex h-screen items-center justify-center bg-[linear-gradient(135deg,#f8fbff_0%,#ffffff_42%,#eef4ff_100%)] px-4 dark:bg-[radial-gradient(circle_at_top_left,rgba(86,114,255,0.16),transparent_24%),linear-gradient(180deg,rgba(9,16,31,0.98),rgba(15,24,43,1))]">
       <Card
         className="
           w-full max-w-md rounded-2xl border border-slate-200 bg-white shadow-xl dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]

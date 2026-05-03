@@ -23,7 +23,7 @@ type SortableRenderProps = {
 interface PublishedListProps {
   chapters: Chapter[];
   activeId: number | null;
-  setActiveId: (id: number) => void;
+  setActiveId: (id: number | null) => void;
   courseId: number;
   onTooglePublish: (id: number, isPublished: boolean) => void;
   onDelete: (id: number) => void;
@@ -45,10 +45,14 @@ export default function PublishedList({
 
   return (
     <div className="space-y-3 rounded-xl border border-slate-200 bg-white/70 p-4 dark:border-white/10 dark:bg-white/4">
-      <h3 className="text-sm font-semibold text-slate-950 dark:text-white">Published Chapters</h3>
+      <h3 className="text-sm font-semibold text-slate-950 dark:text-white">
+        Published Chapters
+      </h3>
 
       {chapters.length === 0 && (
-        <p className="text-xs text-muted-foreground dark:text-slate-400">No published chapters</p>
+        <p className="text-xs text-muted-foreground dark:text-slate-400">
+          No published chapters
+        </p>
       )}
       <div className="space-y-2">
         <DndContext

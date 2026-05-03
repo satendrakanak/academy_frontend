@@ -39,8 +39,8 @@ export function ChangePasswordForm() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border p-5">
-      <h3 className="text-sm font-semibold text-gray-600 mb-4">
+    <div className="rounded-2xl border bg-white p-5 dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))]">
+      <h3 className="mb-4 text-sm font-semibold text-gray-600 dark:text-slate-300">
         Change Password
       </h3>
 
@@ -103,7 +103,7 @@ export function ChangePasswordForm() {
             type="submit"
             disabled={!isValid}
             loading={isSubmitting}
-            className="bg-primary text-white p-5 cursor-pointer  rounded-lg text-sm disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-primary p-5 text-sm text-white disabled:opacity-50"
             loadingText="Updating..."
           >
             Update

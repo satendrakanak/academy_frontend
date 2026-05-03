@@ -1,121 +1,119 @@
 "use client";
 
-import {
-  ArrowRight,
-  Award,
-  BookOpen,
-  Brain,
-  UserPlus,
-  Video,
-} from "lucide-react";
-
-const steps = [
-  {
-    icon: BookOpen,
-    eyebrow: "Step 01",
-    title: "Choose the right program",
-    desc: "Browse wellness, Ayurveda, and nutrition courses that match your level, schedule, and long-term career goals.",
-  },
-  {
-    icon: UserPlus,
-    eyebrow: "Step 02",
-    title: "Create your learner account",
-    desc: "Register quickly, verify your details, and unlock a clean dashboard where your courses and certificates stay organized.",
-  },
-  {
-    icon: Video,
-    eyebrow: "Step 03",
-    title: "Start learning with structure",
-    desc: "Watch lessons, join guided sessions, and move chapter by chapter with a clear, practical learning path.",
-  },
-  {
-    icon: Brain,
-    eyebrow: "Step 04",
-    title: "Practice and apply concepts",
-    desc: "Reinforce what you learn through notes, assignments, and repeat viewing so concepts actually stay with you.",
-  },
-  {
-    icon: Award,
-    eyebrow: "Step 05",
-    title: "Complete and get certified",
-    desc: "Finish the course journey, track your progress, and receive your downloadable certificate when you complete the program.",
-  },
-];
+import { steps } from "@/data/steps-data";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function HowItWorks() {
   return (
-    <section className="academy-section bg-[linear-gradient(180deg,transparent_0%,var(--brand-50)_40%,transparent_100%)] dark:bg-transparent">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.08),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(16,32,72,0.08),transparent_26%)]" />
+    <section className="relative overflow-hidden py-24 text-white dark:bg-[#101b2d]">
+      {/* LIGHT MODE - HERO STYLE DARK BLUE BACKGROUND */}
+      <div className="pointer-events-none absolute inset-0 dark:hidden">
+        <div className="absolute inset-0 academy-hero-animated-bg-light" />
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        <div className="grid gap-10 xl:grid-cols-[0.88fr_1.12fr] xl:items-start">
-          <div className="xl:sticky xl:top-28">
-            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(56,189,248,0.45),transparent_32%),radial-gradient(circle_at_85%_25%,rgba(37,99,235,0.38),transparent_36%),radial-gradient(circle_at_45%_85%,rgba(14,165,233,0.28),transparent_40%)]" />
+
+        <div className="academy-glow-one absolute -left-40 -top-40 h-140 w-140 rounded-full bg-sky-400/25 blur-[120px]" />
+        <div className="academy-glow-two absolute -right-55 top-20 h-140 w-140 rounded-full bg-blue-700/30 blur-[130px]" />
+        <div className="academy-glow-three absolute -bottom-65 left-1/2 h-140 w-190 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-[140px]" />
+
+        <div className="academy-hero-shine absolute inset-0 opacity-45" />
+        <div className="academy-hero-grid absolute inset-0 opacity-20" />
+
+        <div className="absolute inset-0 bg-linear-to-r from-[#020617]/80 via-[#020617]/30 to-[#020617]/55" />
+      </div>
+
+      {/* DARK MODE - UNCHANGED */}
+      <div className="pointer-events-none absolute inset-0 hidden dark:block">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(56,189,248,0.14),transparent_32%),radial-gradient(circle_at_88%_35%,rgba(99,102,241,0.14),transparent_36%)]" />
+        <div className="dark-section-shine absolute inset-0 opacity-35" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6">
+        <div className="grid gap-10 xl:grid-cols-[1fr_1.15fr] xl:items-center">
+          {/* LEFT */}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-sky-100 dark:text-rose-200">
               How It Works
             </p>
-            <h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-5xl">
+
+            <h2 className="mt-4 max-w-xl text-4xl font-semibold tracking-tight text-white dark:text-white md:text-5xl">
               A guided path from curiosity to certification.
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-slate-600 dark:text-slate-300">
-              We keep the process straightforward, but the learning experience
-              rich. From choosing a course to earning your certificate, every
-              step is designed to feel organized, credible, and practical.
+
+            <p className="mt-5 max-w-xl text-base leading-8 text-white/75 dark:text-slate-300">
+              We keep the process simple, structured, and professional — from
+              choosing a course to earning your certificate.
             </p>
 
-            <div className="academy-card mt-8 p-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
-                Learner Promise
-              </p>
-              <p className="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                Clear onboarding, structured lessons, practical outcomes, and a
-                completion flow that feels professional from start to finish.
-              </p>
+            <div className="mt-8 rounded-3xl border border-white/15 bg-white/10 p-6 shadow-[0_24px_70px_rgba(2,6,23,0.24)] backdrop-blur-xl dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_25px_70px_rgba(0,0,0,0.4)]">
+              <div className="grid gap-4 sm:grid-cols-3">
+                {["Choose", "Learn", "Certify"].map((item) => (
+                  <div
+                    key={item}
+                    className="rounded-2xl border border-white/10 bg-white/10 p-4 text-center backdrop-blur-md dark:bg-white/5"
+                  >
+                    <CheckCircle2 className="mx-auto mb-2 h-5 w-5 text-sky-100 dark:text-rose-200" />
+                    <p className="text-sm font-semibold text-white dark:text-white">
+                      {item}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-2xl border border-white/10 bg-white/10 p-5 backdrop-blur-md dark:bg-white/5">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100 dark:text-rose-200">
+                  Learner Promise
+                </p>
+
+                <p className="mt-3 text-sm leading-7 text-white/75 dark:text-slate-300">
+                  Clear onboarding, structured lessons, practical outcomes, and
+                  a completion flow that feels professional from start to
+                  finish.
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="space-y-5">
-            {steps.map((step, index) => {
-              const Icon = step.icon;
+          {/* RIGHT */}
+          <div className="relative">
+            <div className="absolute left-7 top-8 hidden h-[calc(100%-4rem)] w-px bg-linear-to-b from-sky-200/70 via-white/25 to-transparent dark:from-rose-200/50 dark:via-white/15 md:block" />
 
-              return (
-                <div key={step.title} className="group relative">
-                  {index !== steps.length - 1 ? (
-                    <div className="absolute left-8 top-20 hidden h-[calc(100%-2rem)] w-px bg-[linear-gradient(180deg,var(--brand-200),transparent)] md:block" />
-                  ) : null}
+            <div className="space-y-4">
+              {steps.map((step) => {
+                const Icon = step.icon;
 
-                  <div className="academy-card p-6 transition duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_34px_80px_-42px_rgba(15,23,42,0.3)] md:p-7">
-                    <div className="flex flex-col gap-6 md:flex-row md:items-start">
-                      <div className="flex items-center gap-4 md:block">
-                        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-3xl bg-[linear-gradient(135deg,var(--brand-50),#ffffff)] text-[var(--brand-700)] shadow-inner ring-1 ring-[var(--brand-100)]">
-                          <Icon className="size-7" />
-                        </div>
+                return (
+                  <div
+                    key={step.title}
+                    className="group relative rounded-3xl border border-white/15 bg-white/10 p-5 shadow-[0_18px_55px_rgba(2,6,23,0.22)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/15 hover:shadow-[0_28px_80px_rgba(2,6,23,0.3)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.35)] dark:hover:shadow-[0_30px_90px_rgba(244,63,94,0.16)] md:pl-24"
+                  >
+                    <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/15 bg-white/15 text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-md transition group-hover:bg-white group-hover:text-blue-700 dark:border-transparent dark:bg-white/10 dark:text-rose-200 dark:shadow-sm dark:group-hover:bg-rose-200 dark:group-hover:text-black md:absolute md:left-5 md:top-1/2 md:mb-0 md:-translate-y-1/2">
+                      <Icon className="h-6 w-6 stroke-[1.8]" />
+                    </div>
+
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-100 dark:text-rose-200">
+                          {step.eyebrow}
+                        </p>
+
+                        <h3 className="mt-1 text-xl font-semibold text-white dark:text-white">
+                          {step.title}
+                        </h3>
                       </div>
 
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                          <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand-700)] dark:text-[var(--brand-300)]">
-                              {step.eyebrow}
-                            </p>
-                            <h3 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
-                              {step.title}
-                            </h3>
-                          </div>
-
-                          <div className="hidden rounded-full bg-slate-100 px-3 py-2 text-slate-400 md:flex">
-                            <ArrowRight className="size-4" />
-                          </div>
-                        </div>
-
-                        <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 md:text-base">
-                          {step.desc}
-                        </p>
+                      <div className="hidden rounded-full border border-white/10 bg-white/10 p-2 text-sky-100 transition group-hover:bg-white group-hover:text-blue-700 dark:bg-white/10 dark:text-rose-200 dark:group-hover:bg-rose-200 dark:group-hover:text-black md:block">
+                        <ArrowRight className="h-4 w-4" />
                       </div>
                     </div>
+
+                    <p className="mt-3 text-sm leading-7 text-white/75 dark:text-slate-300">
+                      {step.desc}
+                    </p>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

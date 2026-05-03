@@ -14,7 +14,12 @@ import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { courseExamSchema } from "@/schemas/courses";
@@ -123,7 +128,9 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                       ...option,
                       text: option.text.trim(),
                       isCorrect:
-                        question.type === "drag_drop" ? false : option.isCorrect,
+                        question.type === "drag_drop"
+                          ? false
+                          : option.isCorrect,
                     })),
             })),
           }
@@ -227,7 +234,9 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                   className="min-h-24 rounded-2xl px-4 py-3"
                   placeholder="Short intro shown before the learner starts the exam."
                 />
-                <FieldError errors={[form.formState.errors.exam?.description]} />
+                <FieldError
+                  errors={[form.formState.errors.exam?.description]}
+                />
               </Field>
 
               <Field>
@@ -238,7 +247,9 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                   className="min-h-28 rounded-2xl px-4 py-3"
                   placeholder="Mention negative marking policy, time guidance, and passing rule."
                 />
-                <FieldError errors={[form.formState.errors.exam?.instructions]} />
+                <FieldError
+                  errors={[form.formState.errors.exam?.instructions]}
+                />
               </Field>
             </FieldGroup>
           </div>
@@ -264,7 +275,9 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                   {...form.register("exam.maxAttempts")}
                   className="h-12 rounded-2xl px-4"
                 />
-                <FieldError errors={[form.formState.errors.exam?.maxAttempts]} />
+                <FieldError
+                  errors={[form.formState.errors.exam?.maxAttempts]}
+                />
               </Field>
 
               <Field>
@@ -295,7 +308,10 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                   type="checkbox"
                   checked={!!showResultImmediately}
                   onChange={(event) =>
-                    form.setValue("exam.showResultImmediately", event.target.checked)
+                    form.setValue(
+                      "exam.showResultImmediately",
+                      event.target.checked,
+                    )
                   }
                   className="size-5 accent-[var(--brand-600)]"
                 />
@@ -307,7 +323,8 @@ export function CourseExamForm({ course }: CourseExamFormProps) {
                     Publish this exam
                   </p>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Published exams become mandatory for certificate eligibility.
+                    Published exams become mandatory for certificate
+                    eligibility.
                   </p>
                 </div>
                 <input
@@ -412,18 +429,18 @@ function QuestionEditor({
           />
         </Field>
 
-              <Field>
-                <FieldLabel>Question type</FieldLabel>
-                <select
-                  {...register(`exam.questions.${questionIndex}.type`)}
+        <Field>
+          <FieldLabel>Question type</FieldLabel>
+          <select
+            {...register(`exam.questions.${questionIndex}.type`)}
             className="h-12 w-full rounded-2xl border border-input bg-background px-4 text-sm shadow-xs outline-none"
           >
-                  <option value="single">Single choice</option>
-                  <option value="multiple">Multiple choice</option>
-                  <option value="true_false">True / False</option>
-                  <option value="short_text">Short written answer</option>
-                  <option value="drag_drop">Drag and drop order</option>
-                </select>
+            <option value="single">Single choice</option>
+            <option value="multiple">Multiple choice</option>
+            <option value="true_false">True / False</option>
+            <option value="short_text">Short written answer</option>
+            <option value="drag_drop">Drag and drop order</option>
+          </select>
           <FieldError
             errors={[errors.exam?.questions?.[questionIndex]?.type]}
           />
@@ -434,7 +451,7 @@ function QuestionEditor({
           <Input
             type="number"
             {...register(`exam.questions.${questionIndex}.points`)}
-            className="h-12 rounded-2xl px-4"
+            className="h-12 w-full! rounded-2xl px-4"
           />
           <FieldError
             errors={[errors.exam?.questions?.[questionIndex]?.points]}
@@ -462,100 +479,101 @@ function QuestionEditor({
           />
         ) : (
           <>
-        {optionsArray.fields.map((optionField, optionIndex) => (
-          <div
-            key={optionField.id}
-            className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8 md:grid-cols-[auto_minmax(0,1fr)_auto]"
-          >
-            <div className="flex items-center gap-2 pt-1">
-              {questionType === "drag_drop" ? (
-                <>
-                  <button
-                    type="button"
-                    className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
-                    onClick={() =>
-                      optionIndex > 0 &&
-                      optionsArray.move(optionIndex, optionIndex - 1)
-                    }
-                  >
-                    <ArrowUp className="size-4" />
-                  </button>
-                  <button
-                    type="button"
-                    className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
-                    onClick={() =>
-                      optionIndex < optionsArray.fields.length - 1 &&
-                      optionsArray.move(optionIndex, optionIndex + 1)
-                    }
-                  >
-                    <ArrowDown className="size-4" />
-                  </button>
-                </>
-              ) : (
-                <label className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    {...register(
-                      `exam.questions.${questionIndex}.options.${optionIndex}.isCorrect`,
-                    )}
-                    className="size-4 accent-[var(--brand-600)]"
-                  />
-                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-                    Correct
-                  </span>
-                </label>
-              )}
-            </div>
+            {optionsArray.fields.map((optionField, optionIndex) => (
+              <div
+                key={optionField.id}
+                className="grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-white/8 md:grid-cols-[auto_minmax(0,1fr)_auto]"
+              >
+                <div className="flex items-center gap-2 pt-1">
+                  {questionType === "drag_drop" ? (
+                    <>
+                      <button
+                        type="button"
+                        className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
+                        onClick={() =>
+                          optionIndex > 0 &&
+                          optionsArray.move(optionIndex, optionIndex - 1)
+                        }
+                      >
+                        <ArrowUp className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        className="rounded-xl border border-slate-200 p-2 text-slate-500 dark:border-white/10 dark:text-slate-300"
+                        onClick={() =>
+                          optionIndex < optionsArray.fields.length - 1 &&
+                          optionsArray.move(optionIndex, optionIndex + 1)
+                        }
+                      >
+                        <ArrowDown className="size-4" />
+                      </button>
+                    </>
+                  ) : (
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        {...register(
+                          `exam.questions.${questionIndex}.options.${optionIndex}.isCorrect`,
+                        )}
+                        className="size-4 accent-[var(--brand-600)]"
+                      />
+                      <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                        Correct
+                      </span>
+                    </label>
+                  )}
+                </div>
 
-            <div className="space-y-2">
-              <Input
-                {...register(
-                  `exam.questions.${questionIndex}.options.${optionIndex}.text`,
-                )}
-                className="h-11 rounded-2xl px-4"
-                placeholder={`Option ${optionIndex + 1}`}
-              />
-              {questionType === "drag_drop" ? (
-                <p className="text-xs text-slate-500 dark:text-slate-400">
-                  The current top-to-bottom order is treated as the correct
-                  answer sequence.
-                </p>
-              ) : null}
-              <FieldError
-                errors={[
-                  errors.exam?.questions?.[questionIndex]?.options?.[optionIndex]
-                    ?.text,
-                ]}
-              />
-            </div>
+                <div className="space-y-2">
+                  <Input
+                    {...register(
+                      `exam.questions.${questionIndex}.options.${optionIndex}.text`,
+                    )}
+                    className="h-11 rounded-2xl px-4"
+                    placeholder={`Option ${optionIndex + 1}`}
+                  />
+                  {questionType === "drag_drop" ? (
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      The current top-to-bottom order is treated as the correct
+                      answer sequence.
+                    </p>
+                  ) : null}
+                  <FieldError
+                    errors={[
+                      errors.exam?.questions?.[questionIndex]?.options?.[
+                        optionIndex
+                      ]?.text,
+                    ]}
+                  />
+                </div>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                  onClick={() => optionsArray.remove(optionIndex)}
+                >
+                  <Trash2 className="size-4" />
+                </Button>
+              </div>
+            ))}
+
+            <FieldError
+              errors={[errors.exam?.questions?.[questionIndex]?.options]}
+            />
 
             <Button
               type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
-              onClick={() => optionsArray.remove(optionIndex)}
+              variant="outline"
+              className="rounded-2xl"
+              onClick={() => optionsArray.append(createOption())}
             >
-              <Trash2 className="size-4" />
+              <Plus className="size-4" />
+              {questionType === "drag_drop"
+                ? "Add draggable item"
+                : "Add option"}
             </Button>
-          </div>
-        ))}
-
-        <FieldError
-          errors={[errors.exam?.questions?.[questionIndex]?.options]}
-        />
-
-        <Button
-          type="button"
-          variant="outline"
-          className="rounded-2xl"
-          onClick={() => optionsArray.append(createOption())}
-        >
-          <Plus className="size-4" />
-          {questionType === "drag_drop"
-            ? "Add draggable item"
-            : "Add option"}
-        </Button>
           </>
         )}
       </div>
@@ -568,7 +586,10 @@ function ShortAnswerEditor({
   control,
   register,
   errors,
-}: Pick<QuestionEditorProps, "questionIndex" | "control" | "register" | "errors">) {
+}: Pick<
+  QuestionEditorProps,
+  "questionIndex" | "control" | "register" | "errors"
+>) {
   const acceptedAnswersArray = useFieldArray({
     control,
     name: `exam.questions.${questionIndex}.acceptedAnswers`,

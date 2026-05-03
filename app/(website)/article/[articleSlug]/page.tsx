@@ -54,28 +54,30 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
     article = response.data;
   } catch (error: unknown) {
     const message = getErrorMessage(error).toLowerCase();
+
     if (message.includes("not found") || message.includes("404")) {
       notFound();
     }
+
     throw new Error(getErrorMessage(error));
   }
 
   let relatedArticles: Article[] = [];
+
   try {
     const response = await articleServerService.getRealtedArticles(article.id);
     relatedArticles = response.data;
   } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+    throw new Error(getErrorMessage(error));
   }
 
   let allArticles: Article[] = [];
+
   try {
     const response = await articleServerService.getAll();
     allArticles = response.data;
   } catch (error: unknown) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+    throw new Error(getErrorMessage(error));
   }
 
   const categories = Array.from(
@@ -89,32 +91,39 @@ export default async function ArticleSlugPage({ params }: ArticlePageProps) {
             slug: category.slug,
             count: (map.get(category.id)?.count || 0) + 1,
           }),
-        new Map<number, { id: number; name: string; slug: string; count: number }>(),
+        new Map<
+          number,
+          { id: number; name: string; slug: string; count: number }
+        >(),
       )
       .values(),
   ).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 
   return (
-    <div className="relative bg-[linear-gradient(180deg,var(--brand-50)_0%,#fff_38%,var(--brand-50)_100%)]">
+    <div className="relative bg-linear-to-b from-slate-50 via-white to-slate-50 dark:bg-[#101b2d] dark:bg-none">
       <ArticleHero article={article} />
 
       <Container>
-        <div className="flex items-start gap-10 lg:flex-row flex-col">
-          <div className="mt-10 max-w-4xl flex-1">
-            <ArticleContent article={article} />
-            <ArticleMeta article={article} />
-            <ArticleComments articleId={article.id} />
+        <div className="flex flex-col items-start gap-10 py-10 lg:flex-row">
+          <div className="max-w-4xl flex-1">
+            <div className="space-y-8">
+              <ArticleContent article={article} />
+              <ArticleMeta article={article} />
+              <ArticleComments articleId={article.id} />
+            </div>
           </div>
 
-          <div className="sticky top-24 mt-10 w-full lg:w-80 self-start">
+          <aside className="w-full self-start lg:sticky lg:top-24 lg:w-80">
             <ArticleSidebar article={article} categories={categories} />
-          </div>
+          </aside>
         </div>
       </Container>
 
-      <Container>
-        <RelatedArticles articles={relatedArticles} />
-      </Container>
+      {relatedArticles.length > 0 && (
+        <Container>
+          <RelatedArticles articles={relatedArticles} />
+        </Container>
+      )}
     </div>
   );
 }

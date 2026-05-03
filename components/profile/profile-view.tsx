@@ -254,16 +254,16 @@ export default function ProfileView({ user }: ProfileViewProps) {
       <div className="grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
         <form
           onSubmit={handleProfileSave}
-          className="space-y-6 rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]"
+          className="space-y-6 rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]"
         >
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Profile Details
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-slate-950">
+            <h3 className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
               Personal and public presence
             </h3>
-            <p className="mt-2 text-sm leading-6 text-slate-500">
+            <p className="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-300">
               Keep your learner profile complete so your dashboard, public
               presence, and faculty identity stay updated everywhere.
             </p>
@@ -308,11 +308,11 @@ export default function ProfileView({ user }: ProfileViewProps) {
         </form>
 
         <div className="space-y-6">
-          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]">
+          <div className="rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
               Visibility Snapshot
             </p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-950">
+            <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
               What learners will notice
             </h3>
 
@@ -338,13 +338,13 @@ export default function ProfileView({ user }: ProfileViewProps) {
           {isFaculty ? (
             <form
               onSubmit={handleFacultySave}
-              className="space-y-5 rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)]"
+              className="space-y-5 rounded-[30px] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.28)] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(10,17,31,0.95),rgba(15,24,43,0.98))] dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]"
             >
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--brand-700)]">
                   Faculty Details
                 </p>
-                <h3 className="mt-2 text-xl font-semibold text-slate-950">
+                <h3 className="mt-2 text-xl font-semibold text-slate-950 dark:text-white">
                   Update your teaching identity
                 </h3>
               </div>
@@ -379,11 +379,11 @@ export default function ProfileView({ user }: ProfileViewProps) {
 
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-white/6">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
         {label}
       </p>
-      <p className="mt-1 text-sm font-medium text-slate-900">{value}</p>
+      <p className="mt-1 text-sm font-medium text-slate-900 dark:text-white">{value}</p>
     </div>
   );
 }
@@ -392,7 +392,7 @@ function StaticField({ label, value }: { label: string; value: string }) {
   return (
     <div className="space-y-2">
       <FieldLabel>{label}</FieldLabel>
-      <div className="flex h-12 items-center rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700">
+      <div className="flex h-12 items-center rounded-2xl border border-slate-200 bg-slate-50 px-4 text-sm font-medium text-slate-700 dark:border-white/10 dark:bg-white/6 dark:text-slate-100">
         {value}
       </div>
     </div>

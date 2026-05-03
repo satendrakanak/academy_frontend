@@ -325,7 +325,7 @@ export default function LectureDrawer({
         </div>
       </div>
 
-      <DrawerContent className="ml-auto flex h-full w-[min(720px,100vw)] max-w-[720px] flex-col border-l border-slate-200 bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
+      <DrawerContent className="ml-auto flex h-full w-[min(720px,100vw)] max-w-2xl! flex-col border-l border-slate-200 bg-white dark:border-white/10 dark:bg-[rgba(11,18,32,0.98)]">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col h-full"
@@ -420,7 +420,7 @@ export default function LectureDrawer({
 
                   {/* 🔥 Attachment List */}
                   {selectedFiles.length > 0 ? (
-                <div className="space-y-2">
+                    <div className="space-y-2">
                       {selectedFiles.map((file) => (
                         <div
                           key={file.id}

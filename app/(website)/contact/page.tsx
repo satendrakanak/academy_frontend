@@ -13,19 +13,21 @@ export const metadata = buildMetadata({
 
 export default function ContactPage() {
   return (
-    <div className="academy-surface min-h-screen">
+    <div className="relative min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-50 dark:bg-[#101b2d] dark:bg-none">
       <PageHero
         pageTitle="Contact Us"
         pageHeadline="Talk to the academy team with context, not confusion."
         pageDescription="Ask about admissions, course fit, faculty, support, or next steps and we will guide you clearly."
       />
 
-      <Container>
-        <div className="grid gap-10 py-16 lg:grid-cols-[1.08fr_0.92fr]">
-          <ContactForm />
-          <ContactInfo />
-        </div>
-      </Container>
+      <section className="py-12 pb-20">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-start">
+            <ContactForm />
+            <ContactInfo />
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }

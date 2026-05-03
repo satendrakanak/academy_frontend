@@ -20,25 +20,25 @@ export default async function MyCoursesPage() {
   }
 
   return (
-    <div className=" min-h-[60vh]">
+    <div className="min-h-[60vh]">
       {/* 🔵 Title */}
-      <h2 className="text-2xl font-semibold mb-6">My Courses</h2>
+      <h2 className="mb-6 text-2xl font-semibold dark:text-white">My Courses</h2>
 
       {/* ❌ EMPTY STATE */}
       {enrolledCourses.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center bg-white rounded-2xl shadow p-10 border border-dashed">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed bg-white p-10 text-center shadow dark:border-white/10 dark:bg-white/6 dark:shadow-[0_32px_90px_-46px_rgba(0,0,0,0.68)]">
           <div className="text-5xl mb-4">📚</div>
 
-          <h3 className="text-xl font-semibold mb-2">No courses yet</h3>
+          <h3 className="mb-2 text-xl font-semibold dark:text-white">No courses yet</h3>
 
-          <p className="text-gray-500 mb-6 max-w-md">
+          <p className="mb-6 max-w-md text-gray-500 dark:text-slate-300">
             You haven’t enrolled in any courses yet. Start learning something
             new today 🚀
           </p>
 
           <Link
             href="/courses"
-            className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-red-900 transition"
+            className="rounded-lg bg-primary px-6 py-3 text-white transition hover:opacity-90"
           >
             Explore Courses
           </Link>

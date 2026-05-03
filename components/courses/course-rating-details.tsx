@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import RatingStars from "@/components/courses/rating-star";
-import { Award } from "lucide-react";
+import { Award, Star, Users } from "lucide-react";
 
 interface CourseRatingDetailsProps {
   rating: number;
@@ -15,40 +14,35 @@ const CourseRatingDetails = ({
   reviews,
   enrolledStudentCount,
 }: CourseRatingDetailsProps) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
-    <div className="flex flex-col md:flex-row items-center md:my-5">
-      <div className="md:mr-4">
-        <div className="bg-linear-to-r from-blue-200 to-cyan-200 inline-flex items-center p-4 border border-white rounded-full text-lg text-gray-600">
-          <Award className="w-6 h-6" />
-          <span className="ml-3">Bestseller</span>
-        </div>
+    <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+      {/* Bestseller */}
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/12 px-4 py-2 text-sm font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.18)] backdrop-blur-md dark:border-rose-200/20 dark:bg-rose-200/10 dark:text-rose-200">
+        <Award className="h-4 w-4 text-sky-100 dark:text-rose-200" />
+        <span>Bestseller</span>
       </div>
-      <div className="text-sm text-gray-700 flex items-center  my-4 ">
-        <p className="mr-1 text-lg">{rating}</p>
+
+      {/* Rating */}
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/85 backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-slate-200">
+        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+
+        <span className="font-semibold text-white">{rating}</span>
+
         <RatingStars rating={rating} />
+
+        <span className="text-white/60">({reviews.toLocaleString()})</span>
       </div>
-      <div className="text-sm text-gray-700 flex items-center md:grow my-4 ">
-        <p className="ml-2 md:text-md bg-gray-200/20 hover:bg-gray-200/60 transition duration-300 cursor-pointer p-2 rounded-md md:ml-4">
-          {reviews.toLocaleString()} ratings
-        </p>
-        <p className="ml-2 text-lg text-black md:ml-4">
-          {enrolledStudentCount.toLocaleString()} students
-        </p>
+
+      {/* Students */}
+      <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/85 backdrop-blur-md dark:border-white/10 dark:bg-white/5 dark:text-slate-200">
+        <Users className="h-4 w-4 text-sky-100 dark:text-rose-200" />
+
+        <span>
+          <strong className="font-semibold text-white">
+            {enrolledStudentCount.toLocaleString()}
+          </strong>{" "}
+          students
+        </span>
       </div>
     </div>
   );

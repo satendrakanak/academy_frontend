@@ -1,5 +1,6 @@
 import { ArticleCard } from "@/components/articles/article-card";
 import Container from "@/components/container";
+import { ArticleHeader } from "@/components/layout/article-header";
 import { getErrorMessage } from "@/lib/error-handler";
 import { buildMetadata } from "@/lib/seo";
 import { articleServerService } from "@/services/articles/article.server";
@@ -26,16 +27,18 @@ export default async function ArticlesPage({
   searchParams: Promise<{ category?: string }>;
 }) {
   const { category } = await searchParams;
+
   let articles: Article[] = [];
+
   try {
     const response = await articleServerService.getAll();
     articles = response.data;
   } catch (error) {
-    const message = getErrorMessage(error);
-    throw new Error(message);
+    throw new Error(getErrorMessage(error));
   }
 
   const categoryMap = new Map<number, ArticleCategorySummary>();
+
   for (const currentArticle of articles) {
     for (const cat of currentArticle.categories || []) {
       categoryMap.set(cat.id, {
@@ -58,71 +61,72 @@ export default async function ArticlesPage({
     : articles;
 
   const activeCategory = categories.find((item) => item.slug === category);
-  return (
-    <div className="academy-surface pb-20">
-      <section className="academy-hero-gradient relative overflow-hidden py-20 text-white">
-        <div className="academy-hero-grid absolute inset-0 opacity-20" />
-        <Container>
-          <div className="relative">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.28em] text-white/70">
-              Articles
-            </p>
-            <h1 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
-              Read ideas that make the learning journey more practical.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg text-white/80">
-              Explore wellness, learning, nutrition, and career-oriented
-              insights written for thoughtful readers.
-            </p>
-          </div>
-        </Container>
-      </section>
 
-      <Container>
-        <div className="py-12">
-          <div className="mb-8 flex flex-wrap gap-3">
-            <Link
-              href="/articles"
-              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                !activeCategory
-                  ? "bg-[var(--brand-600)] text-white"
-                  : "bg-white text-slate-600 hover:text-[var(--brand-700)]"
-              }`}
-            >
-              All Articles
-            </Link>
-            {categories.map((item) => (
+  return (
+    <div className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:bg-[#101b2d] dark:bg-none">
+      <ArticleHeader />
+
+      <section className="relative py-12 pb-20">
+        <Container>
+          {/* FILTERS */}
+          <div className="mb-8 rounded-3xl border border-slate-200 bg-white p-4 shadow-[0_18px_55px_rgba(15,23,42,0.06)] dark:border-white/10 dark:bg-[#07111f] dark:shadow-[0_24px_70px_rgba(0,0,0,0.28)]">
+            <div className="flex flex-wrap gap-3">
               <Link
-                key={item.id}
-                href={`/articles?category=${item.slug}`}
-                className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                  activeCategory?.id === item.id
-                    ? "bg-[var(--brand-600)] text-white"
-                    : "bg-white text-slate-600 hover:text-[var(--brand-700)]"
+                href="/articles"
+                className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                  !activeCategory
+                    ? "bg-blue-600 text-white shadow-[0_12px_30px_rgba(37,99,235,0.24)] dark:bg-rose-200 dark:text-black"
+                    : "bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-700 dark:bg-white/10 dark:text-slate-300 dark:hover:bg-white/15 dark:hover:text-white"
                 }`}
               >
-                {item.name} ({item.count})
+                All Articles
               </Link>
-            ))}
+
+              {categories.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/articles?category=${item.slug}`}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    activeCategory?.id === item.id
+                      ? "bg-blue-600 text-white shadow-[0_12px_30px_rgba(37,99,235,0.24)] dark:bg-rose-200 dark:text-black"
+                      : "bg-slate-50 text-slate-600 hover:bg-blue-50 hover:text-blue-700 dark:bg-white/10 dark:text-slate-300 dark:hover:bg-white/15 dark:hover:text-white"
+                  }`}
+                >
+                  {item.name} ({item.count})
+                </Link>
+              ))}
+            </div>
+
+            {activeCategory && (
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                Showing articles in{" "}
+                <span className="font-semibold text-slate-800 dark:text-white">
+                  {activeCategory.name}
+                </span>
+                .
+              </p>
+            )}
           </div>
 
-          {activeCategory && (
-            <p className="mb-6 text-sm text-slate-500">
-              Showing articles in{" "}
-              <span className="font-medium text-slate-700">
-                {activeCategory.name}
-              </span>
-              .
-            </p>
+          {/* LIST */}
+          {filteredArticles.length ? (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {filteredArticles.map((article) => (
+                <ArticleCard key={article.id} article={article} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-200 bg-white p-10 text-center shadow-[0_18px_55px_rgba(15,23,42,0.05)] dark:border-white/10 dark:bg-[#07111f]">
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                No articles found
+              </p>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                Try selecting another category.
+              </p>
+            </div>
           )}
-
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {filteredArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-        </div>
-      </Container>
+        </Container>
+      </section>
     </div>
   );
 }

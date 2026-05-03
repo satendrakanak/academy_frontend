@@ -1,19 +1,11 @@
+"use client";
+
 import Container from "../container";
 
-interface PageHeroProps {
-  pageTitle: string;
-  pageHeadline: string;
-  pageDescription: string;
-}
-
-export function PageHero({
-  pageTitle,
-  pageHeadline,
-  pageDescription,
-}: PageHeroProps) {
+export function ArticleHeader() {
   return (
     <section className="relative overflow-hidden py-14 text-white dark:bg-[#101b2d] md:py-16">
-      {/* LIGHT MODE - HERO BLUE THEME */}
+      {/* LIGHT MODE - SAME HERO BLUE THEME */}
       <div className="pointer-events-none absolute inset-0 dark:hidden">
         <div className="absolute inset-0 academy-hero-animated-bg-light" />
 
@@ -39,15 +31,16 @@ export function PageHero({
       <Container className="relative z-10">
         <div className="max-w-3xl">
           <span className="mb-4 inline-flex rounded-full border border-white/20 bg-white/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.26em] text-sky-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_10px_28px_rgba(2,6,23,0.20)] backdrop-blur-md dark:border-rose-200/20 dark:bg-rose-200/10 dark:text-rose-200">
-            {pageTitle}
+            Articles
           </span>
 
           <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-white md:text-5xl lg:text-[46px]">
-            {pageHeadline}
+            Read ideas that make the learning journey more practical.
           </h1>
 
           <p className="mt-4 max-w-2xl text-sm leading-7 text-white/76 md:text-base">
-            {pageDescription}
+            Explore wellness, learning, nutrition, and career-oriented insights
+            written for thoughtful readers.
           </p>
         </div>
       </Container>
